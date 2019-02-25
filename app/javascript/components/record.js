@@ -13,9 +13,15 @@ const Record = {
   clearImageCache: function() {
     imgCache = {};
   },
-  render: function(props) {
+  render: function(props, shouldRenderText = true) {
     const { borderSize, fullWidth, fullHeight } = this.computeBorderSize(props);
-    const fullProps = { ...props, borderSize, fullWidth, fullHeight };
+    const fullProps = {
+      ...props,
+      borderSize,
+      fullWidth,
+      fullHeight,
+      shouldRenderText
+    };
     this.ctx.save();
     this.transformToItem(fullProps);
     this.renderBase(fullProps);
@@ -64,20 +70,31 @@ const Record = {
     fullHeight,
     caption,
     border,
-    borderSize
+    borderSize,
+    shouldRenderText
   }) {
-    if (border) {
-      const bottomBorderHeight = fullHeight - height - borderSize;
-      const fontHeight = 0.5 * bottomBorderHeight;
-      this.ctx.fillStyle = "#333";
-      this.ctx.font = `${fontHeight}px American Typewriter, Courier New, sans-serif`;
-      this.ctx.textAlign = "center";
-      this.ctx.textBaseline = "bottom";
-      this.ctx.fillText(
-        caption,
-        x,
-        y + 0.5 * fullHeight - (bottomBorderHeight - fontHeight) * 0.4,
-        width
+    if (!border) {
+      return;
+    }
+    const bottomBorderHeight = fullHeight - height - borderSize;
+    const fontHeight = 0.5 * bottomBorderHeight;
+    const xpos = x;
+    const ypos = y + 0.5 * fullHeight - (bottomBorderHeight - fontHeight) * 0.4;
+    this.ctx.fillStyle = "#333";
+    this.ctx.font = `${fontHeight}px American Typewriter, Courier New, sans-serif`;
+    this.ctx.textAlign = "center";
+    this.ctx.textBaseline = "bottom";
+    if (shouldRenderText) {
+      this.ctx.fillText(caption, xpos, ypos, width);
+    } else {
+      const textWidth = Math.min(this.ctx.measureText(caption).width, width);
+      this.ctx.fillStyle = "#bbb";
+      this.draw(
+        this.ctx.fillRect,
+        xpos - textWidth / 2,
+        ypos - fontHeight,
+        textWidth,
+        fontHeight
       );
     }
   },

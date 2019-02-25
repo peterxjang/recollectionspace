@@ -48,7 +48,8 @@ function render() {
   resetCanvas();
   let redraw = false;
   state.items.forEach(item => {
-    const alpha = Record.render(getRecordProps(item));
+    const shouldRenderText = !isScrolling;
+    const alpha = Record.render(getRecordProps(item), shouldRenderText);
     if (alpha < 1) {
       redraw = true;
     }
