@@ -48,8 +48,8 @@ function render() {
   resetCanvas();
   let redraw = false;
   state.items.forEach(item => {
-    const shouldRenderText = !isScrolling;
-    const alpha = Record.render(getRecordProps(item), shouldRenderText);
+    const isZooming = isScrolling || touchScaling;
+    const alpha = Record.render(getRecordProps(item), isZooming);
     if (alpha < 1) {
       redraw = true;
     }

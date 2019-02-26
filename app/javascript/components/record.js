@@ -13,14 +13,14 @@ const Record = {
   clearImageCache: function() {
     imgCache = {};
   },
-  render: function(props, shouldRenderText = true) {
+  render: function(props, isZooming = false) {
     const { borderSize, fullWidth, fullHeight } = this.computeBorderSize(props);
     const fullProps = {
       ...props,
       borderSize,
       fullWidth,
       fullHeight,
-      shouldRenderText
+      isZooming
     };
     this.ctx.save();
     this.transformToItem(fullProps);
@@ -71,7 +71,7 @@ const Record = {
     caption,
     border,
     borderSize,
-    shouldRenderText
+    isZooming
   }) {
     if (!border) {
       return;
@@ -84,7 +84,7 @@ const Record = {
     this.ctx.font = `${fontHeight}px American Typewriter, Courier New, sans-serif`;
     this.ctx.textAlign = "center";
     this.ctx.textBaseline = "bottom";
-    if (shouldRenderText) {
+    if (!isZooming) {
       this.ctx.fillText(caption, xpos, ypos, width);
     } else {
       const textWidth = Math.min(this.ctx.measureText(caption).width, width);
@@ -160,7 +160,7 @@ const Record = {
       props.canvasScale
     );
     const imgAlpha = img.alpha || 0;
-    if (visibleOpacity > 0 && props.shouldRenderText) {
+    if (visibleOpacity > 0 && !props.isZooming) {
       this.ctx.globalAlpha = Math.min(imgAlpha, visibleOpacity);
       const xCorner = props.x - props.width / 2;
       const yCorner =
