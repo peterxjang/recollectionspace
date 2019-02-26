@@ -160,7 +160,7 @@ const Record = {
       props.canvasScale
     );
     const imgAlpha = img.alpha || 0;
-    if (visibleOpacity > 0) {
+    if (visibleOpacity > 0 && props.shouldRenderText) {
       this.ctx.globalAlpha = Math.min(imgAlpha, visibleOpacity);
       const xCorner = props.x - props.width / 2;
       const yCorner =
