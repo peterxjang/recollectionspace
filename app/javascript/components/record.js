@@ -143,10 +143,14 @@ const Record = {
     if (!img) {
       return;
     }
+    if (props.isZooming) {
+      img.alpha = 0;
+      return;
+    }
     let visibleOpacity;
     visibleOpacity = this.renderImage(img, props);
     if (img.alpha < 1) {
-      img.alpha += 0.01;
+      img.alpha += props.isZooming ? 0.05 : 0.01;
     }
     return visibleOpacity;
   },
