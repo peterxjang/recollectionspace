@@ -1,0 +1,2 @@
+class CollectionCategory < ApplicationRecord
+end
