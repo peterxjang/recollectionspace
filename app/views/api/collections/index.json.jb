@@ -14,6 +14,7 @@
       caption: child.name,
       x: child.x,
       y: child.y,
+      src: child.src,
       width: child.width,
       height: child.height,
       color: child.color,

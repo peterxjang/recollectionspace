@@ -1,5 +1,4 @@
 import Canvas from "./canvas-redux";
-import rawInitialState from "./initial-state";
 import ModalInfo from "./components/modal-info";
 import ModalMenu from "./components/modal-menu";
 import ModalNew from "./components/modal-new";
@@ -8,7 +7,7 @@ import ModalEdit from "./components/modal-edit";
 const Application = {
   initialize: function() {
     this.initializeCanvas();
-    this.loadCanvasData("data.json");
+    this.loadCanvasData("/api/collections");
     this.hideWebsiteTitle();
   },
   initializeCanvas: function() {
@@ -22,26 +21,13 @@ const Application = {
     });
   },
   loadCanvasData: function(url) {
-    var initialState = this.getInitialState();
-    Canvas.transitionRoute(initialState);
     fetch(url)
-      .then(function(response) {
+      .then(response => {
         return response.json();
       })
-      .then(function(json) {
-        Canvas.replaceItems(json.items);
+      .then(json => {
+        Canvas.transitionRoute(json);
       });
-  },
-  getInitialState: function() {
-    const localStateString = localStorage.getItem("state");
-    const initialState = localStateString
-      ? JSON.parse(localStateString)
-      : rawInitialState;
-    initialState.items = initialState.items.map(item => ({
-      ...item,
-      border: true
-    }));
-    return initialState;
   },
   hideWebsiteTitle: function() {
     setTimeout(function() {
