@@ -1,0 +1,27 @@
+json = {
+  selectedItem: -1,
+  canvas: {
+    id: @parent.id,
+    x: @parent.x,
+    y: @parent.y,
+    angle: @parent.angle,
+    scale: @parent.scale,
+    color: @parent.color
+  }
+}
+
+json[:items] = @children.map do |child|
+  {
+    id: child.id,
+    caption: child.name,
+    x: child.x,
+    y: child.y,
+    width: child.width,
+    height: child.height,
+    color: child.color,
+    angle: child.angle,
+    scale: child.scale
+  }
+end
+
+json

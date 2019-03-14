@@ -9,7 +9,6 @@ class Api::UsersController < ApplicationController
       last_name: params[:last_name],
       avatar: params[:avatar],
     )
-
     if user.save
       render json: {message: 'User created successfully'}, status: :created
     else

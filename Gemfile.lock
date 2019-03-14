@@ -58,9 +58,8 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.5.3)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.8.0)
-      activesupport (>= 4.2.0)
-      multi_json (>= 1.2)
+    jb (0.6.1)
+      multi_json
     jwt (2.1.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -164,7 +163,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.1.0)
   byebug
-  jbuilder (~> 2.5)
+  jb
   jwt
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
