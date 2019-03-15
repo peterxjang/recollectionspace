@@ -92,7 +92,7 @@ function checkTransition(delta) {
     0
   );
   if (delta < 0 && totalVisibleWidth < 10) {
-    return props.onTransition(-1, state.parent);
+    return props.onTransition(-1, state.canvas);
   } else if (delta > 0) {
     var item;
     for (var i = 0; i < state.items.length; i++) {
@@ -493,7 +493,7 @@ function onDoubleClick() {
       skipCheckHandle: true
     });
     if (itemType === "record") {
-      if (!item.pinBack) {
+      if (item.type === "record" || item.type === "collection") {
         props.onShowModalInfo(item);
         return;
       }

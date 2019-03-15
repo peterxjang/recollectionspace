@@ -37,6 +37,13 @@ const Application = {
   },
   handleTransition: function(delta, item) {
     if (delta < 0) {
+      if (item && item.type === "collection") {
+        this.loadCanvasData("/api/collections");
+        return true;
+      }
+      return true;
+    } else if (item && item.type === "collection") {
+      this.loadCanvasData("/api/collections/" + item.id);
       return true;
     } else if (item) {
       ModalInfo.show({

@@ -6,12 +6,14 @@
     y: @parent.y,
     angle: @parent.angle,
     scale: @parent.scale,
-    color: @parent.color
+    color: @parent.color,
+    type: @parent_type
   },
   items: @children.map do |child|
     {
       id: child.id,
       caption: child.name,
+      body: "",
       x: child.x,
       y: child.y,
       src: child.src,
@@ -20,7 +22,8 @@
       color: child.color,
       angle: child.angle,
       scale: child.scale,
-      border: child.border
+      border: child.border,
+      type: @children_type
     }
   end
 }
