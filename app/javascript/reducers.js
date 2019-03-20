@@ -12,7 +12,9 @@ import {
   SCALE_CANVAS,
   UPDATE_ITEM_CHARACTERISTICS,
   LOAD_ITEMS,
-  CHANGE_ROUTE
+  CHANGE_ROUTE_REQUEST,
+  CHANGE_ROUTE_FAILURE,
+  CHANGE_ROUTE_SUCCESS
 } from "./actions";
 
 const initialState = {
@@ -24,7 +26,8 @@ const initialState = {
   },
   items: [],
   selectedItem: -1,
-  loadingItems: false
+  loadingItems: false,
+  isChangingRoute: false
 };
 
 function canvas(state = initialState.canvas, action) {
@@ -152,20 +155,36 @@ function loadingItems(state = initialState.loadingItems, action) {
   return state;
 }
 
+function isChangingRoute(state = initialState.isChangingRoute, action) {
+  return state;
+}
+
 const appReducer = combineReducers({
   canvas,
   selectedItem,
   loadingItems,
+  isChangingRoute,
   items,
   parent
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === CHANGE_ROUTE) {
+  if (action.type === CHANGE_ROUTE_REQUEST) {
     state = {
+      ...state,
+      isChangingRoute: true
+    };
+  } else if (action.type === CHANGE_ROUTE_FAILURE) {
+    state = {
+      ...state,
+      isChangingRoute: false
+    };
+  } else if (action.type === CHANGE_ROUTE_SUCCESS) {
+    state = {
+      ...state,
       canvas: action.state.canvas,
       items: action.state.items,
-      parent: action.state.parent
+      isChangingRoute: false
     };
   } else if (action.type === LOAD_ITEMS) {
     state = {

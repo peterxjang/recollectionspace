@@ -12,7 +12,9 @@ export const RESIZE_ITEM = "RESIZE_ITEM";
 export const ROTATE_ITEM = "ROTATE_ITEM";
 export const UPDATE_ITEM_CHARACTERISTICS = "UPDATE_ITEM_CHARACTERISTICS";
 export const LOAD_ITEMS = "LOAD_ITEMS";
-export const CHANGE_ROUTE = "CHANGE_ROUTE";
+export const CHANGE_ROUTE_REQUEST = "CHANGE_ROUTE_REQUEST";
+export const CHANGE_ROUTE_FAILURE = "CHANGE_ROUTE_FAILURE";
+export const CHANGE_ROUTE_SUCCESS = "CHANGE_ROUTE_SUCCESS";
 export const REFRESH_CANVAS = "REFRESH_CANVAS";
 
 export function addItem(item) {
@@ -70,8 +72,16 @@ export function scaleCanvas(scale, x, y) {
   return { type: SCALE_CANVAS, scale: scale, x: x, y: y };
 }
 
-export function changeRoute(state) {
-  return { type: CHANGE_ROUTE, state: state };
+export function changeRouteRequest() {
+  return { type: CHANGE_ROUTE_REQUEST };
+}
+
+export function changeRouteFailure() {
+  return { type: CHANGE_ROUTE_FAILURE };
+}
+
+export function changeRouteSuccess(state) {
+  return { type: CHANGE_ROUTE_SUCCESS, state: state };
 }
 
 export function refreshCanvas() {

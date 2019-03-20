@@ -12,7 +12,9 @@ import {
   loadItems,
   translateCanvas,
   scaleCanvas,
-  changeRoute,
+  changeRouteRequest,
+  changeRouteFailure,
+  changeRouteSuccess,
   refreshCanvas
 } from "./actions";
 import Record from "./components/record";
@@ -621,6 +623,10 @@ function onInputMove(evt) {
 }
 
 function onScroll(evt) {
+  if (state.isChangingRoute) {
+    isScrolling = false;
+    return evt.preventDefault() && false;
+  }
   if (!wheeling) {
     scaleCanvasMoveInitial();
   }
@@ -634,7 +640,7 @@ function onScroll(evt) {
     : evt.detail
       ? evt.detail
       : 0;
-  if (delta) {
+  if (delta && isScrolling) {
     const { inputX, inputY } = getInputPos(evt);
     scaleCanvasMove(inputX, inputY, delta);
   }
@@ -706,8 +712,16 @@ function initialize(inputCanvas, inputProps) {
   return store;
 }
 
-function transitionRoute(newState) {
-  store.dispatch(changeRoute(newState));
+function transitionRouteRequest() {
+  store.dispatch(changeRouteRequest());
+}
+
+function transitionRouteFailure() {
+  store.dispatch(changeRouteFailure());
+}
+
+function transitionRouteSuccess(newState) {
+  store.dispatch(changeRouteSuccess(newState));
   zoomToFitAll(0.2, false);
   loadVisibleImages();
 }
@@ -767,7 +781,9 @@ function deleteItem(id) {
 
 export default {
   initialize,
-  transitionRoute,
+  transitionRouteRequest,
+  transitionRouteFailure,
+  transitionRouteSuccess,
   replaceItems,
   createItem,
   deleteItem,

@@ -21,12 +21,16 @@ const Application = {
     });
   },
   loadCanvasData: function(url) {
+    Canvas.transitionRouteRequest();
     fetch(url)
       .then(response => {
         return response.json();
       })
       .then(json => {
-        Canvas.transitionRoute(json);
+        Canvas.transitionRouteSuccess(json);
+      })
+      .catch(error => {
+        Canvas.transitionRouteFailure();
       });
   },
   hideWebsiteTitle: function() {
