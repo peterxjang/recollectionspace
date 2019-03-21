@@ -99,7 +99,7 @@ const Record = {
     }
   },
   loadImage: function(props) {
-    if (imgCache[props.id]) {
+    if (imgCache[props.type + props.id]) {
       return;
     }
     if (imgLoading) {
@@ -129,7 +129,7 @@ const Record = {
       false
     );
     img.src = this.getFullSrc(props.src, props.id);
-    imgCache[props.id] = img;
+    imgCache[props.type + props.id] = img;
   },
   getFullSrc: function(src, id) {
     var result = src ? `/images/${src}` : `/images/${id}.jpg`;
@@ -139,7 +139,7 @@ const Record = {
     return result;
   },
   renderImageAnimate: function(props) {
-    const img = imgCache[props.id];
+    const img = imgCache[props.type + props.id];
     if (!img) {
       return;
     }
