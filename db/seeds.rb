@@ -14,7 +14,7 @@ CollectionCategory.create!(user_id: 2, name: "Art samples", description: "Drawin
 
 Follow.create!(follower_id: 1, following_id: 1)
 
-Follow.create!(follower_id: 2, following_id: 2, x: -838.6, y: 901.4, angle: 0, scale: 0.5101, color: "#111")
+Follow.create!(follower_id: 2, following_id: 2, x: -838.6, y: 901.4, angle: 0, scale: 0.5101, color: "#111", src: "default.jpg")
 Follow.create!(follower_id: 2, following_id: 3)
 Follow.create!(follower_id: 2, following_id: 4)
 

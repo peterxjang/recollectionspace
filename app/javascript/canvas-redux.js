@@ -88,6 +88,13 @@ function loadVisibleImages() {
   });
 }
 
+function changeBackground() {
+  document.querySelector("html").style.background = `${
+    state.canvas.color
+  } url('/images/${state.canvas.src}') no-repeat center center fixed`;
+  document.querySelector("html").style.backgroundSize = "cover";
+}
+
 function checkTransition(delta) {
   const totalVisibleWidth = state.items.reduce(
     (sum, item) => sum + item.width * item.scale * state.canvas.scale,
@@ -724,6 +731,7 @@ function transitionRouteSuccess(newState) {
   store.dispatch(changeRouteSuccess(newState));
   zoomToFitAll(0.2, false);
   loadVisibleImages();
+  changeBackground();
 }
 
 function replaceItems(newItems) {
