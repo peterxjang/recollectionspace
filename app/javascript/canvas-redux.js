@@ -40,7 +40,7 @@ let touchScaling;
 let currentItemId;
 
 let pressTimer;
-var clickTimer = null;
+let clickTimer = null;
 
 let wheeling;
 let isScrolling;
@@ -104,8 +104,8 @@ function checkTransition(delta) {
   if (delta < 0 && totalVisibleWidth < 10) {
     return props.onTransition(-1, state.canvas);
   } else if (delta > 0) {
-    var item;
-    for (var i = 0; i < state.items.length; i++) {
+    let item;
+    for (let i = 0; i < state.items.length; i++) {
       item = state.items[i];
       if (
         !item.pinBack &&
@@ -254,10 +254,10 @@ function transformItemMove(deltaMouseX, deltaMouseY) {
 function transformItemWithGroup(draggingItem, draggingItemGroup, scale, angle) {
   if (draggingItemGroup) {
     const transforms = [...draggingItemGroup, draggingItem].map(item => {
-      var xDelta = item.x - draggingItem.x;
-      var yDelta = item.y - draggingItem.y;
-      var diag = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
-      var angleItem = Math.atan2(yDelta, xDelta);
+      let xDelta = item.x - draggingItem.x;
+      let yDelta = item.y - draggingItem.y;
+      let diag = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+      let angleItem = Math.atan2(yDelta, xDelta);
       return {
         id: item.id,
         x:
@@ -454,7 +454,7 @@ function onLongPress() {
   const selectedItem = state.items.filter(
     item => item.id === state.selectedItem
   )[0];
-  for (var i = state.items.length - 1; i >= 0; i--) {
+  for (let i = state.items.length - 1; i >= 0; i--) {
     const item = state.items[i];
     draggingItemType = Record.isPointInRecord({
       ...item,
@@ -493,7 +493,7 @@ function onLongPress() {
 }
 
 function onDoubleClick() {
-  for (var i = state.items.length - 1; i >= 0; i--) {
+  for (let i = state.items.length - 1; i >= 0; i--) {
     const item = state.items[i];
     const itemType = Record.isPointInRecord({
       ...item,
@@ -551,32 +551,47 @@ function zoomToFit(
     return;
   }
   if (animate) {
-    animateScaleCanvas(canvasScale, canvasX, canvasY);
+    let initialCanvasScale = state.canvas.scale;
+    let initialCanvasX = state.canvas.x;
+    let initialCanvasY = state.canvas.y;
+    animateScaleCanvas(
+      initialCanvasScale,
+      initialCanvasX,
+      initialCanvasY,
+      canvasScale,
+      canvasX,
+      canvasY
+    );
   } else {
     smoothDispatch(scaleCanvas(canvasScale, canvasX, canvasY));
   }
 }
 
-function animateScaleCanvas(finalCanvasScale, finalCanvasX, finalCanvasY) {
-  var initialCanvasScale = state.canvas.scale;
-  var initialCanvasX = state.canvas.x;
-  var initialCanvasY = state.canvas.y;
-  var starttime;
-  var duration = 300;
-  var draw = function(timestamp) {
-    var runtime = timestamp - starttime;
-    var progress = runtime / duration;
+function animateScaleCanvas(
+  initialCanvasScale,
+  initialCanvasX,
+  initialCanvasY,
+  finalCanvasScale,
+  finalCanvasX,
+  finalCanvasY
+) {
+  let starttime;
+  let duration = 300;
+  let draw = function(timestamp) {
+    let runtime = timestamp - starttime;
+    let progress = runtime / duration;
     progress = Math.min(progress, 1);
-    var canvasScale =
+    let canvasScale =
       initialCanvasScale + (finalCanvasScale - initialCanvasScale) * progress;
-    var canvasX = initialCanvasX + (finalCanvasX - initialCanvasX) * progress;
-    var canvasY = initialCanvasY + (finalCanvasY - initialCanvasY) * progress;
+    let canvasX = initialCanvasX + (finalCanvasX - initialCanvasX) * progress;
+    let canvasY = initialCanvasY + (finalCanvasY - initialCanvasY) * progress;
     smoothDispatch(scaleCanvas(canvasScale, canvasX, canvasY));
     if (runtime < duration) {
       requestAnimationFrame(draw);
     } else {
       isScrolling = false;
       allTransformEnd();
+      store.dispatch(changeRouteFailure());
     }
   };
   isScrolling = true;
@@ -587,8 +602,8 @@ function animateScaleCanvas(finalCanvasScale, finalCanvasX, finalCanvasY) {
 }
 
 function zoomToFitAll(padding = 0.1, animate = true) {
-  var xPoints = [];
-  var yPoints = [];
+  let xPoints = [];
+  let yPoints = [];
   state.items.forEach(item => {
     const { x, y, width, height } = Record.getTransformedDimensions(item);
     xPoints.push(x);
@@ -643,7 +658,7 @@ function onScroll(evt) {
     wheeling = undefined;
     scaleCanvasMoveFinal();
   }, 250);
-  var delta = evt.wheelDelta
+  let delta = evt.wheelDelta
     ? -evt.wheelDelta / 40
     : evt.detail
       ? evt.detail
@@ -740,18 +755,37 @@ function transitionRouteSuccess(newState, delta, item) {
       item => item.id === currentItemId
     )[0];
     if (currentItem) {
-      animateInItem(newState, currentItem);
+      // animateInItem(newState, currentItem);
+      animateState(newState, currentItem);
     } else {
       replaceState(newState);
     }
   }
 }
 
+function animateState(newState, currentItem) {
+  replaceState(newState, true);
+  let initialCanvasScale = state.canvas.scale;
+  let initialCanvasX = state.canvas.x;
+  let initialCanvasY = state.canvas.y;
+  let finalCanvasScale = newState.canvas.scale;
+  let finalCanvasX = newState.canvas.x;
+  let finalCanvasY = newState.canvas.y;
+  animateScaleCanvas(
+    initialCanvasScale,
+    initialCanvasX,
+    initialCanvasY,
+    finalCanvasScale,
+    finalCanvasX,
+    finalCanvasY
+  );
+}
+
 function animateInItem(newState, item) {
   replaceState(newState, true);
   let initialItemScale = 1;
-  let initialItemX = 1;
-  let initialItemY = 1;
+  let initialItemX = -newState.canvas.x;
+  let initialItemY = -newState.canvas.y;
   let initialItemAngle = 0;
   let finalItemScale = item.scale;
   let finalItemX = item.x;
@@ -797,14 +831,14 @@ function replaceItems(newItems) {
 }
 
 function createItem(image, caption, body) {
-  var startingCenter = getVisiblePoint();
-  var img = new Image();
+  let startingCenter = getVisiblePoint();
+  let img = new Image();
   img.crossOrigin = "anonymous";
-  var id = Date.now();
+  let id = Date.now();
   img.onload = function() {
-    var height = img.height;
-    var width = img.width;
-    var item = {
+    let height = img.height;
+    let width = img.width;
+    let item = {
       id: id,
       src: image,
       caption: caption,
@@ -825,12 +859,12 @@ function createItem(image, caption, body) {
 
 function getVisiblePoint() {
   // Change to world position https://stackoverflow.com/questions/34597160/html-canvas-mouse-position-after-scale-and-translate
-  var xcoords = state.items.map(item => item.x);
-  var ycoords = state.items.map(item => item.y);
-  var xmin = Math.min(...xcoords);
-  var xmax = Math.max(...xcoords);
-  var ymin = Math.min(...ycoords);
-  var ymax = Math.max(...ycoords);
+  let xcoords = state.items.map(item => item.x);
+  let ycoords = state.items.map(item => item.y);
+  let xmin = Math.min(...xcoords);
+  let xmax = Math.max(...xcoords);
+  let ymin = Math.min(...ycoords);
+  let ymax = Math.max(...ycoords);
   return {
     x: xmin + (xmax - xmin) / 2,
     y: ymin + (ymax - ymin) / 2
