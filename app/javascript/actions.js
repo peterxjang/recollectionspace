@@ -80,8 +80,13 @@ export function changeRouteFailure() {
   return { type: CHANGE_ROUTE_FAILURE };
 }
 
-export function changeRouteSuccess(state) {
-  return { type: CHANGE_ROUTE_SUCCESS, state: state };
+export function changeRouteSuccess(state, isChangingRoute) {
+  return {
+    type: CHANGE_ROUTE_SUCCESS,
+    canvas: state.canvas,
+    items: state.items,
+    isChangingRoute: isChangingRoute
+  };
 }
 
 export function refreshCanvas() {

@@ -37,6 +37,7 @@ let draggingItemType;
 let draggingItemGroup;
 let draggingCanvas;
 let touchScaling;
+let currentItemId;
 
 let pressTimer;
 var clickTimer = null;
@@ -727,8 +728,65 @@ function transitionRouteFailure() {
   store.dispatch(changeRouteFailure());
 }
 
-function transitionRouteSuccess(newState) {
-  store.dispatch(changeRouteSuccess(newState));
+function transitionRouteSuccess(newState, delta, item) {
+  console.log("transitionRouteSuccess", delta);
+  if (delta > 0) {
+    if (item) {
+      currentItemId = item.id;
+    }
+    replaceState(newState);
+  } else {
+    const currentItem = newState.items.filter(
+      item => item.id === currentItemId
+    )[0];
+    if (currentItem) {
+      animateInItem(newState, currentItem);
+    } else {
+      replaceState(newState);
+    }
+  }
+}
+
+function animateInItem(newState, item) {
+  replaceState(newState, true);
+  let initialItemScale = 1;
+  let initialItemX = 1;
+  let initialItemY = 1;
+  let initialItemAngle = 0;
+  let finalItemScale = item.scale;
+  let finalItemX = item.x;
+  let finalItemY = item.y;
+  let finalItemAngle = item.angle;
+  let starttime;
+  let duration = 3000;
+  let draw = function(timestamp) {
+    let runtime = timestamp - starttime;
+    let progress = runtime / duration;
+    progress = Math.min(progress, 1);
+    let itemX = initialItemX + (finalItemX - initialItemX) * progress;
+    let itemY = initialItemY + (finalItemY - initialItemY) * progress;
+    let itemScale =
+      initialItemScale + (finalItemScale - initialItemScale) * progress;
+    let itemAngle =
+      initialItemAngle + (finalItemAngle - initialItemAngle) * progress;
+    smoothDispatch(transformItem(item.id, itemX, itemY, itemScale, itemAngle));
+    if (runtime < duration) {
+      requestAnimationFrame(draw);
+    } else {
+      isScrolling = false;
+      allTransformEnd();
+      store.dispatch(changeRouteFailure());
+    }
+  };
+  isScrolling = true;
+  requestAnimationFrame(function(timestamp) {
+    starttime = timestamp;
+    draw(timestamp);
+  });
+}
+
+function replaceState(newState, isChangingRoute = false) {
+  store.dispatch(changeRouteSuccess(newState, isChangingRoute));
   zoomToFitAll(0.2, false);
   loadVisibleImages();
   changeBackground();

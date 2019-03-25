@@ -182,9 +182,9 @@ const rootReducer = (state, action) => {
   } else if (action.type === CHANGE_ROUTE_SUCCESS) {
     state = {
       ...state,
-      canvas: action.state.canvas,
-      items: action.state.items,
-      isChangingRoute: false
+      canvas: action.canvas,
+      items: action.items,
+      isChangingRoute: action.isChangingRoute
     };
   } else if (action.type === LOAD_ITEMS) {
     state = {

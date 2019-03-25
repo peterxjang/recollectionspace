@@ -7,7 +7,7 @@ import ModalEdit from "./components/modal-edit";
 const Application = {
   initialize: function() {
     this.initializeCanvas();
-    this.loadCanvasData("/api/collections");
+    this.loadCanvasData("/api/collections", 1, null);
     this.hideWebsiteTitle();
   },
   initializeCanvas: function() {
@@ -20,14 +20,14 @@ const Application = {
       isModalInfoVisible: () => ModalInfo.visible
     });
   },
-  loadCanvasData: function(url) {
+  loadCanvasData: function(url, delta, item) {
     Canvas.transitionRouteRequest();
     fetch(url)
       .then(response => {
         return response.json();
       })
       .then(json => {
-        Canvas.transitionRouteSuccess(json);
+        Canvas.transitionRouteSuccess(json, delta, item);
       })
       .catch(error => {
         Canvas.transitionRouteFailure();
@@ -42,12 +42,12 @@ const Application = {
   handleTransition: function(delta, item) {
     if (delta < 0) {
       if (item && item.type === "collection") {
-        this.loadCanvasData("/api/collections");
+        this.loadCanvasData("/api/collections", delta, item);
         return true;
       }
       return true;
     } else if (item && item.type === "collection") {
-      this.loadCanvasData("/api/collections/" + item.id);
+      this.loadCanvasData("/api/collections/" + item.id, delta, item);
       return true;
     } else if (item) {
       ModalInfo.show({
