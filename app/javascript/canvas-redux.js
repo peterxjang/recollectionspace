@@ -515,6 +515,27 @@ function onDoubleClick() {
   zoomToFitAll();
 }
 
+function getZoomToFitProperties(x, y, width, height, padding) {
+  const xscale = (canvas.width - 2 * padding * canvas.width) / width;
+  const yscale = (canvas.height - 2 * padding * canvas.height) / height;
+  if (!xscale || !yscale) {
+    return {};
+  }
+  let canvasScale, canvasX, canvasY, xOffset, yOffset;
+  if (xscale < yscale) {
+    yOffset = (canvas.height - height * xscale) / 2;
+    canvasScale = xscale;
+    canvasX = -x * xscale + padding * canvas.width;
+    canvasY = -y * xscale + yOffset;
+  } else {
+    xOffset = (canvas.width - width * yscale) / 2;
+    canvasScale = yscale;
+    canvasX = -x * yscale + xOffset;
+    canvasY = -y * yscale + padding * canvas.height;
+  }
+  return { canvasScale, canvasX, canvasY };
+}
+
 function zoomToFit(
   x,
   y,
@@ -529,18 +550,25 @@ function zoomToFit(
   if (!xscale || !yscale) {
     return;
   }
-  let canvasScale, canvasX, canvasY, xOffset, yOffset;
-  if (xscale < yscale) {
-    yOffset = (canvas.height - height * xscale) / 2;
-    canvasScale = xscale;
-    canvasX = -x * xscale + padding * canvas.width;
-    canvasY = -y * xscale + yOffset;
-  } else {
-    xOffset = (canvas.width - width * yscale) / 2;
-    canvasScale = yscale;
-    canvasX = -x * yscale + xOffset;
-    canvasY = -y * yscale + padding * canvas.height;
-  }
+  let { canvasScale, canvasX, canvasY } = getZoomToFitProperties(
+    x,
+    y,
+    width,
+    height,
+    padding
+  );
+  // let canvasScale, canvasX, canvasY, xOffset, yOffset;
+  // if (xscale < yscale) {
+  //   yOffset = (canvas.height - height * xscale) / 2;
+  //   canvasScale = xscale;
+  //   canvasX = -x * xscale + padding * canvas.width;
+  //   canvasY = -y * xscale + yOffset;
+  // } else {
+  //   xOffset = (canvas.width - width * yscale) / 2;
+  //   canvasScale = yscale;
+  //   canvasX = -x * yscale + xOffset;
+  //   canvasY = -y * yscale + padding * canvas.height;
+  // }
   if (
     !fitAll &&
     canvasScale === state.canvas.scale &&
@@ -764,13 +792,25 @@ function transitionRouteSuccess(newState, delta, item) {
 }
 
 function animateState(newState, currentItem) {
-  replaceState(newState, true);
-  let initialCanvasScale = state.canvas.scale;
-  let initialCanvasX = state.canvas.x;
-  let initialCanvasY = state.canvas.y;
+  const { x, y, width, height } = Record.getTransformedDimensions(currentItem);
+  let { canvasScale, canvasX, canvasY } = getZoomToFitProperties(
+    x,
+    y,
+    width,
+    height,
+    0
+  );
+  let initialCanvasScale = canvasScale;
+  let initialCanvasX = canvasX;
+  let initialCanvasY = canvasY;
   let finalCanvasScale = newState.canvas.scale;
   let finalCanvasX = newState.canvas.x;
   let finalCanvasY = newState.canvas.y;
+  newState.canvas.scale = initialCanvasScale;
+  newState.canvas.x = initialCanvasX;
+  newState.canvas.y = initialCanvasY;
+  // TODO: Chain state changes instead of two async calls...
+  replaceState(newState, true);
   animateScaleCanvas(
     initialCanvasScale,
     initialCanvasX,
@@ -783,9 +823,9 @@ function animateState(newState, currentItem) {
 
 function animateInItem(newState, item) {
   replaceState(newState, true);
-  let initialItemScale = 1;
-  let initialItemX = -newState.canvas.x;
-  let initialItemY = -newState.canvas.y;
+  let initialItemScale = item.scale * 10;
+  let initialItemX = item.x;
+  let initialItemY = item.x;
   let initialItemAngle = 0;
   let finalItemScale = item.scale;
   let finalItemX = item.x;
