@@ -515,7 +515,7 @@ function onDoubleClick() {
   zoomToFitAll();
 }
 
-function getZoomToFitProperties(x, y, width, height, padding) {
+function getZoomToFitProperties(x, y, width, height, padding = 0.05) {
   const xscale = (canvas.width - 2 * padding * canvas.width) / width;
   const yscale = (canvas.height - 2 * padding * canvas.height) / height;
   if (!xscale || !yscale) {
@@ -557,18 +557,6 @@ function zoomToFit(
     height,
     padding
   );
-  // let canvasScale, canvasX, canvasY, xOffset, yOffset;
-  // if (xscale < yscale) {
-  //   yOffset = (canvas.height - height * xscale) / 2;
-  //   canvasScale = xscale;
-  //   canvasX = -x * xscale + padding * canvas.width;
-  //   canvasY = -y * xscale + yOffset;
-  // } else {
-  //   xOffset = (canvas.width - width * yscale) / 2;
-  //   canvasScale = yscale;
-  //   canvasX = -x * yscale + xOffset;
-  //   canvasY = -y * yscale + padding * canvas.height;
-  // }
   if (
     !fitAll &&
     canvasScale === state.canvas.scale &&
@@ -595,6 +583,7 @@ function zoomToFit(
   }
 }
 
+// TODO: Refactor arguments to two objects, canvasInitial & canvasFinal
 function animateScaleCanvas(
   initialCanvasScale,
   initialCanvasX,
@@ -629,10 +618,10 @@ function animateScaleCanvas(
   });
 }
 
-function zoomToFitAll(padding = 0.1, animate = true) {
+function getAllItemsDimensions(items) {
   let xPoints = [];
   let yPoints = [];
-  state.items.forEach(item => {
+  items.forEach(item => {
     const { x, y, width, height } = Record.getTransformedDimensions(item);
     xPoints.push(x);
     xPoints.push(x + width);
@@ -643,6 +632,11 @@ function zoomToFitAll(padding = 0.1, animate = true) {
   const width = Math.max(...xPoints) - x;
   const y = Math.min(...yPoints);
   const height = Math.max(...yPoints) - y;
+  return { x, y, width, height };
+}
+
+function zoomToFitAll(padding = 0.1, animate = true) {
+  const { x, y, width, height } = getAllItemsDimensions(state.items);
   zoomToFit(x, y, width, height, true, padding, animate);
 }
 
@@ -772,7 +766,6 @@ function transitionRouteFailure() {
 }
 
 function transitionRouteSuccess(newState, delta, item) {
-  console.log("transitionRouteSuccess", delta);
   if (delta > 0) {
     if (item) {
       currentItemId = item.id;
@@ -792,20 +785,27 @@ function transitionRouteSuccess(newState, delta, item) {
 }
 
 function animateState(newState, currentItem) {
-  const { x, y, width, height } = Record.getTransformedDimensions(currentItem);
-  let { canvasScale, canvasX, canvasY } = getZoomToFitProperties(
-    x,
-    y,
-    width,
-    height,
+  let dimensions1 = Record.getTransformedDimensions(currentItem);
+  let canvasInitial = getZoomToFitProperties(
+    dimensions1.x,
+    dimensions1.y,
+    dimensions1.width,
+    dimensions1.height,
     0
   );
-  let initialCanvasScale = canvasScale;
-  let initialCanvasX = canvasX;
-  let initialCanvasY = canvasY;
-  let finalCanvasScale = newState.canvas.scale;
-  let finalCanvasX = newState.canvas.x;
-  let finalCanvasY = newState.canvas.y;
+  let initialCanvasScale = canvasInitial.canvasScale;
+  let initialCanvasX = canvasInitial.canvasX;
+  let initialCanvasY = canvasInitial.canvasY;
+  let dimensions2 = getAllItemsDimensions(newState.items);
+  let canvasFinal = getZoomToFitProperties(
+    dimensions2.x,
+    dimensions2.y,
+    dimensions2.width,
+    dimensions2.height
+  );
+  let finalCanvasScale = canvasFinal.canvasScale;
+  let finalCanvasX = canvasFinal.canvasX;
+  let finalCanvasY = canvasFinal.canvasY;
   newState.canvas.scale = initialCanvasScale;
   newState.canvas.x = initialCanvasX;
   newState.canvas.y = initialCanvasY;
