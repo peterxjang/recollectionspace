@@ -1,0 +1,16 @@
+{
+  id: @record.id,
+  name: @record.name,
+  description: @record.description,
+  collection_id: @record.collection_id,
+  x: @record.x,
+  y: @record.y,
+  width: @record.width,
+  height: @record.height,
+  angle: @record.angle,
+  scale: @record.scale,
+  border: @record.border,
+  src: @record.src,
+  color: @record.color,
+  zindex: @record.zindex
+}

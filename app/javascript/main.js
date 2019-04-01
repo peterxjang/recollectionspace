@@ -15,6 +15,7 @@ const Application = {
       onTransition: this.handleTransition.bind(this),
       onSave: this.handleSave.bind(this),
       onMenu: this.handleMenu.bind(this),
+      onSaveRecord: this.handleSaveRecord.bind(this),
       onShowModalInfo: this.handleShowModalInfo.bind(this),
       onHideModalInfo: this.handleHideModalInfo.bind(this),
       isModalInfoVisible: () => ModalInfo.visible
@@ -63,7 +64,7 @@ const Application = {
     ModalMenu.show({
       onSaveLayout: this.handleSave.bind(null, state),
       onResetLayout: this.handleResetLayout,
-      onNewRecord: this.handleNewRecord.bind(this)
+      onNewRecord: this.handleNewRecord.bind(this, state)
     });
   },
   handleResetLayout: function() {
@@ -112,13 +113,41 @@ const Application = {
     localStorage.setItem("state", stateString);
     console.log(stateString);
   },
-  handleNewRecord: function() {
+  handleNewRecord: function(state) {
     ModalNew.show({
-      onSaveRecord: this.handleSaveRecord
+      onSaveRecord: Canvas.createItem
     });
   },
-  handleSaveRecord: function(image, caption, body) {
-    Canvas.createItem(image, caption, body);
+  handleSaveRecord: function(parent, item) {
+    // TODO: Web request to backend first...
+    let url, params;
+    if (parent.type === "collection") {
+      url = "/api/records";
+      params = {
+        ...item,
+        collection_id: parent.id,
+        name: item.caption,
+        description: item.body
+      };
+    } else {
+      return;
+    }
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify(params)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(JSON.stringify(data));
+      })
+      .catch(error => console.error(error));
   },
   handleEditRecord: function(item) {
     ModalEdit.show({

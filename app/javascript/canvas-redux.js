@@ -871,6 +871,10 @@ function replaceItems(newItems) {
 }
 
 function createItem(image, caption, body) {
+  // TODO: Try without image, use default image 5.png or something
+  image = "5.jpg";
+  caption = "Test caption";
+  body = "Test body";
   let startingCenter = getVisiblePoint();
   let img = new Image();
   img.crossOrigin = "anonymous";
@@ -893,6 +897,7 @@ function createItem(image, caption, body) {
       color: Record.getDominantColor(img)
     };
     smoothDispatch(addItem(item));
+    props.onSaveRecord(state.canvas, item);
   };
   img.src = Record.getFullSrc(image, id);
 }

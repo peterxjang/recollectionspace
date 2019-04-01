@@ -6,5 +6,6 @@ Rails.application.routes.draw do
     post "/sessions" => "sessions#create"
     get "/collections" => "collections#index"
     get "/collections/:id" => "collections#show"
+    post "/records" => "records#create"
   end
 end
