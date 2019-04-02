@@ -8,5 +8,6 @@ Rails.application.routes.draw do
     get "/collections/:id" => "collections#show"
     post "/records" => "records#create"
     patch "/records/:id" => "records#update"
+    delete "/records/:id" => "records#destroy"
   end
 end

@@ -921,8 +921,8 @@ function updateItem(id, options) {
   smoothDispatch(updateItemCharacteristics(id, options));
 }
 
-function deleteItem(id) {
-  smoothDispatch(removeItem(id));
+function deleteItem(item) {
+  smoothDispatch(removeItem(item));
 }
 
 export default {

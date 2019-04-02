@@ -43,4 +43,10 @@ class Api::RecordsController < ApplicationController
       render json: {errors: @record.errors.full_messages}, status: 422
     end
   end
+
+  def destroy
+    @record = Record.find_by(id: params[:id])
+    @record.destroy
+    render json: {message: "Record successfully destroyed!"}
+  end
 end

@@ -214,8 +214,30 @@ const Application = {
       })
       .catch(error => console.error(error));
   },
-  handleDeleteRecord: function(id) {
-    Canvas.deleteItem(id);
+  handleDeleteRecord: function(item) {
+    let url, params;
+    if (item.type === "record") {
+      url = "/api/records/" + item.id;
+    } else {
+      return;
+    }
+    fetch(url, {
+      method: "DELETE",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify(params)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(JSON.stringify(data));
+        Canvas.deleteItem(item);
+      })
+      .catch(error => console.error(error));
   },
   handleShowModalInfo: function(item) {
     ModalInfo.show({
