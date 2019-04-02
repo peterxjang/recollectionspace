@@ -16,6 +16,7 @@ const Application = {
       onSave: this.handleSave.bind(this),
       onMenu: this.handleMenu.bind(this),
       onSaveRecord: this.handleSaveRecord.bind(this),
+      onUpdateRecord: this.handleUpdateRecord.bind(this),
       onShowModalInfo: this.handleShowModalInfo.bind(this),
       onHideModalInfo: this.handleHideModalInfo.bind(this),
       isModalInfoVisible: () => ModalInfo.visible
@@ -180,6 +181,36 @@ const Application = {
       .then(data => {
         console.log(JSON.stringify(data));
         Canvas.updateItem(id, { caption, body });
+      })
+      .catch(error => console.error(error));
+  },
+  handleUpdateRecord: function(item) {
+    console.log("handleUpdateRecord!!!", item);
+    let url, params;
+    if (item.type === "record") {
+      url = "/api/records/" + item.id;
+      params = {
+        ...item,
+        name: item.caption,
+        description: item.body
+      };
+    } else {
+      return;
+    }
+    fetch(url, {
+      method: "PATCH",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify(params)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(JSON.stringify(data));
       })
       .catch(error => console.error(error));
   },

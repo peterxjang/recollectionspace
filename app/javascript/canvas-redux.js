@@ -426,6 +426,7 @@ function onInputDown(evt) {
     } else if (draggingItemType === "handle") {
       transformItemStart(inputX, inputY, item);
     } else {
+      props.onUpdateRecord(item);
       translateCanvasStart(inputX, inputY);
     }
   } else {
