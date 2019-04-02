@@ -37,6 +37,7 @@ const ModalEdit = {
       event.preventDefault();
       this.props.onEditRecord(
         this.props.item.id,
+        this.props.item.type,
         this.$inputCaption.value,
         this.$inputBody.value
       );

@@ -7,5 +7,6 @@ Rails.application.routes.draw do
     get "/collections" => "collections#index"
     get "/collections/:id" => "collections#show"
     post "/records" => "records#create"
+    patch "/records/:id" => "records#update"
   end
 end

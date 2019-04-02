@@ -119,7 +119,6 @@ const Application = {
     });
   },
   handleSaveRecord: function(parent, item) {
-    // TODO: Web request to backend first...
     let url, params;
     if (parent.type === "collection") {
       url = "/api/records";
@@ -152,11 +151,37 @@ const Application = {
   handleEditRecord: function(item) {
     ModalEdit.show({
       item: item,
-      onEditRecord: this.handleUpdateRecord.bind(this)
+      onEditRecord: this.handleUpdateRecordText.bind(this)
     });
   },
-  handleUpdateRecord: function(id, caption, body) {
-    Canvas.updateItem(id, { caption, body });
+  handleUpdateRecordText: function(id, type, caption, body) {
+    let url, params;
+    if (type === "record") {
+      url = "/api/records/" + id;
+      params = {
+        name: caption,
+        description: body
+      };
+    } else {
+      return;
+    }
+    fetch(url, {
+      method: "PATCH",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify(params)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(JSON.stringify(data));
+        Canvas.updateItem(id, { caption, body });
+      })
+      .catch(error => console.error(error));
   },
   handleDeleteRecord: function(id) {
     Canvas.deleteItem(id);
