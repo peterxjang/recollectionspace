@@ -1,5 +1,8 @@
 class Api::RecordsController < ApplicationController
   def create
+    response = Cloudinary::Uploader.upload(Rails.root.join("public", "images", "2.jpg"))
+    render json: {message: "Upload file", response: response}
+    return
     @record = Record.new(
       name: params[:name],
       description: params[:description],
