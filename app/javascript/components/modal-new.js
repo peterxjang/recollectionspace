@@ -36,7 +36,7 @@ const ModalNew = {
     this.$buttonSave.onclick = event => {
       event.preventDefault();
       this.props.onSaveRecord(
-        this.$inputImage.value,
+        this.$inputImage.files[0],
         this.$inputCaption.value,
         this.$inputBody.value
       );

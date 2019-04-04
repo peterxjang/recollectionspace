@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import {
   SELECT_ITEM,
   ADD_ITEM,
+  REPLACE_ITEM,
   REMOVE_ITEM,
   TRANSLATE_ITEM,
   TRANSLATE_ITEM_GROUP,
@@ -63,6 +64,13 @@ function items(state = initialState.items, action) {
   switch (action.type) {
     case ADD_ITEM:
       return [...state, action.item];
+    case REPLACE_ITEM:
+      return state.map(item => {
+        if (item.id === action.itemOld.id) {
+          return action.itemNew;
+        }
+        return item;
+      });
     case REMOVE_ITEM:
       return state.filter(item => item.id !== action.item.id);
     case TRANSLATE_ITEM:

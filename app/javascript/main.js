@@ -119,16 +119,16 @@ const Application = {
       onSaveRecord: Canvas.createItem
     });
   },
-  handleSaveRecord: function(parent, item) {
+  handleSaveRecord: function(parent, item, image) {
     let url, params;
     if (parent.type === "collection") {
       url = "/api/records";
-      params = {
-        ...item,
-        collection_id: parent.id,
-        name: item.caption,
-        description: item.body
-      };
+      params = new FormData();
+      Object.keys(item).forEach(key => params.append(key, item[key]));
+      params.append("collection_id", parent.id);
+      params.append("name", item.caption);
+      params.append("description", item.body);
+      params.append("image", image);
     } else {
       return;
     }
@@ -136,16 +136,23 @@ const Application = {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
-      headers: {
-        "Content-Type": "application/json"
-      },
       redirect: "follow",
       referrer: "no-referrer",
-      body: JSON.stringify(params)
+      body: params
     })
       .then(response => response.json())
       .then(data => {
-        console.log(JSON.stringify(data));
+        console.log("success", item, data);
+        const itemNew = {
+          ...item,
+          id: data.id,
+          src: data.src,
+          caption: data.name,
+          body: data.description
+        };
+        // TODO: Item not updating properly??? handleUpdateRecord holding on to old item?
+        Canvas.replaceItemProperties(item, itemNew);
+        URL.revokeObjectURL(item.src);
       })
       .catch(error => console.error(error));
   },

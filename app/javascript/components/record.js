@@ -133,7 +133,7 @@ const Record = {
   },
   getFullSrc: function(src, id) {
     var result = src ? `/images/${src}` : `/images/${id}.jpg`;
-    if (src && src.startsWith("http")) {
+    if (src && (src.startsWith("http") || src.startsWith("blob:"))) {
       result = src;
     }
     return result;

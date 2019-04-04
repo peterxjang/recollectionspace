@@ -1,4 +1,5 @@
 export const ADD_ITEM = "ADD_ITEM";
+export const REPLACE_ITEM = "REPLACE_ITEM";
 export const REMOVE_ITEM = "REMOVE_ITEM";
 export const SELECT_ITEM = "SELECT_ITEM";
 export const TRANSLATE_ITEM = "TRANSLATE_ITEM";
@@ -19,6 +20,10 @@ export const REFRESH_CANVAS = "REFRESH_CANVAS";
 
 export function addItem(item) {
   return { type: ADD_ITEM, item: item };
+}
+
+export function replaceItem(itemOld, itemNew) {
+  return { type: REPLACE_ITEM, itemOld: itemOld, itemNew: itemNew };
 }
 
 export function removeItem(item) {

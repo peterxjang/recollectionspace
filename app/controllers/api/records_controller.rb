@@ -1,8 +1,6 @@
 class Api::RecordsController < ApplicationController
   def create
-    response = Cloudinary::Uploader.upload(Rails.root.join("public", "images", "2.jpg"))
-    render json: {message: "Upload file", response: response}
-    return
+    response = Cloudinary::Uploader.upload(params[:image])
     @record = Record.new(
       name: params[:name],
       description: params[:description],
@@ -14,7 +12,7 @@ class Api::RecordsController < ApplicationController
       angle: params[:angle],
       scale: params[:scale],
       border: params[:border],
-      src: params[:src],
+      src: response["secure_url"],
       color: params[:color],
       zindex: params[:zindex]
     )

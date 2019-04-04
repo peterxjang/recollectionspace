@@ -2,6 +2,7 @@ import { createStore } from "redux";
 import rootReducer from "./reducers";
 import {
   addItem,
+  replaceItem,
   removeItem,
   selectItem,
   translateItem,
@@ -871,11 +872,11 @@ function replaceItems(newItems) {
   smoothDispatch(loadItems(newItems));
 }
 
+function replaceItemProperties(itemOld, itemNew) {
+  smoothDispatch(replaceItem(itemOld, itemNew));
+}
+
 function createItem(image, caption, body) {
-  // TODO: Try without image, use default image 5.png or something
-  image = "5.jpg";
-  caption = "Test caption";
-  body = "Test body";
   let startingCenter = getVisiblePoint();
   let img = new Image();
   img.crossOrigin = "anonymous";
@@ -885,7 +886,7 @@ function createItem(image, caption, body) {
     let width = img.width;
     let item = {
       id: id,
-      src: image,
+      src: img.src,
       caption: caption,
       body: body,
       angle: 0,
@@ -898,9 +899,9 @@ function createItem(image, caption, body) {
       color: Record.getDominantColor(img)
     };
     smoothDispatch(addItem(item));
-    props.onSaveRecord(state.canvas, item);
+    props.onSaveRecord(state.canvas, item, image);
   };
-  img.src = Record.getFullSrc(image, id);
+  img.src = URL.createObjectURL(image);
 }
 
 function getVisiblePoint() {
@@ -931,6 +932,7 @@ export default {
   transitionRouteFailure,
   transitionRouteSuccess,
   replaceItems,
+  replaceItemProperties,
   createItem,
   deleteItem,
   updateItem
