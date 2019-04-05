@@ -142,15 +142,14 @@ const Application = {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("success", item, data);
         const itemNew = {
           ...item,
           id: data.id,
           src: data.src,
           caption: data.name,
-          body: data.description
+          body: data.description,
+          type: data.type
         };
-        // TODO: Item not updating properly??? handleUpdateRecord holding on to old item?
         Canvas.replaceItemProperties(item, itemNew);
         URL.revokeObjectURL(item.src);
       })
@@ -192,7 +191,6 @@ const Application = {
       .catch(error => console.error(error));
   },
   handleUpdateRecord: function(item) {
-    console.log("handleUpdateRecord!!!", item);
     let url, params;
     if (item.type === "record") {
       url = "/api/records/" + item.id;

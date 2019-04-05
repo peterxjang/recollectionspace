@@ -12,5 +12,6 @@
   border: @record.border,
   src: @record.src,
   color: @record.color,
-  zindex: @record.zindex
+  zindex: @record.zindex,
+  type: "record"
 }
