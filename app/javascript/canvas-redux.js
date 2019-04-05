@@ -63,9 +63,12 @@ function render() {
   }
 }
 
-function smoothDispatch(action) {
+function smoothDispatch(action, callback) {
   window.requestAnimationFrame(function() {
     store.dispatch(action);
+    if (callback) {
+      callback();
+    }
   });
 }
 
@@ -873,7 +876,7 @@ function replaceItems(newItems) {
 }
 
 function replaceItemProperties(itemOld, itemNew) {
-  smoothDispatch(replaceItem(itemOld, itemNew));
+  smoothDispatch(replaceItem(itemOld, itemNew), allTransformEnd);
 }
 
 function createItem(image, caption, body) {
