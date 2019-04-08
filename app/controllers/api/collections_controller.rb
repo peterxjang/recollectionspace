@@ -1,9 +1,7 @@
 class Api::CollectionsController < ApplicationController
-  # before_action :authenticate_user
+  before_action :authenticate_user
 
   def index
-    current_user = User.second
-
     @parent = Follow.find_by(follower_id: current_user.id, following_id: current_user.id)
     @parent_type = "follow"
     @children = @parent.following.collections

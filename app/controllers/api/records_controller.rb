@@ -1,4 +1,6 @@
 class Api::RecordsController < ApplicationController
+  before_action :authenticate_user
+
   def create
     response = Cloudinary::Uploader.upload(params[:image])
     @record = Record.new(
