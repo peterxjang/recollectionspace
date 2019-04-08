@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   namespace :api do
     post "/users" => "users#create"
     post "/sessions" => "sessions#create"
+    get "/follows" => "follows#index"
+    get "/follows/:id" => "follows#show"
     get "/collections" => "collections#index"
     get "/collections/:id" => "collections#show"
     post "/records" => "records#create"
