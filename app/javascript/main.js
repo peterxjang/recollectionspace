@@ -46,6 +46,10 @@ const Application = {
       if (item && item.type === "collection") {
         this.loadCanvasData("/api/collections", delta, item);
         return true;
+      } else if (item && item.type === "follow") {
+        console.log("transition out of follow...");
+        this.loadCanvasData("/api/follows", delta, item);
+        return true;
       }
       return true;
     } else if (item && item.type === "collection") {

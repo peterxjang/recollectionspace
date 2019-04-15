@@ -771,15 +771,20 @@ function transitionRouteFailure() {
 }
 
 function transitionRouteSuccess(newState, delta, item) {
+  console.log("transitionRouteSuccess start", currentItemId, delta);
   if (delta > 0) {
-    if (item) {
-      currentItemId = item.id;
-    }
+    // if (item) {
+    //   currentItemId = item.id;
+    // }
+    currentItemId = item ? item.id : newState.canvas.id;
     replaceState(newState);
   } else {
+    console.log("currentItemId", currentItemId);
     const currentItem = newState.items.filter(
       item => item.id === currentItemId
     )[0];
+    console.log("transitionRouteSuccess", newState, delta, item);
+    console.log("currentItem", currentItem);
     if (currentItem) {
       // animateInItem(newState, currentItem);
       animateState(newState, currentItem);
@@ -865,6 +870,7 @@ function animateInItem(newState, item) {
 }
 
 function replaceState(newState, isChangingRoute = false) {
+  console.log("replaceState", newState);
   store.dispatch(changeRouteSuccess(newState, isChangingRoute));
   zoomToFitAll(0.2, false);
   loadVisibleImages();

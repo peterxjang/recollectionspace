@@ -2,12 +2,12 @@
   selectedItem: -1,
   canvas: {
     id: @parent.id,
-    # x: @parent.x,
-    # y: @parent.y,
-    # angle: @parent.angle,
-    # scale: @parent.scale,
-    # color: @parent.color,
-    # src: @parent.src,
+    x: @parent.x || 0,
+    y: @parent.y || 0,
+    angle: @parent.angle || 0,
+    scale: @parent.scale || 1,
+    color: @parent.color || "#000",
+    src: @parent.src || "6.jpg",
     type: @parent_type
   },
   items: @children.map do |child|
@@ -15,15 +15,15 @@
       id: child.id,
       caption: child.following.username,
       body: "",
-      x: child.x,
-      y: child.y,
-      src: child.src,
-      width: child.width,
-      height: child.height,
-      color: child.color,
-      angle: child.angle,
-      scale: child.scale,
-      border: child.border,
+      x: child.x || @parent.x || 0,
+      y: child.y || @parent.y || 0,
+      src: child.src || "6.jpg",
+      width: child.width || 320,
+      height: child.height || 240,
+      color: child.color || "#000",
+      angle: child.angle || 0,
+      scale: child.scale || 1,
+      border: child.border || true,
       type: @children_type
     }
   end

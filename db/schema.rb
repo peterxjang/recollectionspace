@@ -84,6 +84,16 @@ ActiveRecord::Schema.define(version: 2019_03_06_171121) do
     t.string "first_name"
     t.string "last_name"
     t.string "avatar"
+    t.float "x"
+    t.float "y"
+    t.integer "width"
+    t.integer "height"
+    t.float "angle", default: 0.0
+    t.float "scale"
+    t.boolean "border", default: true
+    t.string "src"
+    t.string "color"
+    t.integer "zindex", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
