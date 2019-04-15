@@ -43,24 +43,36 @@ const Application = {
   },
   handleTransition: function(delta, item) {
     if (delta < 0) {
-      if (item && item.type === "collection") {
-        this.loadCanvasData("/api/collections", delta, item);
-        return true;
-      } else if (item && item.type === "follow") {
-        console.log("transition out of follow...");
-        this.loadCanvasData("/api/follows", delta, item);
-        return true;
-      }
-      return true;
-    } else if (item && item.type === "collection") {
-      this.loadCanvasData("/api/collections/" + item.id, delta, item);
-      return true;
+      return this.transitionOut(delta, item);
+    } else if (item && item.type !== "record") {
+      return this.transitionIn(delta, item);
     } else if (item) {
       ModalInfo.show({
         item: item,
         onEdit: this.handleEditRecord.bind(this),
         onDelete: this.handleDeleteRecord.bind(this)
       });
+      return true;
+    }
+    return false;
+  },
+  transitionOut: function(delta, item) {
+    if (item && item.type === "collection") {
+      this.loadCanvasData("/api/collections", delta, item);
+      return true;
+    } else if (item && item.type === "follow") {
+      console.log("transition out of follow...");
+      this.loadCanvasData("/api/follows", delta, item);
+      return true;
+    }
+    return false;
+  },
+  transitionIn: function(delta, item) {
+    if (item.type === "collection") {
+      this.loadCanvasData("/api/collections/" + item.id, delta, item);
+      return true;
+    } else if (item.type === "follow") {
+      this.loadCanvasData("/api/follows/" + item.id, delta, item);
       return true;
     }
     return false;
