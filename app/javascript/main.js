@@ -2,6 +2,7 @@ import Canvas from "./canvas-redux";
 import ModalInfo from "./components/modal-info";
 import ModalMenu from "./components/modal-menu";
 import ModalNew from "./components/modal-new";
+import ModalNewFollow from "./components/modal-new-follow";
 import ModalEdit from "./components/modal-edit";
 
 const Application = {
@@ -131,9 +132,26 @@ const Application = {
     console.log(stateString);
   },
   handleNewRecord: function(state) {
-    ModalNew.show({
-      onSaveRecord: Canvas.createItem
-    });
+    if (state.canvas.type === "collection") {
+      ModalNew.show({
+        onSaveRecord: Canvas.createItem
+      });
+    } else if (state.canvas.type === "follow") {
+      console.log("handleNewRecord (collection)");
+    } else if (state.canvas.type === "root") {
+      console.log("handleNewRecord (follow)");
+      ModalNewFollow.show({
+        onSearchUsers: this.handleSearchUsers,
+        onSaveFollow: Canvas.createItem
+      });
+    }
+  },
+  handleSearchUsers: function(searchText, callback) {
+    fetch("/api/users?new=true&username=" + searchText)
+      .then(response => response.json())
+      .then(data => {
+        callback(data);
+      });
   },
   handleSaveRecord: function(parent, item, image) {
     let url, params;
@@ -145,6 +163,12 @@ const Application = {
       params.append("name", item.caption);
       params.append("description", item.body);
       params.append("image", image);
+    } else if (parent.type === "root") {
+      console.log("handleSaveRecord follow", parent, item, image);
+      url = "/api/follows";
+      params = new FormData();
+      Object.keys(item).forEach(key => params.append(key, item[key]));
+      params.append("following_id", item.id);
     } else {
       return;
     }
@@ -239,6 +263,8 @@ const Application = {
     let url, params;
     if (item.type === "record") {
       url = "/api/records/" + item.id;
+    } else if (item.type === "follow") {
+      url = "/api/follows/" + item.id;
     } else {
       return;
     }

@@ -885,11 +885,11 @@ function replaceItemProperties(itemOld, itemNew) {
   smoothDispatch(replaceItem(itemOld, itemNew), allTransformEnd);
 }
 
-function createItem(image, caption, body) {
+function createItem(image, caption, body, id = null) {
   let startingCenter = getVisiblePoint();
   let img = new Image();
   img.crossOrigin = "anonymous";
-  let id = Date.now();
+  id = id === null ? Date.now() : id;
   img.onload = function() {
     let height = img.height;
     let width = img.width;
@@ -910,7 +910,9 @@ function createItem(image, caption, body) {
     smoothDispatch(addItem(item));
     props.onSaveRecord(state.canvas, item, image);
   };
-  img.src = URL.createObjectURL(image);
+  img.src = image.startsWith("blob:")
+    ? URL.createObjectURL(image)
+    : Record.getFullSrc(image, id);
 }
 
 function getVisiblePoint() {

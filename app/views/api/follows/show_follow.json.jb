@@ -1,0 +1,16 @@
+{
+  id: @follow.id,
+  name: @follow.following.username,
+  description: "",
+  x: @follow.x,
+  y: @follow.y,
+  width: @follow.width,
+  height: @follow.height,
+  angle: @follow.angle,
+  scale: @follow.scale,
+  border: @follow.border,
+  src: @follow.src,
+  color: @follow.color,
+  zindex: @follow.zindex,
+  type: "follow"
+}
