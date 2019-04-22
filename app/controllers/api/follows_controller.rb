@@ -41,7 +41,11 @@ class Api::FollowsController < ApplicationController
 
   def destroy
     @follow = Follow.find_by(id: params[:id])
-    @follow.destroy
-    render json: {message: "Follow successfully destroyed!"}
+    unless @follow.follower_id == current_user.id && @follow.following_id == current_user.id
+      @follow.destroy
+      render json: {message: "Follow successfully destroyed!"}
+    else
+      render json: {errors: ["Cannot unfollow yourself"]}, status: 422
+    end
   end
 end

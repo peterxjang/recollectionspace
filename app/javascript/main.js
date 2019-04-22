@@ -27,6 +27,9 @@ const Application = {
     Canvas.transitionRouteRequest();
     fetch(url)
       .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
         return response.json();
       })
       .then(json => {
@@ -148,7 +151,12 @@ const Application = {
   },
   handleSearchUsers: function(searchText, callback) {
     fetch("/api/users?new=true&username=" + searchText)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
       .then(data => {
         callback(data);
       });
@@ -180,7 +188,12 @@ const Application = {
       referrer: "no-referrer",
       body: params
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
       .then(data => {
         const itemNew = {
           ...item,
@@ -223,7 +236,12 @@ const Application = {
       referrer: "no-referrer",
       body: JSON.stringify(params)
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
       .then(data => {
         console.log(JSON.stringify(data));
         Canvas.updateItem(id, { caption, body });
@@ -253,7 +271,12 @@ const Application = {
       referrer: "no-referrer",
       body: JSON.stringify(params)
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
       .then(data => {
         console.log(JSON.stringify(data));
       })
@@ -279,7 +302,12 @@ const Application = {
       referrer: "no-referrer",
       body: JSON.stringify(params)
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
       .then(data => {
         console.log(JSON.stringify(data));
         Canvas.deleteItem(item);
