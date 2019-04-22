@@ -39,6 +39,25 @@ class Api::FollowsController < ApplicationController
     render "show.json.jb"
   end
 
+  def update
+    @follow = Follow.find_by(id: params[:id])
+    @follow.x = params[:x] || @follow.x
+    @follow.y = params[:y] || @follow.y
+    @follow.width = params[:width] || @follow.width
+    @follow.height = params[:height] || @follow.height
+    @follow.angle = params[:angle] || @follow.angle
+    @follow.scale = params[:scale] || @follow.scale
+    @follow.border = params[:border] || @follow.border
+    @follow.src = params[:src] || @follow.src
+    @follow.color = params[:color] || @follow.color
+    @follow.zindex = params[:zindex] || @follow.zindex
+    if @follow.save
+      render "show_follow.json.jb"
+    else
+      render json: {errors: @follow.errors.full_messages}, status: 422
+    end
+  end
+
   def destroy
     @follow = Follow.find_by(id: params[:id])
     unless @follow.follower_id == current_user.id && @follow.following_id == current_user.id

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get "/follows" => "follows#index"
     post "/follows" => "follows#create"
     get "/follows/:id" => "follows#show"
+    patch "/follows/:id" => "follows#update"
     delete "/follows/:id" => "follows#destroy"
     get "/collections" => "collections#index"
     get "/collections/:id" => "collections#show"

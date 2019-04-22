@@ -257,6 +257,13 @@ const Application = {
         name: item.caption,
         description: item.body
       };
+    } else if (item.type === "follow") {
+      url = "/api/follows/" + item.id;
+      params = {
+        ...item,
+        name: item.caption,
+        description: item.body
+      };
     } else {
       return;
     }
