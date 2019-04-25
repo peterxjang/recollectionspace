@@ -910,9 +910,10 @@ function createItem(image, caption, body, id = null) {
     smoothDispatch(addItem(item));
     props.onSaveRecord(state.canvas, item, image);
   };
-  img.src = image.startsWith("blob:")
-    ? URL.createObjectURL(image)
-    : Record.getFullSrc(image, id);
+  img.src =
+    image instanceof File
+      ? URL.createObjectURL(image)
+      : Record.getFullSrc(image, id);
 }
 
 function getVisiblePoint() {
