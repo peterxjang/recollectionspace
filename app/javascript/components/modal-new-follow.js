@@ -58,7 +58,9 @@ const ModalNewFollow = {
         user => user.id === parseInt(this.$inputUsers.value)
       )[0];
       if (user) {
-        this.props.onSaveFollow(user.src, user.username, "", user.id);
+        this.props.onSaveFollow(user.src, user.username, "", {
+          following_id: user.id
+        });
       }
       this.hide();
     };

@@ -885,11 +885,11 @@ function replaceItemProperties(itemOld, itemNew) {
   smoothDispatch(replaceItem(itemOld, itemNew), allTransformEnd);
 }
 
-function createItem(image, caption, body, id = null) {
+function createItem(image, caption, body, options = {}) {
   let startingCenter = getVisiblePoint();
   let img = new Image();
   img.crossOrigin = "anonymous";
-  id = id === null ? Date.now() : id;
+  const id = Date.now();
   img.onload = function() {
     let height = img.height;
     let width = img.width;
@@ -908,7 +908,7 @@ function createItem(image, caption, body, id = null) {
       color: Record.getDominantColor(img)
     };
     smoothDispatch(addItem(item));
-    props.onSaveRecord(state.canvas, item, image);
+    props.onSaveRecord(state.canvas, item, image, options);
   };
   img.src =
     image instanceof File

@@ -3,6 +3,7 @@ import ModalInfo from "./components/modal-info";
 import ModalMenu from "./components/modal-menu";
 import ModalNew from "./components/modal-new";
 import ModalNewFollow from "./components/modal-new-follow";
+import ModalNewCollection from "./components/modal-new-collection";
 import ModalEdit from "./components/modal-edit";
 
 const Application = {
@@ -141,6 +142,13 @@ const Application = {
       });
     } else if (state.canvas.type === "follow") {
       console.log("handleNewRecord (collection)");
+      this.handleGetCollectionCategories(function(data) {
+        console.log("collection categories", data);
+        ModalNewCollection.show({
+          collectionCategories: data,
+          onSaveCollection: Canvas.createItem
+        });
+      });
     } else if (state.canvas.type === "root") {
       console.log("handleNewRecord (follow)");
       ModalNewFollow.show({
@@ -148,6 +156,18 @@ const Application = {
         onSaveFollow: Canvas.createItem
       });
     }
+  },
+  handleGetCollectionCategories: function(callback) {
+    fetch("/api/collection_categories?public=true")
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        callback(data);
+      });
   },
   handleSearchUsers: function(searchText, callback) {
     fetch("/api/users?new=true&username=" + searchText)
@@ -161,7 +181,7 @@ const Application = {
         callback(data);
       });
   },
-  handleSaveRecord: function(parent, item, image) {
+  handleSaveRecord: function(parent, item, image, options) {
     let url, params;
     if (parent.type === "collection") {
       url = "/api/records";
@@ -171,12 +191,19 @@ const Application = {
       params.append("name", item.caption);
       params.append("description", item.body);
       params.append("image", image);
+    } else if (parent.type === "follow") {
+      console.log("handleSaveRecord collection");
+      url = "/api/collections";
+      params = new FormData();
+      Object.keys(item).forEach(key => params.append(key, item[key]));
+      params.append("collection_category_id", options.collection_category_id);
+      params.append("image", image);
     } else if (parent.type === "root") {
       console.log("handleSaveRecord follow", parent, item, image);
       url = "/api/follows";
       params = new FormData();
       Object.keys(item).forEach(key => params.append(key, item[key]));
-      params.append("following_id", item.id);
+      params.append("following_id", options.following_id);
     } else {
       return;
     }
@@ -257,6 +284,11 @@ const Application = {
         name: item.caption,
         description: item.body
       };
+    } else if (item.type === "collection") {
+      url = "/api/collections/" + item.id;
+      params = {
+        ...item
+      };
     } else if (item.type === "follow") {
       url = "/api/follows/" + item.id;
       params = {
@@ -293,6 +325,8 @@ const Application = {
     let url, params;
     if (item.type === "record") {
       url = "/api/records/" + item.id;
+    } else if (item.type === "collection") {
+      url = "/api/collections/" + item.id;
     } else if (item.type === "follow") {
       url = "/api/follows/" + item.id;
     } else {
