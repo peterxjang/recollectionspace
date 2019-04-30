@@ -61,12 +61,6 @@ class Api::CollectionsController < ApplicationController
 
   def destroy
     @collection = Collection.find_by(id: params[:id])
-    matches = /^.+\.cloudinary\.com\/(?:[^\/]+\/)(?:(image|video)\/)?(?:(upload|fetch)\/)?(?:(?:[^_\/]+_[^,\/]+,?)*\/)?(?:v(\d+|\w{1,2})\/)?([^\.^\s]+)(?:\.(.+))?$/.match(@collection.src).to_a
-    if matches.length == 6
-      public_id = matches[4]
-      result = Cloudinary::Uploader.destroy(public_id, options = {})
-      p result
-    end
     @collection.destroy
     render json: {message: "Collection successfully destroyed!"}
   end
