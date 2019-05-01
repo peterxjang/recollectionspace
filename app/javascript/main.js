@@ -66,7 +66,6 @@ const Application = {
       this.loadCanvasData("/api/collections", delta, item);
       return true;
     } else if (item && item.type === "follow") {
-      console.log("transition out of follow...");
       this.loadCanvasData("/api/follows", delta, item);
       return true;
     }
@@ -133,7 +132,6 @@ const Application = {
     };
     const stateString = JSON.stringify(minState, null, 2);
     localStorage.setItem("state", stateString);
-    console.log(stateString);
   },
   handleNewRecord: function(state) {
     if (state.canvas.type === "collection") {
@@ -141,16 +139,13 @@ const Application = {
         onSaveRecord: Canvas.createItem
       });
     } else if (state.canvas.type === "follow") {
-      console.log("handleNewRecord (collection)");
       this.handleGetCollectionCategories(function(data) {
-        console.log("collection categories", data);
         ModalNewCollection.show({
           collectionCategories: data,
           onSaveCollection: Canvas.createItem
         });
       });
     } else if (state.canvas.type === "root") {
-      console.log("handleNewRecord (follow)");
       ModalNewFollow.show({
         onSearchUsers: this.handleSearchUsers,
         onSaveFollow: Canvas.createItem
@@ -192,14 +187,12 @@ const Application = {
       params.append("description", item.body);
       params.append("image", image);
     } else if (parent.type === "follow") {
-      console.log("handleSaveRecord collection");
       url = "/api/collections";
       params = new FormData();
       Object.keys(item).forEach(key => params.append(key, item[key]));
       params.append("collection_category_id", options.collection_category_id);
       params.append("image", image);
     } else if (parent.type === "root") {
-      console.log("handleSaveRecord follow", parent, item, image);
       url = "/api/follows";
       params = new FormData();
       Object.keys(item).forEach(key => params.append(key, item[key]));
@@ -270,7 +263,6 @@ const Application = {
         return response.json();
       })
       .then(data => {
-        console.log(JSON.stringify(data));
         Canvas.updateItem(id, { caption, body });
       })
       .catch(error => console.error(error));
@@ -316,9 +308,6 @@ const Application = {
         }
         return response.json();
       })
-      .then(data => {
-        console.log(JSON.stringify(data));
-      })
       .catch(error => console.error(error));
   },
   handleDeleteRecord: function(item) {
@@ -350,7 +339,6 @@ const Application = {
         return response.json();
       })
       .then(data => {
-        console.log(JSON.stringify(data));
         Canvas.deleteItem(item);
       })
       .catch(error => console.error(error));
