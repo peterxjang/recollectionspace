@@ -915,16 +915,9 @@ function createItem(image, caption, body, options = {}) {
 }
 
 function getVisiblePoint() {
-  // Change to world position https://stackoverflow.com/questions/34597160/html-canvas-mouse-position-after-scale-and-translate
-  let xcoords = state.items.map(item => item.x);
-  let ycoords = state.items.map(item => item.y);
-  let xmin = Math.min(...xcoords);
-  let xmax = Math.max(...xcoords);
-  let ymin = Math.min(...ycoords);
-  let ymax = Math.max(...ycoords);
   return {
-    x: xmin + (xmax - xmin) / 2,
-    y: ymin + (ymax - ymin) / 2
+    x: (-state.canvas.x + canvas.width * 0.5) / state.canvas.scale,
+    y: (-state.canvas.y + canvas.height * 0.5) / state.canvas.scale
   };
 }
 
