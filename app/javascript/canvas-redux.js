@@ -938,5 +938,6 @@ export default {
   replaceItemProperties,
   createItem,
   deleteItem,
-  updateItem
+  updateItem,
+  zoomToFitAll
 };

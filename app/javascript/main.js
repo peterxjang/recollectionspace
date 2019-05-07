@@ -5,6 +5,7 @@ import ModalNew from "./components/modal-new";
 import ModalNewFollow from "./components/modal-new-follow";
 import ModalNewCollection from "./components/modal-new-collection";
 import ModalEdit from "./components/modal-edit";
+import ModalSession from "./components/modal-session";
 
 const Application = {
   initialize: function() {
@@ -26,7 +27,9 @@ const Application = {
   },
   loadCanvasData: function(url, delta, item) {
     Canvas.transitionRouteRequest();
-    fetch(url)
+    fetch(url, {
+      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+    })
       .then(response => {
         if (!response.ok) {
           throw response;
@@ -37,7 +40,14 @@ const Application = {
         Canvas.transitionRouteSuccess(json, delta, item);
       })
       .catch(error => {
+        console.log(error);
         Canvas.transitionRouteFailure();
+        if (error.status === 401) {
+          ModalSession.show({
+            onLogin: this.handleLogin.bind(this),
+            onCancel: this.handleLoginCancel
+          });
+        }
       });
   },
   hideWebsiteTitle: function() {
@@ -68,6 +78,11 @@ const Application = {
     } else if (item && item.type === "follow") {
       this.loadCanvasData("/api/follows", delta, item);
       return true;
+    } else if (item && item.type === "root") {
+      ModalSession.show({
+        onLogin: this.handleLogin.bind(this),
+        onCancel: this.handleLoginCancel
+      });
     }
     return false;
   },
@@ -80,6 +95,33 @@ const Application = {
       return true;
     }
     return false;
+  },
+  handleLogin: function(email, password) {
+    var params = new FormData();
+    params.append("email", email);
+    params.append("password", password);
+    fetch("/api/sessions", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: params
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        localStorage.setItem("jwt", data.jwt);
+        this.loadCanvasData("/api/collections", 1, null);
+      })
+      .catch(error => console.error(error));
+  },
+  handleLoginCancel: function() {
+    Canvas.zoomToFitAll();
   },
   handleMenu: function(state) {
     ModalMenu.show({
@@ -153,7 +195,9 @@ const Application = {
     }
   },
   handleGetCollectionCategories: function(callback) {
-    fetch("/api/collection_categories?public=true")
+    fetch("/api/collection_categories?public=true", {
+      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+    })
       .then(response => {
         if (!response.ok) {
           throw response;
@@ -165,7 +209,9 @@ const Application = {
       });
   },
   handleSearchUsers: function(searchText, callback) {
-    fetch("/api/users?new=true&username=" + searchText)
+    fetch("/api/users?new=true&username=" + searchText, {
+      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+    })
       .then(response => {
         if (!response.ok) {
           throw response;
@@ -206,7 +252,8 @@ const Application = {
       cache: "no-cache",
       redirect: "follow",
       referrer: "no-referrer",
-      body: params
+      body: params,
+      headers: { Authorization: `Bearer ${localStorage.jwt}` }
     })
       .then(response => {
         if (!response.ok) {
@@ -250,7 +297,8 @@ const Application = {
       mode: "cors",
       cache: "no-cache",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.jwt}`
       },
       redirect: "follow",
       referrer: "no-referrer",
@@ -296,7 +344,8 @@ const Application = {
       mode: "cors",
       cache: "no-cache",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.jwt}`
       },
       redirect: "follow",
       referrer: "no-referrer",
@@ -326,7 +375,8 @@ const Application = {
       mode: "cors",
       cache: "no-cache",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.jwt}`
       },
       redirect: "follow",
       referrer: "no-referrer",
