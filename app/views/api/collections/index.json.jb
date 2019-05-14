@@ -14,7 +14,7 @@
     {
       id: child.id,
       caption: child.name,
-      body: "",
+      body: child.description,
       x: child.x,
       y: child.y,
       src: child.src,
