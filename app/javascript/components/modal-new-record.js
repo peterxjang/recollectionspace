@@ -1,11 +1,11 @@
 const ModalNewRecord = {
   props: null,
   $modal: document.getElementById("modal-new-record"),
-  $buttonSave: document.querySelector("#modal-new-record .save"),
-  $buttonCancel: document.querySelector("#modal-new-record .cancel"),
-  $inputImage: document.querySelector("#modal-new-record .image"),
-  $inputCaption: document.querySelector("#modal-new-record .caption"),
-  $inputBody: document.querySelector("#modal-new-record .body"),
+  $buttonSave: document.getElementById("modal-new-record-save"),
+  $buttonCancel: document.getElementById("modal-new-record-cancel"),
+  $inputImage: document.getElementById("modal-new-record-image"),
+  $inputCaption: document.getElementById("modal-new-record-caption"),
+  $inputBody: document.getElementById("modal-new-record-body"),
   visible: false,
   initialize: function() {
     this.bindEvents();

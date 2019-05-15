@@ -5,7 +5,6 @@ const Application = {
   initialize: function() {
     this.initializeCanvas();
     this.loadCanvasData("/api/collections", 1, null);
-    this.hideWebsiteTitle();
   },
   initializeCanvas: function() {
     Canvas.initialize(document.getElementById("canvas"), {
@@ -43,12 +42,6 @@ const Application = {
           });
         }
       });
-  },
-  hideWebsiteTitle: function() {
-    setTimeout(function() {
-      document.querySelector("#title h1").style.color = "#333";
-      document.querySelector("#title p").style.opacity = 0;
-    }, 6000);
   },
   handleTransition: function(delta, item) {
     if (delta < 0) {

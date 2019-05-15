@@ -15,33 +15,7 @@
       box-sizing: border-box;
       margin:0;
       padding:0;
-    }
-    @keyframes typing { from { width: 0; } }
-    @keyframes typing2 { 0%{width: 0;} 50%{width: 0;} 100%{ width: 100; } }
-    #title {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      font: 1em Consolas, Monaco, monospace;
-      color: #ccc;
-      margin: 2em 1em;
-      z-index: -1;
-    }
-    #title h1 {
-      width: 10ch;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: typing 1s steps(10, end);
-      transition: color 1s ease;
-    }
-    #title p {
-      width: 18ch;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: typing2 4s steps(18, end);
-      transition: opacity 1s ease;
+      border-width: 0;
     }
     html, body {
       height: 100%;
@@ -62,14 +36,11 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.8);
-      padding: 1em;
+      padding: 1rem;
       z-index: 3;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
-    }
-    .modal p {
-      margin-bottom: 1em;
     }
     .modal a {
       pointer-events: auto;
@@ -77,17 +48,7 @@
     #modal-close {
       color: white;
       float: right;
-      margin-bottom: 1em;
-    }
-    .modal form button, .modal form input, .modal form textarea {
-      display: block;
-      height: 4em;
-      width: 100%;
-      margin-bottom: 1em;
-      padding: 1em;
-    }
-    .modal form textarea {
-      height: 20em;
+      margin-bottom: 1rem;
     }
     .modal-section {
       background-color: white;
@@ -96,36 +57,92 @@
       pointer-events: auto;
       width: 50%;
       margin-left: 25%;
-      margin-top: 2em;
-      margin-bottom: 1em;
-      padding: 1em;
-      font-size: 14px;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      padding: 2rem;
+      border-radius: .25rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      color: #4a5568;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    textarea {
+      font-family: inherit;
+      height: 10rem;
+    }
+    .form-control {
+      width: 100%;
+      font-size: 1rem;
+      line-height: 1.5;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+    }
+    .btn {
+      font-size: 1rem;
+      font-weight: bold;
+      line-height: 1.5;
+      padding: 0.5rem 1rem;
+      border-radius: .25rem;
+      margin-right: 0.5rem;
+    }
+    .btn-primary {
+      color: white;
+      background-color: #4299e1;
+    }
+    .btn-primary:hover {
+      background-color: #2b6cb0;
+    }
+    .btn-secondary {
+      color: black;
+      background-color: #e2e8f0;
+    }
+    .btn-secondary:hover {
+      background-color: #cbd5e0;
     }
     .hidden {
       display: none;
     }
+    /*
+    .modal p {
+      margin-bottom: 1rem;
+    }
+    .modal form button, .modal form input, .modal form textarea {
+      display: block;
+      height: 4rem;
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: .25rem;
+    }
+    .modal form textarea {
+      height: 20rem;
+    }
+    */
   </style>
 </head>
 <body>
   <div id="app"></div>
   <canvas id="canvas"></canvas>
-  <div id="title">
-    <!-- typing animation based on Lea Verou's work: http://lea.verou.me/2012/02/simpler-css-typing-animation-with-the-ch-unit/ -->
-    <h1>Peter Jang</h1>
-    <p>(zoom to navigate)</p>
-  </div>
   <div id="modal" class="modal" style="">
     <a id="modal-close" href="javascript:void(0)">Close</a>
     <div id="modal-new-session" class="modal-section">
       <form>
-        <div>
-          <input class="email" type="email" placeholder="Email" aria-label="Email">
+        <div class="form-group">
+          <label for="modal-new-session-email">Email</label>
+          <input id="modal-new-session-email" class="form-control" type="email" placeholder="Email" aria-label="Email">
         </div>
-        <div>
-          <input class="password" type="password" placeholder="Password" aria-label="Password">
+        <div class="form-group">
+          <label for="modal-new-session-password">Password</label>
+          <input id="modal-new-session-password" class="form-control" type="password" placeholder="Password" aria-label="Password">
         </div>
-        <button class="save">Submit</button>
-        <button class="cancel">Cancel</button>
+        <button id="modal-new-session-save" class="btn btn-primary">Sign in</button>
+        <button id="modal-new-session-cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
     <div id="modal-info" class="modal-section hidden-scrollbar">
@@ -140,68 +157,82 @@
     </div>
     <div id="modal-menu" class="modal-section">
       <form>
-        <button class="save">Save Layout</button>
-        <button class="reset">Reset Layout</button>
-        <br>
-        <button class="new">New Record</button>
+        <div class="form-group">
+          <button class="save btn btn-primary form-control">Save Layout</button>
+        </div>
+        <div class="form-group">
+          <button class="reset btn btn-primary form-control">Reset Layout</button>
+        </div>
+        <div class="form-group">
+          <button class="new btn btn-primary form-control">New Record</button>
+        </div>
       </form>
     </div>
     <div id="modal-new-record" class="modal-section">
       <form>
-        <div>
-          <input class="image" type="file" placeholder="image" aria-label="image">
+        <div class="form-group">
+          <label for="modal-new-record-image">Image</label>
+          <input id="modal-new-record-image" class="form-control" type="file" placeholder="image" aria-label="image">
         </div>
-        <div>
-          <input class="caption" type="text" placeholder="caption" aria-label="caption">
+        <div class="form-group">
+          <label for="modal-new-record-caption">Caption</label>
+          <input id="modal-new-record-caption" class="form-control" type="text" placeholder="caption" aria-label="caption">
         </div>
-        <div>
-          <textarea class="body" placeholder="body" aria-label="body"></textarea>
+        <div class="form-group">
+          <label for="modal-new-record-body">Body</label>
+          <textarea id="modal-new-record-body" class="form-control" placeholder="body" aria-label="body"></textarea>
         </div>
-        <button class="save">create</button>
-        <button class="cancel">cancel</button>
+        <button id="modal-new-record-save" class="btn btn-primary">Create</button>
+        <button id="modal-new-record-cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
     <div id="modal-new-follow" class="modal-section">
       <form>
-        <div>
-          <input class="search" type="text" placeholder="search by username">
-          <button class="search-submit">submit</button>
+        <div class="form-group">
+          <label for="modal-new-follow-search">Search by username</label>
+          <input id="modal-new-follow-search" class="form-control" type="text" placeholder="Search by username">
         </div>
-        <div class="results" class="hidden">
-          <div>
-            <select class="users">
+        <button id="modal-new-follow-search-submit" class="btn btn-primary">Submit</button>
+        <div id="modal-new-follow-results" class="hidden">
+          <div class="form-group">
+            <label for="modal-new-follow-users">Users</label>
+            <select id="modal-new-follow-users" class="form-control">
               <option value=""></option>
             </select>
           </div>
-          <button class="save">create</button>
-          <button class="cancel">cancel</button>
+          <button id="modal-new-follow-save" class="btn btn-primary">Create</button>
+          <button id="modal-new-follow-cancel" class="btn btn-primary">Cancel</button>
         </div>
       </form>
     </div>
     <div id="modal-new-collection" class="modal-section">
       <form>
-        <div>
-          <select class="categories">
+        <div class="form-group">
+          <label for="modal-new-collection-categories">Category</label>
+          <select id="modal-new-collection-categories" class="form-control">
             <option value=""></option>
           </select>
         </div>
-        <div>
-          <input class="image" type="file" placeholder="image" aria-label="image">
+        <div class="form-group">
+          <label for="modal-new-collection-image">Image</label>
+          <input id="modal-new-collection-image" class="form-control" type="file" placeholder="image" aria-label="image">
         </div>
-        <button class="save">create</button>
-        <button class="cancel">cancel</button>
+        <button id="modal-new-collection-save" class="btn btn-primary">Create</button>
+        <button id="modal-new-collection-cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
     <div id="modal-edit" class="modal-section">
       <form>
-        <div>
-          <input class="caption" type="text" placeholder="caption" aria-label="caption">
+        <div class="form-group">
+          <label for="modal-edit-caption">Caption</label>
+          <input id="modal-edit-caption" class="form-control" type="text" placeholder="caption" aria-label="caption">
         </div>
-        <div>
-          <textarea class="body" placeholder="body" aria-label="body"></textarea>
+        <div class="form-group">
+          <label for="modal-edit-body">Body</label>
+          <textarea id="modal-edit-body" class="form-control" placeholder="body" aria-label="body"></textarea>
         </div>
-        <button class="save">update</button>
-        <button class="cancel">cancel</button>
+        <button id="modal-edit-save" class="btn btn-primary">Update</button>
+        <button id="modal-edit-cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
   </div>

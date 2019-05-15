@@ -1,13 +1,12 @@
 const ModalNewCollection = {
-  // TODO: user can add custom image
   props: null,
   $modal: document.getElementById("modal-new-collection"),
-  $inputCollectionCategories: document.querySelector(
-    "#modal-new-collection .categories"
+  $inputCollectionCategories: document.getElementById(
+    "modal-new-collection-categories"
   ),
-  $inputImage: document.querySelector("#modal-new-collection .image"),
-  $buttonSave: document.querySelector("#modal-new-collection .save"),
-  $buttonCancel: document.querySelector("#modal-new-collection .cancel"),
+  $inputImage: document.getElementById("modal-new-collection-image"),
+  $buttonSave: document.getElementById("modal-new-collection-save"),
+  $buttonCancel: document.getElementById("modal-new-collection-cancel"),
   visible: false,
   initialize: function() {
     this.bindEvents();

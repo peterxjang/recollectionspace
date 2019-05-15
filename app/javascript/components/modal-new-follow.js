@@ -1,14 +1,14 @@
 const ModalNewFollow = {
   props: null,
   $modal: document.getElementById("modal-new-follow"),
-  $inputSearch: document.querySelector("#modal-new-follow .search"),
-  $buttonSearchSubmit: document.querySelector(
-    "#modal-new-follow .search-submit"
+  $inputSearch: document.getElementById("modal-new-follow-search"),
+  $buttonSearchSubmit: document.getElementById(
+    "modal-new-follow-search-submit"
   ),
-  $divResults: document.querySelector("#modal-new-follow .results"),
-  $buttonSave: document.querySelector("#modal-new-follow .save"),
-  $buttonCancel: document.querySelector("#modal-new-follow .cancel"),
-  $inputUsers: document.querySelector("#modal-new-follow .users"),
+  $divResults: document.getElementById("modal-new-follow-results"),
+  $buttonSave: document.getElementById("modal-new-follow-save"),
+  $buttonCancel: document.getElementById("modal-new-follow-cancel"),
+  $inputUsers: document.getElementById("modal-new-follow-users"),
   visible: false,
   users: [],
   initialize: function() {

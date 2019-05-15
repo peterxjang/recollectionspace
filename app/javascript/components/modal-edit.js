@@ -1,10 +1,10 @@
 const ModalEdit = {
   props: null,
   $modal: document.getElementById("modal-edit"),
-  $buttonSave: document.querySelector("#modal-edit .save"),
-  $buttonCancel: document.querySelector("#modal-edit .cancel"),
-  $inputCaption: document.querySelector("#modal-edit .caption"),
-  $inputBody: document.querySelector("#modal-edit .body"),
+  $buttonSave: document.getElementById("modal-edit-save"),
+  $buttonCancel: document.getElementById("modal-edit-cancel"),
+  $inputCaption: document.getElementById("modal-edit-caption"),
+  $inputBody: document.getElementById("modal-edit-body"),
   visible: false,
   initialize: function() {
     this.bindEvents();

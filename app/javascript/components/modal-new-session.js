@@ -1,10 +1,10 @@
 const ModalNewSession = {
   props: null,
   $modal: document.getElementById("modal-new-session"),
-  $buttonSave: document.querySelector("#modal-new-session .save"),
-  $buttonCancel: document.querySelector("#modal-new-session .cancel"),
-  $inputEmail: document.querySelector("#modal-new-session .email"),
-  $inputPassword: document.querySelector("#modal-new-session .password"),
+  $buttonSave: document.getElementById("modal-new-session-save"),
+  $buttonCancel: document.getElementById("modal-new-session-cancel"),
+  $inputEmail: document.getElementById("modal-new-session-email"),
+  $inputPassword: document.getElementById("modal-new-session-password"),
   visible: false,
   initialize: function() {
     this.bindEvents();
