@@ -15,10 +15,6 @@ const Modal = {
     return this;
   },
   hide: function() {
-    this.$modal.style.opacity = 0;
-    this.visible = false;
-  },
-  reset: function() {
     ModalInfo.hide();
     ModalMenu.hide();
     ModalNewRecord.hide();
@@ -26,38 +22,48 @@ const Modal = {
     ModalNewCollection.hide();
     ModalNewSession.hide();
     ModalEdit.hide();
+    this.makeInvisible();
+  },
+  makeInvisible: function() {
+    this.$modal.style.opacity = 0;
+    this.visible = false;
+  },
+  makeVisible: function() {
     setTimeout(() => {
       this.$modal.style.opacity = 1;
       this.visible = true;
     }, 0);
   },
   showInfo: function(props) {
-    this.reset();
-    ModalInfo.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalInfo.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showMenu: function(props) {
-    this.reset();
-    ModalMenu.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalMenu.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showNewRecord: function(props) {
-    this.reset();
-    ModalNewRecord.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalNewRecord.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showNewFollow: function(props) {
-    this.reset();
-    ModalNewFollow.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalNewFollow.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showNewCollection: function(props) {
-    this.reset();
-    ModalNewCollection.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalNewCollection.show({
+      ...props,
+      onHide: this.makeInvisible.bind(this)
+    });
   },
   showNewSession: function(props) {
-    this.reset();
-    ModalNewSession.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalNewSession.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showEdit: function(props) {
-    this.reset();
-    ModalEdit.show({ ...props, onHide: this.hide.bind(this) });
+    this.makeVisible();
+    ModalEdit.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   bindEvents: function() {
     this.$buttonClose.onclick = event => {
