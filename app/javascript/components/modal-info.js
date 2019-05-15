@@ -1,10 +1,10 @@
 const ModalInfo = {
   props: null,
   $modal: document.getElementById("modal-info"),
-  $caption: document.querySelector("#modal-info .caption"),
-  $body: document.querySelector("#modal-info .body"),
-  $buttonEdit: document.querySelector("#modal-info .edit"),
-  $buttonDelete: document.querySelector("#modal-info .delete"),
+  $caption: document.getElementById("modal-info-caption"),
+  $body: document.getElementById("modal-info-body"),
+  $buttonEdit: document.getElementById("modal-info-edit"),
+  $buttonDelete: document.getElementById("modal-info-delete"),
   visible: false,
   initialize: function() {
     this.bindEvents();

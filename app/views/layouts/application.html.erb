@@ -48,7 +48,10 @@
     #modal-close {
       color: white;
       float: right;
-      margin-bottom: 1rem;
+      text-decoration: none;
+      font-size: 2em;
+      cursor: pointer;
+      margin-right: 0.5rem;
     }
     .modal-section {
       background-color: white;
@@ -82,6 +85,11 @@
       padding: 0.5rem 0.75rem;
       border: 1px solid #ced4da;
       border-radius: .25rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    .form-control:focus, .btn:focus {
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+      outline: 0;
     }
     .btn {
       font-size: 1rem;
@@ -108,29 +116,13 @@
     .hidden {
       display: none;
     }
-    /*
-    .modal p {
-      margin-bottom: 1rem;
-    }
-    .modal form button, .modal form input, .modal form textarea {
-      display: block;
-      height: 4rem;
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 1rem;
-      border-radius: .25rem;
-    }
-    .modal form textarea {
-      height: 20rem;
-    }
-    */
   </style>
 </head>
 <body>
   <div id="app"></div>
   <canvas id="canvas"></canvas>
   <div id="modal" class="modal" style="">
-    <a id="modal-close" href="javascript:void(0)">Close</a>
+    <a id="modal-close">&times;</a>
     <div id="modal-new-session" class="modal-section">
       <form>
         <div class="form-group">
@@ -146,14 +138,12 @@
       </form>
     </div>
     <div id="modal-info" class="modal-section hidden-scrollbar">
-      <div class="inner">
-        <div class="toolbar">
-          <a class="edit" href="javascript:void(0)" class="hidden">Edit</a>
-          <a class="delete" href="javascript:void(0)" class="hidden">Delete</a>
-        </div>
-        <h1 class="caption"></h1>
-        <div class="body"></div>
+      <div id="modal-info-toolbar" class="form-group">
+        <button id="modal-info-edit" class="btn btn-primary">Edit</button>
+        <button id="modal-info-delete" class="btn btn-primary">Delete</button>
       </div>
+      <h1 id="modal-info-caption"></h1>
+      <div id="modal-info-body"></div>
     </div>
     <div id="modal-menu" class="modal-section">
       <form>
