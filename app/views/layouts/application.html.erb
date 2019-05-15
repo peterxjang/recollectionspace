@@ -61,63 +61,23 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background: black;
-      color: white;
+      background: rgba(0, 0, 0, 0.8);
       padding: 1em;
       z-index: 3;
-      opacity: 0.9;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity 0.2s;
     }
     .modal p {
       margin-bottom: 1em;
     }
     .modal a {
-      color: white;
-    }
-    .modal-close {
-      color: white;
-      float: right;
-      margin-bottom: 1em;
-    }
-    #modal-info {
-      opacity: 0;
-      padding-top: 0px;
-      padding-bottom: 0px;
-      pointer-events: none;
-      background-color: #222;
-    }
-    #modal-info > div {
-      margin: 0 auto;
-      max-width: 960px;
-      height: 100%;
-      overflow: hidden;
-    }
-    #modal-info > div > div {
-      padding: 1em;
-      overflow-y: auto;
-      height: 100%;
-      margin-right: -200em;
-      padding-right: 201em;
-      background-color: #000;
-    }
-    #modal-info a {
       pointer-events: auto;
     }
-    #modal-info .caption:hover {
-      cursor: pointer;
-    }
-    #modal-info .caption {
-      margin-bottom: 0.2em;
-    }
-    #modal-info .toolbar {
+    #modal-close {
+      color: white;
       float: right;
-    }
-    .modal form {
-      width: 50%;
-      margin-left: 25%;
       margin-bottom: 1em;
-      padding: 1em;
-      font-size: 14px;
     }
     .modal form button, .modal form input, .modal form textarea {
       display: block;
@@ -128,6 +88,18 @@
     }
     .modal form textarea {
       height: 20em;
+    }
+    .modal-section {
+      background-color: white;
+      opacity: 1;
+      display: none;
+      pointer-events: auto;
+      width: 50%;
+      margin-left: 25%;
+      margin-top: 2em;
+      margin-bottom: 1em;
+      padding: 1em;
+      font-size: 14px;
     }
     .hidden {
       display: none;
@@ -142,102 +114,96 @@
     <h1>Peter Jang</h1>
     <p>(zoom to navigate)</p>
   </div>
-  <div id="modal-info" class="modal" style="opacity:0">
-    <div class="hidden-scrollbar">
+  <div id="modal" class="modal" style="">
+    <a id="modal-close" href="javascript:void(0)">Close</a>
+    <div id="modal-new-session" class="modal-section">
+      <form>
+        <div>
+          <input class="email" type="email" placeholder="Email" aria-label="Email">
+        </div>
+        <div>
+          <input class="password" type="password" placeholder="Password" aria-label="Password">
+        </div>
+        <button class="save">Submit</button>
+        <button class="cancel">Cancel</button>
+      </form>
+    </div>
+    <div id="modal-info" class="modal-section hidden-scrollbar">
       <div class="inner">
         <div class="toolbar">
-          <a id="modal-info-edit" href="javascript:void(0)" class="hidden">Edit</a>
-          <a id="modal-info-delete" href="javascript:void(0)" class="hidden">Delete</a>
-          <a id="modal-info-close" href="javascript:void(0)">Close</a>
+          <a class="edit" href="javascript:void(0)" class="hidden">Edit</a>
+          <a class="delete" href="javascript:void(0)" class="hidden">Delete</a>
         </div>
-        <h1 class="caption" title="Toggle solid text"></h1>
+        <h1 class="caption"></h1>
         <div class="body"></div>
       </div>
     </div>
-  </div>
-  <div id="modal-menu" class="modal modal-form hidden">
-    <a id="modal-menu-close" class="modal-close" href="javascript:void(0)">Close</a>
-    <form>
-      <button id="modal-menu-save">Save Layout</button>
-      <button id="modal-menu-reset">Reset Layout</button>
-      <br>
-      <button id="modal-menu-new">New Record</button>
-    </form>
-  </div>
-  <div id="modal-new" class="modal modal-form hidden">
-    <a id="modal-new-close" class="modal-close" href="javascript:void(0)">Close</a>
-    <form>
-      <div>
-        <input id="modal-new-image" type="file" placeholder="Image" aria-label="Image">
-      </div>
-      <div>
-        <input id="modal-new-caption" type="text" placeholder="Caption" aria-label="Caption">
-      </div>
-      <div>
-        <textarea id="modal-new-body" placeholder="Body" aria-label="Body"></textarea>
-      </div>
-      <button id="modal-new-save">Create</button>
-      <button id="modal-new-cancel">Cancel</button>
-    </form>
-  </div>
-  <div id="modal-new-follow" class="modal modal-form hidden">
-    <a id="modal-new-follow-close" class="modal-close" href="javascript:void(0)">Close</a>
-    <form>
-      <div>
-        <input id="modal-new-follow-search" type="text" placeholder="Search by username">
-        <button id="modal-new-follow-search-submit">Submit</button>
-      </div>
-      <div id="modal-new-follow-results" class="hidden">
+    <div id="modal-menu" class="modal-section">
+      <form>
+        <button class="save">Save Layout</button>
+        <button class="reset">Reset Layout</button>
+        <br>
+        <button class="new">New Record</button>
+      </form>
+    </div>
+    <div id="modal-new-record" class="modal-section">
+      <form>
         <div>
-          <select id="modal-new-follow-users">
+          <input class="image" type="file" placeholder="image" aria-label="image">
+        </div>
+        <div>
+          <input class="caption" type="text" placeholder="caption" aria-label="caption">
+        </div>
+        <div>
+          <textarea class="body" placeholder="body" aria-label="body"></textarea>
+        </div>
+        <button class="save">create</button>
+        <button class="cancel">cancel</button>
+      </form>
+    </div>
+    <div id="modal-new-follow" class="modal-section">
+      <form>
+        <div>
+          <input class="search" type="text" placeholder="search by username">
+          <button class="search-submit">submit</button>
+        </div>
+        <div class="results" class="hidden">
+          <div>
+            <select class="users">
+              <option value=""></option>
+            </select>
+          </div>
+          <button class="save">create</button>
+          <button class="cancel">cancel</button>
+        </div>
+      </form>
+    </div>
+    <div id="modal-new-collection" class="modal-section">
+      <form>
+        <div>
+          <select class="categories">
             <option value=""></option>
           </select>
         </div>
-        <button id="modal-new-follow-save">Create</button>
-        <button id="modal-new-follow-cancel">Cancel</button>
-      </div>
-    </form>
-  </div>
-  <div id="modal-new-collection" class="modal modal-form hidden">
-    <a id="modal-new-collection-close" class="modal-close" href="javascript:void(0)">Close</a>
-    <form>
-      <div>
-        <select id="modal-new-collection-categories">
-          <option value=""></option>
-        </select>
-      </div>
-      <div>
-        <input id="modal-new-collection-image" type="file" placeholder="Image" aria-label="Image">
-      </div>
-      <button id="modal-new-collection-save">Create</button>
-      <button id="modal-new-collection-cancel">Cancel</button>
-    </form>
-  </div>
-  <div id="modal-edit" class="modal modal-form hidden">
-    <a id="modal-edit-close" class="modal-close" href="javascript:void(0)">Close</a>
-    <form>
-      <div>
-        <input id="modal-edit-caption" type="text" placeholder="Caption" aria-label="Caption">
-      </div>
-      <div>
-        <textarea id="modal-edit-body" placeholder="Body" aria-label="Body"></textarea>
-      </div>
-      <button id="modal-edit-save">Update</button>
-      <button id="modal-edit-cancel">Cancel</button>
-    </form>
-  </div>
-  <div id="modal-session" class="modal modal-form hidden">
-    <a id="modal-session-close" class="modal-close" href="javascript:void(0)">Close</a>
-    <form>
-      <div>
-        <input id="modal-session-email" type="email" placeholder="Email" aria-label="Email">
-      </div>
-      <div>
-        <input id="modal-session-password" type="password" placeholder="Password" aria-label="Password">
-      </div>
-      <button id="modal-session-save">Submit</button>
-      <button id="modal-session-cancel">Cancel</button>
-    </form>
+        <div>
+          <input class="image" type="file" placeholder="image" aria-label="image">
+        </div>
+        <button class="save">create</button>
+        <button class="cancel">cancel</button>
+      </form>
+    </div>
+    <div id="modal-edit" class="modal-section">
+      <form>
+        <div>
+          <input class="caption" type="text" placeholder="caption" aria-label="caption">
+        </div>
+        <div>
+          <textarea class="body" placeholder="body" aria-label="body"></textarea>
+        </div>
+        <button class="save">update</button>
+        <button class="cancel">cancel</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>

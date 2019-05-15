@@ -3,12 +3,11 @@ const ModalNewCollection = {
   props: null,
   $modal: document.getElementById("modal-new-collection"),
   $inputCollectionCategories: document.querySelector(
-    "#modal-new-collection-categories"
+    "#modal-new-collection .categories"
   ),
-  $inputImage: document.querySelector("#modal-new-collection-image"),
-  $buttonSave: document.querySelector("#modal-new-collection-save"),
-  $buttonCancel: document.querySelector("#modal-new-collection-cancel"),
-  $buttonClose: document.querySelector("#modal-new-collection-close"),
+  $inputImage: document.querySelector("#modal-new-collection .image"),
+  $buttonSave: document.querySelector("#modal-new-collection .save"),
+  $buttonCancel: document.querySelector("#modal-new-collection .cancel"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -19,6 +18,9 @@ const ModalNewCollection = {
     this.$inputCollectionCategories.value = "";
     this.$inputImage.value = "";
     this.visible = false;
+    if (this.props) {
+      this.props.onHide();
+    }
   },
   show: function(props) {
     this.props = props;
@@ -32,10 +34,6 @@ const ModalNewCollection = {
       .join();
   },
   bindEvents: function() {
-    this.$buttonClose.onclick = event => {
-      event.preventDefault();
-      this.hide();
-    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.hide();

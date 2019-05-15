@@ -1,10 +1,9 @@
 const ModalMenu = {
   props: null,
   $modal: document.getElementById("modal-menu"),
-  $buttonSave: document.querySelector("#modal-menu-save"),
-  $buttonReset: document.querySelector("#modal-menu-reset"),
-  $buttonClose: document.querySelector("#modal-menu-close"),
-  $buttonNew: document.querySelector("#modal-menu-new"),
+  $buttonSave: document.querySelector("#modal-menu .save"),
+  $buttonReset: document.querySelector("#modal-menu .reset"),
+  $buttonNew: document.querySelector("#modal-menu .new"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -20,10 +19,6 @@ const ModalMenu = {
     this.visible = true;
   },
   bindEvents: function() {
-    this.$buttonClose.onclick = event => {
-      event.preventDefault();
-      this.hide();
-    };
     this.$buttonSave.onclick = event => {
       event.preventDefault();
       this.props.onSaveLayout();

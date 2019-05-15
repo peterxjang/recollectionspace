@@ -1,12 +1,11 @@
-const ModalNew = {
+const ModalNewRecord = {
   props: null,
-  $modal: document.getElementById("modal-new"),
-  $buttonSave: document.querySelector("#modal-new-save"),
-  $buttonCancel: document.querySelector("#modal-new-cancel"),
-  $inputImage: document.querySelector("#modal-new-image"),
-  $inputCaption: document.querySelector("#modal-new-caption"),
-  $inputBody: document.querySelector("#modal-new-body"),
-  $buttonClose: document.querySelector("#modal-new-close"),
+  $modal: document.getElementById("modal-new-record"),
+  $buttonSave: document.querySelector("#modal-new-record .save"),
+  $buttonCancel: document.querySelector("#modal-new-record .cancel"),
+  $inputImage: document.querySelector("#modal-new-record .image"),
+  $inputCaption: document.querySelector("#modal-new-record .caption"),
+  $inputBody: document.querySelector("#modal-new-record .body"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -18,6 +17,9 @@ const ModalNew = {
     this.$inputCaption.value = "";
     this.$inputBody.value = "";
     this.visible = false;
+    if (this.props) {
+      this.props.onHide();
+    }
   },
   show: function(props) {
     this.props = props;
@@ -25,10 +27,6 @@ const ModalNew = {
     this.visible = true;
   },
   bindEvents: function() {
-    this.$buttonClose.onclick = event => {
-      event.preventDefault();
-      this.hide();
-    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.hide();
@@ -45,4 +43,4 @@ const ModalNew = {
   }
 };
 
-export default ModalNew.initialize();
+export default ModalNewRecord.initialize();

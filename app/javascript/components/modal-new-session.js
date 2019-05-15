@@ -1,11 +1,10 @@
-const ModalSession = {
+const ModalNewSession = {
   props: null,
-  $modal: document.getElementById("modal-session"),
-  $buttonSave: document.querySelector("#modal-session-save"),
-  $buttonCancel: document.querySelector("#modal-session-cancel"),
-  $inputEmail: document.querySelector("#modal-session-email"),
-  $inputPassword: document.querySelector("#modal-session-password"),
-  $buttonClose: document.querySelector("#modal-session-close"),
+  $modal: document.getElementById("modal-new-session"),
+  $buttonSave: document.querySelector("#modal-new-session .save"),
+  $buttonCancel: document.querySelector("#modal-new-session .cancel"),
+  $inputEmail: document.querySelector("#modal-new-session .email"),
+  $inputPassword: document.querySelector("#modal-new-session .password"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -16,6 +15,9 @@ const ModalSession = {
     this.$inputEmail.value = "";
     this.$inputPassword.value = "";
     this.visible = false;
+    if (this.props) {
+      this.props.onHide();
+    }
   },
   show: function(props) {
     this.props = props;
@@ -23,11 +25,6 @@ const ModalSession = {
     this.visible = true;
   },
   bindEvents: function() {
-    this.$buttonClose.onclick = event => {
-      event.preventDefault();
-      this.props.onCancel();
-      this.hide();
-    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.props.onCancel();
@@ -41,4 +38,4 @@ const ModalSession = {
   }
 };
 
-export default ModalSession.initialize();
+export default ModalNewSession.initialize();

@@ -1,11 +1,5 @@
 import Canvas from "./canvas-redux";
-import ModalInfo from "./components/modal-info";
-import ModalMenu from "./components/modal-menu";
-import ModalNew from "./components/modal-new";
-import ModalNewFollow from "./components/modal-new-follow";
-import ModalNewCollection from "./components/modal-new-collection";
-import ModalEdit from "./components/modal-edit";
-import ModalSession from "./components/modal-session";
+import Modal from "./components/modal";
 
 const Application = {
   initialize: function() {
@@ -22,7 +16,7 @@ const Application = {
       onUpdateRecord: this.handleUpdateRecord.bind(this),
       onShowModalInfo: this.handleShowModalInfo.bind(this),
       onHideModalInfo: this.handleHideModalInfo.bind(this),
-      isModalInfoVisible: () => ModalInfo.visible
+      isModalInfoVisible: () => Modal.visible
     });
   },
   loadCanvasData: function(url, delta, item) {
@@ -40,10 +34,10 @@ const Application = {
         Canvas.transitionRouteSuccess(json, delta, item);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
         Canvas.transitionRouteFailure();
         if (error.status === 401) {
-          ModalSession.show({
+          Modal.showNewSession({
             onLogin: this.handleLogin.bind(this),
             onCancel: this.handleLoginCancel
           });
@@ -62,7 +56,7 @@ const Application = {
     } else if (item && item.type !== "record") {
       return this.transitionIn(delta, item);
     } else if (item) {
-      ModalInfo.show({
+      Modal.showInfo({
         item: item,
         onEdit: this.handleEditRecord.bind(this),
         onDelete: this.handleDeleteRecord.bind(this)
@@ -79,7 +73,7 @@ const Application = {
       this.loadCanvasData("/api/follows", delta, item);
       return true;
     } else if (item && item.type === "root") {
-      ModalSession.show({
+      Modal.showNewSession({
         onLogin: this.handleLogin.bind(this),
         onCancel: this.handleLoginCancel
       });
@@ -124,7 +118,7 @@ const Application = {
     Canvas.zoomToFitAll();
   },
   handleMenu: function(state) {
-    ModalMenu.show({
+    Modal.showMenu({
       onSaveLayout: this.handleSave.bind(null, state),
       onResetLayout: this.handleResetLayout,
       onNewRecord: this.handleNewRecord.bind(this, state)
@@ -177,18 +171,18 @@ const Application = {
   },
   handleNewRecord: function(state) {
     if (state.canvas.type === "collection") {
-      ModalNew.show({
+      Modal.showNewRecord({
         onSaveRecord: Canvas.createItem
       });
     } else if (state.canvas.type === "follow") {
       this.handleGetCollectionCategories(function(data) {
-        ModalNewCollection.show({
+        Modal.showNewCollection({
           collectionCategories: data,
           onSaveCollection: Canvas.createItem
         });
       });
     } else if (state.canvas.type === "root") {
-      ModalNewFollow.show({
+      Modal.showNewFollow({
         onSearchUsers: this.handleSearchUsers,
         onSaveFollow: Canvas.createItem
       });
@@ -276,7 +270,7 @@ const Application = {
       .catch(error => console.error(error));
   },
   handleEditRecord: function(item) {
-    ModalEdit.show({
+    Modal.showEdit({
       item: item,
       onEditRecord: this.handleUpdateRecordText.bind(this)
     });
@@ -394,15 +388,16 @@ const Application = {
       .catch(error => console.error(error));
   },
   handleShowModalInfo: function(item) {
-    ModalInfo.show({
+    Modal.showInfo({
       item: item,
       onEdit: this.handleEditRecord.bind(this),
       onDelete: this.handleDeleteRecord.bind(this)
     });
   },
   handleHideModalInfo: function() {
-    if (ModalInfo.visible) {
-      ModalInfo.hide();
+    // TODO: Zoom to fit if closing modal info from max zoom in...
+    if (Modal.visible) {
+      Modal.hide();
     }
   }
 };

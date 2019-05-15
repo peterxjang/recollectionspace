@@ -1,11 +1,10 @@
 const ModalEdit = {
   props: null,
   $modal: document.getElementById("modal-edit"),
-  $buttonSave: document.querySelector("#modal-edit-save"),
-  $buttonCancel: document.querySelector("#modal-edit-cancel"),
-  $inputCaption: document.querySelector("#modal-edit-caption"),
-  $inputBody: document.querySelector("#modal-edit-body"),
-  $buttonClose: document.querySelector("#modal-edit-close"),
+  $buttonSave: document.querySelector("#modal-edit .save"),
+  $buttonCancel: document.querySelector("#modal-edit .cancel"),
+  $inputCaption: document.querySelector("#modal-edit .caption"),
+  $inputBody: document.querySelector("#modal-edit .body"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -16,6 +15,9 @@ const ModalEdit = {
     this.$inputCaption.value = "";
     this.$inputBody.value = "";
     this.visible = false;
+    if (this.props) {
+      this.props.onHide();
+    }
   },
   show: function(props) {
     this.props = props;
@@ -25,10 +27,6 @@ const ModalEdit = {
     this.visible = true;
   },
   bindEvents: function() {
-    this.$buttonClose.onclick = event => {
-      event.preventDefault();
-      this.hide();
-    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.hide();

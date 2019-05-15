@@ -1,15 +1,14 @@
 const ModalNewFollow = {
   props: null,
   $modal: document.getElementById("modal-new-follow"),
-  $inputSearch: document.querySelector("#modal-new-follow-search"),
+  $inputSearch: document.querySelector("#modal-new-follow .search"),
   $buttonSearchSubmit: document.querySelector(
-    "#modal-new-follow-search-submit"
+    "#modal-new-follow .search-submit"
   ),
-  $divResults: document.querySelector("#modal-new-follow-results"),
-  $buttonSave: document.querySelector("#modal-new-follow-save"),
-  $buttonCancel: document.querySelector("#modal-new-follow-cancel"),
-  $inputUsers: document.querySelector("#modal-new-follow-users"),
-  $buttonClose: document.querySelector("#modal-new-follow-close"),
+  $divResults: document.querySelector("#modal-new-follow .results"),
+  $buttonSave: document.querySelector("#modal-new-follow .save"),
+  $buttonCancel: document.querySelector("#modal-new-follow .cancel"),
+  $inputUsers: document.querySelector("#modal-new-follow .users"),
   visible: false,
   users: [],
   initialize: function() {
@@ -22,6 +21,9 @@ const ModalNewFollow = {
     this.$inputSearch.value = "";
     this.$inputUsers.value = "";
     this.visible = false;
+    if (this.props) {
+      this.props.onHide();
+    }
   },
   show: function(props) {
     this.props = props;
@@ -37,10 +39,6 @@ const ModalNewFollow = {
     this.$divResults.style.display = "block";
   },
   bindEvents: function() {
-    this.$buttonClose.onclick = event => {
-      event.preventDefault();
-      this.hide();
-    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.hide();
