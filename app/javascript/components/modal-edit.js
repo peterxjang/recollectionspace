@@ -24,6 +24,7 @@ const ModalEdit = {
     this.$modal.style.display = "block";
     this.$inputCaption.value = this.props.item.caption;
     this.$inputBody.value = this.props.item.body;
+    this.$modal.scrollTo(0, 0);
     this.visible = true;
   },
   bindEvents: function() {

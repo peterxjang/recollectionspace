@@ -24,6 +24,7 @@ const ModalNewRecord = {
   show: function(props) {
     this.props = props;
     this.$modal.style.display = "block";
+    this.$modal.scrollTo(0, 0);
     this.visible = true;
   },
   bindEvents: function() {

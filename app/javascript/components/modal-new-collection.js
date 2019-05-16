@@ -25,6 +25,7 @@ const ModalNewCollection = {
     this.props = props;
     this.showCollectionCategories(this.props.collectionCategories);
     this.$modal.style.display = "block";
+    this.$modal.scrollTo(0, 0);
     this.visible = true;
   },
   showCollectionCategories: function(collectionCategories) {

@@ -31,6 +31,7 @@ const ModalInfo = {
       this.$buttonEdit.style.display = "inline";
       this.$buttonDelete.style.display = "inline";
     }
+    this.$modal.scrollTo(0, 0);
     this.visible = true;
   },
   bindEvents: function() {
