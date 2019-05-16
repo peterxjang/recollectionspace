@@ -60,7 +60,7 @@
       pointer-events: auto;
       width: 50%;
       margin-left: 25%;
-      margin-top: 2rem;
+      margin-top: 5vh;
       margin-bottom: 1rem;
       padding: 2rem;
       border-radius: .25rem;
@@ -78,7 +78,7 @@
     }
     textarea {
       font-family: inherit;
-      height: 10rem;
+      height: 50vh;
     }
     .form-control {
       width: 100%;
@@ -92,6 +92,15 @@
     .form-control:focus, .btn:focus {
       box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
       outline: 0;
+    }
+    #modal-info h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    #modal-info p {
+      font-size: 1rem;
+      line-height: 1.5;
+      font-weight: 200;
     }
     .btn {
       font-size: 1rem;
@@ -145,7 +154,7 @@
         <button id="modal-info-delete" class="btn btn-primary">Delete</button>
       </div>
       <h1 id="modal-info-caption"></h1>
-      <div id="modal-info-body"></div>
+      <p id="modal-info-body"></p>
     </div>
     <div id="modal-menu" class="modal-section">
       <form>
