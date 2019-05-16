@@ -95,7 +95,11 @@
     #modal-info {
       color: #2e2f3e;
     }
+    #modal-info-toolbar {
+      float: right;
+    }
     #modal-info h1 {
+      clear: both;
       font-size: 2rem;
       margin-bottom: 1rem;
     }
@@ -124,6 +128,10 @@
     }
     .btn-secondary:hover {
       background-color: #cbd5e0;
+    }
+    hr {
+      border-top: 1px solid #ddd;
+      margin: 0.5em 0;
     }
     .hidden {
       display: none;
@@ -157,8 +165,8 @@
     </div>
     <div id="modal-info" class="modal-section hidden-scrollbar">
       <div id="modal-info-toolbar" class="form-group">
-        <button id="modal-info-edit" class="btn btn-primary">Edit</button>
-        <button id="modal-info-delete" class="btn btn-primary">Delete</button>
+        <button id="modal-info-edit" class="btn btn-secondary">Edit</button>
+        <button id="modal-info-delete" class="btn btn-secondary">Delete</button>
       </div>
       <h1 id="modal-info-caption"></h1>
       <p id="modal-info-body"></p>
@@ -241,6 +249,17 @@
         </div>
         <button id="modal-edit-save" class="btn btn-primary">Update</button>
         <button id="modal-edit-cancel" class="btn btn-secondary">Cancel</button>
+      </form>
+    </div>
+    <div id="modal-delete" class="modal-section">
+      <form>
+        <div class="form-group">
+          <h2>Confirm</h2>
+          <hr>
+          <p>Are you sure you want to delete this item?</p>
+        </div>
+        <button id="modal-delete-save" class="btn btn-primary">Delete</button>
+        <button id="modal-delete-cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
   </div>

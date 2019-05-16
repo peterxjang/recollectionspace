@@ -52,7 +52,7 @@ const Application = {
       Modal.showInfo({
         item: item,
         onEdit: this.handleEditRecord.bind(this),
-        onDelete: this.handleDeleteRecord.bind(this)
+        onDelete: this.handleConfirmDeleteRecord.bind(this)
       });
       return true;
     }
@@ -346,6 +346,12 @@ const Application = {
       })
       .catch(error => console.error(error));
   },
+  handleConfirmDeleteRecord: function(item) {
+    Modal.showDelete({
+      item,
+      onDelete: this.handleDeleteRecord.bind(this)
+    });
+  },
   handleDeleteRecord: function(item) {
     let url, params;
     if (item.type === "record") {
@@ -384,7 +390,7 @@ const Application = {
     Modal.showInfo({
       item: item,
       onEdit: this.handleEditRecord.bind(this),
-      onDelete: this.handleDeleteRecord.bind(this)
+      onDelete: this.handleConfirmDeleteRecord.bind(this)
     });
   },
   handleHideModalInfo: function() {

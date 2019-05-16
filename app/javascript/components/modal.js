@@ -5,6 +5,7 @@ import ModalNewFollow from "./modal-new-follow";
 import ModalNewCollection from "./modal-new-collection";
 import ModalNewSession from "./modal-new-session";
 import ModalEdit from "./modal-edit";
+import ModalDelete from "./modal-delete";
 
 const Modal = {
   $modal: document.getElementById("modal"),
@@ -22,6 +23,7 @@ const Modal = {
     ModalNewCollection.hide();
     ModalNewSession.hide();
     ModalEdit.hide();
+    ModalDelete.hide();
     this.makeInvisible();
   },
   makeInvisible: function() {
@@ -64,6 +66,10 @@ const Modal = {
   showEdit: function(props) {
     this.makeVisible();
     ModalEdit.show({ ...props, onHide: this.makeInvisible.bind(this) });
+  },
+  showDelete: function(props) {
+    this.makeVisible();
+    ModalDelete.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   bindEvents: function() {
     this.$buttonClose.onclick = event => {
