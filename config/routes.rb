@@ -20,4 +20,6 @@ Rails.application.routes.draw do
     patch "/records/:id" => "records#update"
     delete "/records/:id" => "records#destroy"
   end
+
+  get "/*path" => "pages#index"
 end

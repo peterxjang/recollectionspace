@@ -1,10 +1,32 @@
 import Canvas from "./canvas-redux";
 import Modal from "./components/modal";
+import Router from "./router";
 
 const Application = {
   initialize: function() {
     this.initializeCanvas();
-    this.loadCanvasData("/api/collections", 1, null);
+    this.loadRouteData();
+  },
+  loadRouteData: function() {
+    let apiUrl = null;
+    Router.matchUrl("/", match => {
+      apiUrl = "/api/collections";
+    });
+    Router.matchUrl("/follows", match => {
+      apiUrl = "/api/follows";
+    });
+    Router.matchUrl("/follows/:id", match => {
+      apiUrl = "/api/follows/" + match[0];
+    });
+    Router.matchUrl("/collections", match => {
+      apiUrl = "/api/collections";
+    });
+    Router.matchUrl("/collections/:id", match => {
+      apiUrl = "/api/collections/" + match[0];
+    });
+    if (apiUrl) {
+      this.loadCanvasData(apiUrl, 1, null);
+    }
   },
   initializeCanvas: function() {
     Canvas.initialize(document.getElementById("canvas"), {
@@ -61,9 +83,11 @@ const Application = {
   transitionOut: function(delta, item) {
     if (item && item.type === "collection") {
       this.loadCanvasData("/api/collections", delta, item);
+      Router.setUrl("/collections");
       return true;
     } else if (item && item.type === "follow") {
       this.loadCanvasData("/api/follows", delta, item);
+      Router.setUrl("/follows");
       return true;
     } else if (item && item.type === "root") {
       Modal.showNewSession({
@@ -76,9 +100,11 @@ const Application = {
   transitionIn: function(delta, item) {
     if (item.type === "collection") {
       this.loadCanvasData("/api/collections/" + item.id, delta, item);
+      Router.setUrl("/collections/" + item.id);
       return true;
     } else if (item.type === "follow") {
       this.loadCanvasData("/api/follows/" + item.id, delta, item);
+      Router.setUrl("/follows/" + item.id);
       return true;
     }
     return false;
