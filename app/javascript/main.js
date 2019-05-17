@@ -111,7 +111,16 @@ const Application = {
     Canvas.zoomToFitAll();
   },
   handleMenu: function(state) {
+    let newCaption = "";
+    if (state.canvas.type === "collection") {
+      newCaption = "New Record";
+    } else if (state.canvas.type === "follow") {
+      newCaption = "New Collection";
+    } else if (state.canvas.type === "root") {
+      newCaption = "New Follow";
+    }
     Modal.showMenu({
+      newCaption: newCaption,
       onSaveLayout: this.handleSave.bind(null, state),
       onResetLayout: this.handleResetLayout,
       onNewRecord: this.handleNewRecord.bind(this, state)

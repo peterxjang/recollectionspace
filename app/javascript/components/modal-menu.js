@@ -15,6 +15,7 @@ const ModalMenu = {
   },
   show: function(props) {
     this.props = props;
+    this.$buttonNew.innerText = this.props.newCaption;
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
     this.visible = true;
