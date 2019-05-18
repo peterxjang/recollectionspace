@@ -1,5 +1,5 @@
 {
-  clientUrl: @client_url,
+  clientUrl: @parent.following.username,
   selectedItem: -1,
   canvas: {
     id: @parent.id,
@@ -15,7 +15,7 @@
     {
       id: child.id,
       caption: child.name,
-      body: "",
+      body: child.description,
       x: child.x,
       y: child.y,
       src: child.src,

@@ -6,6 +6,7 @@ class Api::FollowsController < ApplicationController
     @parent_type = "root"
     @children = current_user.following_relationships
     @children_type = "follow"
+    @client_url = "/"
     render "index.json.jb"
   end
 
@@ -36,6 +37,7 @@ class Api::FollowsController < ApplicationController
     @parent_type = "follow"
     @children = @parent.following.collections
     @children_type = "collection"
+    @client_url = "/#{@parent.following.username}"
     render "show.json.jb"
   end
 

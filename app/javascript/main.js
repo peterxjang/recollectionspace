@@ -10,19 +10,15 @@ const Application = {
   loadRouteData: function() {
     let apiUrl = null;
     Router.matchUrl("/", match => {
-      apiUrl = "/api/collections";
-    });
-    Router.matchUrl("/follows", match => {
       apiUrl = "/api/follows";
     });
-    Router.matchUrl("/follows/:id", match => {
-      apiUrl = "/api/follows/" + match[0];
+    Router.matchUrl("/:username", match => {
+      apiUrl = "/api/users/" + match[0];
     });
-    Router.matchUrl("/collections", match => {
-      apiUrl = "/api/collections";
-    });
-    Router.matchUrl("/collections/:id", match => {
-      apiUrl = "/api/collections/" + match[0];
+    Router.matchUrl("/:username/:collection_name", match => {
+      apiUrl = `/api/collections/search?username=${match[0]}&collection_name=${
+        match[1]
+      }`;
     });
     if (apiUrl) {
       this.loadCanvasData(apiUrl, 1, null);
@@ -41,6 +37,7 @@ const Application = {
     });
   },
   loadCanvasData: function(url, delta, item) {
+    // TODO: Slower due to url routing somehow???
     Canvas.transitionRouteRequest();
     fetch(url, {
       headers: { Authorization: `Bearer ${localStorage.jwt}` }
@@ -53,6 +50,9 @@ const Application = {
       })
       .then(json => {
         Canvas.transitionRouteSuccess(json, delta, item);
+        if (json.clientUrl) {
+          Router.setUrl(json.clientUrl);
+        }
       })
       .catch(error => {
         console.error(error);
@@ -82,12 +82,18 @@ const Application = {
   },
   transitionOut: function(delta, item) {
     if (item && item.type === "collection") {
-      this.loadCanvasData("/api/collections", delta, item);
-      Router.setUrl("/collections");
-      return true;
+      let apiUrl;
+      Router.matchUrl("/:username/:collection_name", match => {
+        apiUrl = `/api/users/${match[0]}`;
+      });
+      if (apiUrl) {
+        this.loadCanvasData(apiUrl, delta, item);
+        return true;
+      } else {
+        return false;
+      }
     } else if (item && item.type === "follow") {
       this.loadCanvasData("/api/follows", delta, item);
-      Router.setUrl("/follows");
       return true;
     } else if (item && item.type === "root") {
       Modal.showNewSession({
@@ -100,11 +106,9 @@ const Application = {
   transitionIn: function(delta, item) {
     if (item.type === "collection") {
       this.loadCanvasData("/api/collections/" + item.id, delta, item);
-      Router.setUrl("/collections/" + item.id);
       return true;
     } else if (item.type === "follow") {
       this.loadCanvasData("/api/follows/" + item.id, delta, item);
-      Router.setUrl("/follows/" + item.id);
       return true;
     }
     return false;

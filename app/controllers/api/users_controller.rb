@@ -26,4 +26,17 @@ class Api::UsersController < ApplicationController
       render json: {errors: user.errors.full_messages}, status: :bad_request
     end
   end
+
+  def show
+    user = User.find_by(username: params[:username])
+    if user
+      @parent = Follow.find_by(follower_id: user.id, following_id: user.id)
+      @parent_type = "follow"
+      @children = user.collections
+      @children_type = "collection"
+      render "show.json.jb"
+    else
+      render json: {errors: ["Invalid username"]}, status: :bad_request
+    end
+  end
 end

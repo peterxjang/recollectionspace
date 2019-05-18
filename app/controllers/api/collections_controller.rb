@@ -33,11 +33,26 @@ class Api::CollectionsController < ApplicationController
   end
 
   def show
-    @parent = Collection.find_by(id: params[:id])
-    @parent_type = "collection"
-    @children = @parent.records
-    @children_type = "record"
-    render "index.json.jb"
+    if params[:id] == "search"
+      user = User.find_by(username: params[:username])
+      if user
+        collections = user.collections.select { |collection| collection.name.parameterize == params[:collection_name] }
+        if collections.length > 0
+          @parent = collections[0]
+        end
+      end
+    else
+      @parent = Collection.find_by(id: params[:id])
+    end
+    if @parent
+      @parent_type = "collection"
+      @children = @parent.records
+      @children_type = "record"
+      @client_url = "/#{@parent.user.username}/#{@parent.name.parameterize}"
+      render "index.json.jb"
+    else
+      render json: {errors: ["Invalid parameters"]}, status: :bad_request
+    end
   end
 
   def update

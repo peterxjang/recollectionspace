@@ -1,4 +1,5 @@
 {
+  clientUrl: @client_url,
   selectedItem: -1,
   canvas: {
     id: @parent.id,
