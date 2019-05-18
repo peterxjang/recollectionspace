@@ -43,16 +43,16 @@ let currentItemId;
 let pressTimer;
 let clickTimer = null;
 
-let wheeling;
 let isScrolling;
 let isDragging;
+let isAnimating = false;
 
 function render() {
   state = store.getState();
   resetCanvas();
   let redraw = false;
   state.items.forEach(item => {
-    const isZooming = isScrolling || touchScaling;
+    const isZooming = isScrolling || touchScaling || isAnimating;
     const alpha = Record.render(getRecordProps(item), isZooming);
     if (alpha < 1) {
       redraw = true;
@@ -310,11 +310,15 @@ function translateCanvasMove(deltaMouseX, deltaMouseY, inputX, inputY) {
 }
 
 function scaleCanvasMoveInitial() {
-  isScrolling = true;
+  clearTimeout(isScrolling);
+  isScrolling = setTimeout(() => {
+    isScrolling = undefined;
+    scaleCanvasMoveFinal();
+  }, 250);
 }
 
 function scaleCanvasMoveFinal() {
-  isScrolling = false;
+  isScrolling = undefined;
   loadVisibleImages();
   render();
 }
@@ -614,12 +618,12 @@ function animateScaleCanvas(
     if (runtime < duration) {
       requestAnimationFrame(draw);
     } else {
-      isScrolling = false;
+      isAnimating = false;
       allTransformEnd();
       store.dispatch(changeRouteFailure());
     }
   };
-  isScrolling = true;
+  isAnimating = true;
   requestAnimationFrame(function(timestamp) {
     starttime = timestamp;
     draw(timestamp);
@@ -677,17 +681,12 @@ function onInputMove(evt) {
 
 function onScroll(evt) {
   if (state.isChangingRoute) {
-    isScrolling = false;
+    isScrolling = undefined;
     return evt.preventDefault() && false;
   }
-  if (!wheeling) {
+  if (!isScrolling) {
     scaleCanvasMoveInitial();
   }
-  clearTimeout(wheeling);
-  wheeling = setTimeout(() => {
-    wheeling = undefined;
-    scaleCanvasMoveFinal();
-  }, 250);
   let delta = evt.wheelDelta
     ? -evt.wheelDelta / 40
     : evt.detail
@@ -856,12 +855,12 @@ function animateInItem(newState, item) {
     if (runtime < duration) {
       requestAnimationFrame(draw);
     } else {
-      isScrolling = false;
+      isAnimating = false;
       allTransformEnd();
       store.dispatch(changeRouteFailure());
     }
   };
-  isScrolling = true;
+  isAnimating = true;
   requestAnimationFrame(function(timestamp) {
     starttime = timestamp;
     draw(timestamp);
