@@ -38,6 +38,7 @@ const Application = {
   },
   loadCanvasData: function(url, delta, item) {
     // TODO: Slower due to url routing somehow???
+    document.getElementById("loading").style.opacity = 1;
     Canvas.transitionRouteRequest();
     fetch(url, {
       headers: { Authorization: `Bearer ${localStorage.jwt}` }
@@ -49,12 +50,14 @@ const Application = {
         return response.json();
       })
       .then(json => {
+        document.getElementById("loading").style.opacity = 0;
         Canvas.transitionRouteSuccess(json, delta, item);
         if (json.clientUrl) {
           Router.setUrl(json.clientUrl);
         }
       })
       .catch(error => {
+        document.getElementById("loading").style.opacity = 0;
         console.error(error);
         Canvas.transitionRouteFailure();
         if (error.status === 401) {

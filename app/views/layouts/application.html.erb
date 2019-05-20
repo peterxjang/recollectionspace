@@ -29,6 +29,20 @@
       height: 100%;
       display: block;
     }
+    #loading {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      color: rgba(255, 255, 255, 0.5);
+      transition: opacity 0.2s;
+      text-align: center;
+      padding-top: 40vh;
+      font-size: 3em;
+    }
     .modal {
       position: fixed;
       left: 0;
@@ -262,6 +276,9 @@
         <button id="modal-delete-cancel" class="btn btn-secondary">Cancel</button>
       </form>
     </div>
+  </div>
+  <div id="loading">
+    <h2>Loading...</h2>
   </div>
 </body>
 </html>
