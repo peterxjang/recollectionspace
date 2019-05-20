@@ -347,6 +347,9 @@ function pinchStart(x1, y1, x2, y2) {
 }
 
 function pinchMove(inputX, inputY, inputX2, inputY2) {
+  if (state.isChangingRoute) {
+    return;
+  }
   const originalDistance = Math.sqrt(
     Math.pow(lastInputX - lastInputX2, 2) +
       Math.pow(lastInputY - lastInputY2, 2)
