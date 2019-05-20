@@ -46,6 +46,9 @@ let clickTimer = null;
 let isScrolling;
 let isDragging;
 let isAnimating = false;
+let lockScrolling = false;
+let lastScrollTime = 0;
+let lastScrollDelta = 0;
 
 function render() {
   state = store.getState();
@@ -398,6 +401,7 @@ function allTransformEnd() {
 
 function onInputDown(evt) {
   evt.preventDefault();
+  lockScrolling = false;
   const { inputX, inputY, inputX2, inputY2 } = getInputPos(evt);
   if (clickTimer === null && !props.isModalInfoVisible()) {
     clickTimer = setTimeout(function() {
@@ -680,23 +684,34 @@ function onInputMove(evt) {
 }
 
 function onScroll(evt) {
-  if (state.isChangingRoute) {
+  if (isHumanScroll(evt) && !state.isChangingRoute) {
+    lockScrolling = false;
+  }
+  if (state.isChangingRoute || lockScrolling) {
     isScrolling = undefined;
     return evt.preventDefault() && false;
   }
   if (!isScrolling) {
     scaleCanvasMoveInitial();
   }
-  let delta = evt.wheelDelta
-    ? -evt.wheelDelta / 40
-    : evt.detail
-      ? evt.detail
-      : 0;
+  const delta = evt.deltaY / 40;
   if (delta && isScrolling) {
     const { inputX, inputY } = getInputPos(evt);
     scaleCanvasMove(inputX, inputY, delta);
   }
   return evt.preventDefault() && false;
+}
+
+function isHumanScroll(evt) {
+  const now = Date.now();
+  const delta = evt.deltaY;
+  const rapidSuccession = now - lastScrollTime < 100;
+  const otherDirection = lastScrollDelta > 0 !== delta > 0;
+  const speedDecrease = Math.abs(delta) <= Math.abs(lastScrollDelta);
+  const isHuman = otherDirection || !rapidSuccession || !speedDecrease;
+  lastScrollTime = now;
+  lastScrollDelta = delta;
+  return isHuman;
 }
 
 function getInputPos(evt) {
@@ -751,8 +766,7 @@ function initialize(inputCanvas, inputProps) {
     window.addEventListener("mouseup", onInputUp, false);
     window.addEventListener("touchend", onInputUp, false);
 
-    canvas.addEventListener("DOMMouseScroll", onScroll, false);
-    canvas.addEventListener("mousewheel", onScroll, false);
+    canvas.addEventListener("wheel", onScroll, false);
 
     window.addEventListener("resize", resizeCanvas, false);
 
@@ -765,6 +779,7 @@ function initialize(inputCanvas, inputProps) {
 }
 
 function transitionRouteRequest() {
+  lockScrolling = true;
   store.dispatch(changeRouteRequest());
 }
 
@@ -774,9 +789,6 @@ function transitionRouteFailure() {
 
 function transitionRouteSuccess(newState, delta, item) {
   if (delta > 0) {
-    // if (item) {
-    //   currentItemId = item.id;
-    // }
     currentItemId = item ? item.id : newState.canvas.id;
     replaceState(newState);
   } else {
@@ -784,7 +796,6 @@ function transitionRouteSuccess(newState, delta, item) {
       item => item.id === currentItemId
     )[0];
     if (currentItem) {
-      // animateInItem(newState, currentItem);
       animateState(newState, currentItem);
     } else {
       replaceState(newState);
