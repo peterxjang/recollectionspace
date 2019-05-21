@@ -9,6 +9,7 @@ const Application = {
   },
   loadRouteData: function() {
     let apiUrl = null;
+    let modalId = null;
     Router.matchUrl("/", params => {
       apiUrl = "/api/follows";
     });
@@ -20,8 +21,14 @@ const Application = {
         params.username
       }&collection_name=${params.collection_name}`;
     });
+    Router.matchUrl("/:username/:collection_name/:id", params => {
+      apiUrl = `/api/collections/search?username=${
+        params.username
+      }&collection_name=${params.collection_name}`;
+      modalId = parseInt(params.id);
+    });
     if (apiUrl) {
-      this.loadCanvasData(apiUrl, 1, null);
+      this.loadCanvasData(apiUrl, 1, null, modalId);
     }
   },
   initializeCanvas: function() {
@@ -36,7 +43,7 @@ const Application = {
       isModalInfoVisible: () => Modal.visible
     });
   },
-  loadCanvasData: function(url, delta, item) {
+  loadCanvasData: function(url, delta, item, modalId) {
     // TODO: Slower due to url routing somehow???
     document.getElementById("loading").style.opacity = 1;
     Canvas.transitionRouteRequest();
@@ -52,7 +59,12 @@ const Application = {
       .then(json => {
         document.getElementById("loading").style.opacity = 0;
         Canvas.transitionRouteSuccess(json, delta, item);
-        if (json.clientUrl) {
+        if (modalId) {
+          const modalItem = json.items.filter(child => child.id === modalId)[0];
+          if (modalItem) {
+            this.handleShowModalInfo(modalItem);
+          }
+        } else if (json.clientUrl) {
           Router.setUrl(json.clientUrl);
         }
       })
@@ -74,11 +86,7 @@ const Application = {
     } else if (item && item.type !== "record") {
       return this.transitionIn(delta, item);
     } else if (item) {
-      Modal.showInfo({
-        item: item,
-        onEdit: this.handleEditRecord.bind(this),
-        onDelete: this.handleConfirmDeleteRecord.bind(this)
-      });
+      this.handleShowModalInfo(item);
       return true;
     }
     return false;
@@ -434,11 +442,17 @@ const Application = {
       onEdit: this.handleEditRecord.bind(this),
       onDelete: this.handleConfirmDeleteRecord.bind(this)
     });
+    Router.matchUrl("/:username/:collection_name", params => {
+      Router.setUrl(`/${params.username}/${params.collection_name}/${item.id}`);
+    });
   },
   handleHideModalInfo: function() {
     // TODO: Zoom to fit if closing modal info from max zoom in...
     if (Modal.visible) {
       Modal.hide();
+      Router.matchUrl("/:username/:collection_name/:id", params => {
+        Router.setUrl(`/${params.username}/${params.collection_name}`);
+      });
     }
   }
 };
