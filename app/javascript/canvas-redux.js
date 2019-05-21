@@ -53,9 +53,9 @@ let lastScrollDelta = 0;
 function render() {
   state = store.getState();
   resetCanvas();
+  const isZooming = isScrolling || touchScaling || isAnimating;
   let redraw = false;
   state.items.forEach(item => {
-    const isZooming = isScrolling || touchScaling || isAnimating;
     const alpha = Record.render(getRecordProps(item), isZooming);
     if (alpha < 1) {
       redraw = true;
@@ -598,7 +598,9 @@ function zoomToFit(
       canvasY
     );
   } else {
-    smoothDispatch(scaleCanvas(canvasScale, canvasX, canvasY));
+    smoothDispatch(scaleCanvas(canvasScale, canvasX, canvasY), function() {
+      loadVisibleImages();
+    });
   }
 }
 
@@ -884,7 +886,6 @@ function animateInItem(newState, item) {
 function replaceState(newState, isChangingRoute = false) {
   store.dispatch(changeRouteSuccess(newState, isChangingRoute));
   zoomToFitAll(0.2, false);
-  loadVisibleImages();
   changeBackground();
 }
 
