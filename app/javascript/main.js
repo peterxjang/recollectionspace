@@ -9,16 +9,16 @@ const Application = {
   },
   loadRouteData: function() {
     let apiUrl = null;
-    Router.matchUrl("/", match => {
+    Router.matchUrl("/", params => {
       apiUrl = "/api/follows";
     });
-    Router.matchUrl("/:username", match => {
-      apiUrl = "/api/users/" + match[0];
+    Router.matchUrl("/:username", params => {
+      apiUrl = "/api/users/" + params.username;
     });
-    Router.matchUrl("/:username/:collection_name", match => {
-      apiUrl = `/api/collections/search?username=${match[0]}&collection_name=${
-        match[1]
-      }`;
+    Router.matchUrl("/:username/:collection_name", params => {
+      apiUrl = `/api/collections/search?username=${
+        params.username
+      }&collection_name=${params.collection_name}`;
     });
     if (apiUrl) {
       this.loadCanvasData(apiUrl, 1, null);
@@ -86,8 +86,8 @@ const Application = {
   transitionOut: function(delta, item) {
     if (item && item.type === "collection") {
       let apiUrl;
-      Router.matchUrl("/:username/:collection_name", match => {
-        apiUrl = `/api/users/${match[0]}`;
+      Router.matchUrl("/:username/:collection_name", params => {
+        apiUrl = `/api/users/${params.username}`;
       });
       if (apiUrl) {
         this.loadCanvasData(apiUrl, delta, item);

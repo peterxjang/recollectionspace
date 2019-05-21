@@ -34,10 +34,15 @@ const Router = {
     var routeMatcher = new RegExp(
       "^" + url.replace(/:[^\s/]+/g, "([\\w-]+)") + "$"
     );
-    var match = this.getUrl().match(routeMatcher);
-    if (match) {
-      match.shift();
-      callback(match);
+    var values = this.getUrl().match(routeMatcher);
+    if (values) {
+      values.shift();
+      const keys = url.match(/:[^\s/]+/g);
+      const params = {};
+      for (var i = 0; i < keys.length; i++) {
+        params[keys[i].substr(1)] = values[i];
+      }
+      callback(params);
     }
   },
   clearSlashes: function(path) {
