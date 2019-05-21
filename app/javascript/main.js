@@ -371,6 +371,9 @@ const Application = {
       })
       .then(data => {
         Canvas.deleteItem(item);
+        Router.matchUrl("/:username/:collection_name/:id", params => {
+          Router.setUrl(`/${params.username}/${params.collection_name}`);
+        });
       })
       .catch(error => console.error(error));
   },
