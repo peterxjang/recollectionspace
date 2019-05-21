@@ -39,8 +39,10 @@ const Router = {
       values.shift();
       const keys = url.match(/:[^\s/]+/g);
       const params = {};
-      for (var i = 0; i < keys.length; i++) {
-        params[keys[i].substr(1)] = values[i];
+      if (keys) {
+        for (var i = 0; i < keys.length; i++) {
+          params[keys[i].substr(1)] = values[i];
+        }
       }
       callback(params);
     }
