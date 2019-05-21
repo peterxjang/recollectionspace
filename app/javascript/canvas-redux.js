@@ -508,7 +508,7 @@ function onLongPress() {
       return;
     }
   }
-  props.onMenu(state);
+  props.onNewRecord(state);
 }
 
 function onDoubleClick() {

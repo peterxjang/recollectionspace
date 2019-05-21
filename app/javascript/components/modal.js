@@ -1,5 +1,4 @@
 import ModalInfo from "./modal-info";
-import ModalMenu from "./modal-menu";
 import ModalNewRecord from "./modal-new-record";
 import ModalNewFollow from "./modal-new-follow";
 import ModalNewCollection from "./modal-new-collection";
@@ -17,7 +16,6 @@ const Modal = {
   },
   hide: function() {
     ModalInfo.hide();
-    ModalMenu.hide();
     ModalNewRecord.hide();
     ModalNewFollow.hide();
     ModalNewCollection.hide();
@@ -39,10 +37,6 @@ const Modal = {
   showInfo: function(props) {
     this.makeVisible();
     ModalInfo.show({ ...props, onHide: this.makeInvisible.bind(this) });
-  },
-  showMenu: function(props) {
-    this.makeVisible();
-    ModalMenu.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showNewRecord: function(props) {
     this.makeVisible();

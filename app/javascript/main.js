@@ -34,8 +34,7 @@ const Application = {
   initializeCanvas: function() {
     Canvas.initialize(document.getElementById("canvas"), {
       onTransition: this.handleTransition.bind(this),
-      onSave: this.handleSave.bind(this),
-      onMenu: this.handleMenu.bind(this),
+      onNewRecord: this.handleNewRecord.bind(this),
       onSaveRecord: this.handleSaveRecord.bind(this),
       onUpdateRecord: this.handleUpdateRecord.bind(this),
       onShowModalInfo: this.handleShowModalInfo.bind(this),
@@ -150,67 +149,6 @@ const Application = {
   },
   handleLoginCancel: function() {
     Canvas.zoomToFitAll();
-  },
-  handleMenu: function(state) {
-    let newCaption = "";
-    if (state.canvas.type === "collection") {
-      newCaption = "New Record";
-    } else if (state.canvas.type === "follow") {
-      newCaption = "New Collection";
-    } else if (state.canvas.type === "root") {
-      newCaption = "New Follow";
-    }
-    Modal.showMenu({
-      newCaption: newCaption,
-      onSaveLayout: this.handleSave.bind(null, state),
-      onResetLayout: this.handleResetLayout,
-      onNewRecord: this.handleNewRecord.bind(this, state)
-    });
-  },
-  handleResetLayout: function() {
-    localStorage.removeItem("state");
-    location.reload();
-  },
-  handleSave: function(state) {
-    console.clear();
-    const minState = {
-      selectedItem: -1,
-      canvas: {
-        id: state.canvas.id,
-        x: Math.round(state.canvas.x * 10) / 10,
-        y: Math.round(state.canvas.y * 10) / 10,
-        angle: Math.round(state.canvas.angle * 1000) / 1000,
-        scale: Math.round(state.canvas.scale * 100000) / 100000,
-        color: state.canvas.color
-        // viewportTransform: state.canvas.viewportTransform
-      },
-      items: state.items
-        .map(function(item) {
-          const newItem = {
-            id: item.id,
-            caption: item.caption,
-            x: Math.round(item.x * 10) / 10,
-            y: Math.round(item.y * 10) / 10,
-            width: item.width,
-            height: item.height,
-            color: item.color,
-            angle: Math.round(item.angle * 1000) / 1000,
-            scale: Math.round(item.scale * 100000) / 100000,
-            body: item.body,
-            border: item.border
-          };
-          if (item.pinBack) {
-            newItem.pinBack = item.pinBack;
-          }
-          if (item.src !== `${item.id}.jpg`) {
-            newItem.src = item.src;
-          }
-          return newItem;
-        })
-        .sort((a, b) => a.id - b.id)
-    };
-    const stateString = JSON.stringify(minState, null, 2);
-    localStorage.setItem("state", stateString);
   },
   handleNewRecord: function(state) {
     if (state.canvas.type === "collection") {
