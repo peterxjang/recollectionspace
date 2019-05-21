@@ -144,7 +144,7 @@ const Application = {
       })
       .then(data => {
         localStorage.setItem("jwt", data.jwt);
-        this.loadCanvasData("/api/collections", 1, null);
+        this.loadRouteData();
       })
       .catch(error => console.error(error));
   },
