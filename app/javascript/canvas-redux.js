@@ -432,7 +432,7 @@ function onInputDown(evt) {
     pinchStart(inputX, inputY, inputX2, inputY2);
   }
   const item = state.items.filter(item => item.id === state.selectedItem)[0];
-  if (item) {
+  if (item && item.id !== null) {
     draggingItemType = Record.isPointInRecord({
       ...item,
       inputX,
@@ -901,12 +901,11 @@ function createItem(image, caption, body, options = {}) {
   let startingCenter = getVisiblePoint();
   let img = new Image();
   img.crossOrigin = "anonymous";
-  const id = Date.now();
   img.onload = function() {
     let height = img.height;
     let width = img.width;
     let item = {
-      id: id,
+      id: null,
       src: img.src,
       caption: caption,
       body: body,
@@ -919,7 +918,7 @@ function createItem(image, caption, body, options = {}) {
       border: true,
       color: Record.getDominantColor(img)
     };
-    smoothDispatch(addItem(item));
+    smoothDispatch(addItem({ ...item, caption: "Saving..." }));
     props.onSaveRecord(state.canvas, item, image, options);
   };
   img.src =
