@@ -99,7 +99,17 @@ const Record = {
     }
   },
   loadImage: function(props) {
-    if (imgCache[props.type + props.id]) {
+    const cachedImage = imgCache[props.type + props.id];
+    if (cachedImage) {
+      if (
+        cachedImage.width !== props.width ||
+        cachedImage.height !== props.height
+      ) {
+        props.onUpdateItemProps(props.id, {
+          width: cachedImage.width,
+          height: cachedImage.height
+        });
+      }
       return;
     }
     if (imgLoading) {
