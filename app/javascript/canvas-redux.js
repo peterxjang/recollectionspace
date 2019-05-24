@@ -111,7 +111,7 @@ function checkTransition(delta) {
     (sum, item) => sum + item.width * item.scale * state.canvas.scale,
     0
   );
-  if (delta < 0 && totalVisibleWidth < 10) {
+  if (delta < 0 && totalVisibleWidth < 100) {
     return props.onTransition(-1, state.canvas);
   } else if (delta > 0) {
     let item;
