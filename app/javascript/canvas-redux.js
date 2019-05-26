@@ -881,9 +881,36 @@ function animateInItem(newState, item) {
 }
 
 function replaceState(newState, isChangingRoute = false) {
-  store.dispatch(changeRouteSuccess(newState, isChangingRoute));
+  store.dispatch(
+    changeRouteSuccess(stateWithValidDefaults(newState), isChangingRoute)
+  );
   zoomToFitAll(0.2, false);
   changeBackground();
+}
+
+function stateWithValidDefaults(newState) {
+  let validState = { ...newState };
+  if (!validState.canvas.src) {
+    validState.canvas.src =
+      "https://res.cloudinary.com/recollectionspace/image/upload/v1558827677/placeholder.jpg";
+    validState.canvas.color = "#000";
+  }
+  validState.items = validState.items.map(item => {
+    if (item.src) {
+      return item;
+    } else {
+      return {
+        ...item,
+        src:
+          "https://res.cloudinary.com/recollectionspace/image/upload/v1558827677/placeholder.jpg",
+        width: 640,
+        height: 480,
+        color: "#000"
+      };
+    }
+  });
+  console.log(validState);
+  return validState;
 }
 
 function replaceItems(newItems) {
