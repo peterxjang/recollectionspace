@@ -3,10 +3,10 @@
   selectedItem: -1,
   canvas: {
     id: @parent.id,
-    x: @parent.x || 0,
-    y: @parent.y || 0,
-    angle: @parent.angle || 0,
-    scale: @parent.scale || 1,
+    x: 0,
+    y: 0,
+    angle: 0,
+    scale: 1,
     color: @parent.color || "#000",
     src: @parent.src || "6.jpg",
     type: @parent_type
