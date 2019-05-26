@@ -24,7 +24,7 @@
       color: child.color,
       angle: child.angle,
       scale: child.scale,
-      border: child.border || true,
+      border: child.border,
       type: @children_type
     }
   end
