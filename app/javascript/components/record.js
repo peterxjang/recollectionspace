@@ -138,15 +138,8 @@ const Record = {
       },
       false
     );
-    img.src = this.getFullSrc(props.src, props.id);
+    img.src = props.src;
     imgCache[props.type + props.id] = img;
-  },
-  getFullSrc: function(src, id) {
-    var result = src ? `/images/${src}` : `/images/${id}.jpg`;
-    if (src && (src.startsWith("http") || src.startsWith("blob:"))) {
-      result = src;
-    }
-    return result;
   },
   renderImageAnimate: function(props) {
     const img = imgCache[props.type + props.id];

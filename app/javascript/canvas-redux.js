@@ -97,12 +97,9 @@ function loadVisibleImages() {
 }
 
 function changeBackground() {
-  const imageUrl = state.canvas.src.startsWith("http")
-    ? state.canvas.src
-    : "/images/" + state.canvas.src;
   document.querySelector("html").style.background = `${
     state.canvas.color
-  } url('${imageUrl}') no-repeat center center fixed`;
+  } url('${state.canvas.src}') no-repeat center center fixed`;
   document.querySelector("html").style.backgroundSize = "cover";
 }
 
@@ -921,10 +918,7 @@ function createItem(image, caption, body, options = {}) {
     smoothDispatch(addItem({ ...item, caption: "Saving..." }));
     props.onSaveRecord(state.canvas, item, image, options);
   };
-  img.src =
-    image instanceof File
-      ? URL.createObjectURL(image)
-      : Record.getFullSrc(image, id);
+  img.src = image instanceof File ? URL.createObjectURL(image) : image;
 }
 
 function getVisiblePoint() {

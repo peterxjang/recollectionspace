@@ -14,7 +14,7 @@ CollectionCategory.create!(user_id: 2, name: "Art samples", description: "Drawin
 
 Follow.create!(follower_id: 1, following_id: 1)
 
-Follow.create!(follower_id: 2, following_id: 2, color: "#111", src: "default.jpg")
+Follow.create!(follower_id: 2, following_id: 2, color: "#111", src: "/images/default.jpg", width: 1200, height: 800)
 Follow.create!(follower_id: 2, following_id: 3)
 Follow.create!(follower_id: 2, following_id: 4)
 
@@ -25,15 +25,15 @@ Follow.create!(follower_id: 4, following_id: 4)
 Follow.create!(follower_id: 4, following_id: 2)
 
 # BOOKS
-collection = Collection.create!(user_id: 2, collection_category_id: 3, width: 1024, height: 682, color: "#421607", angle: 0, src: "5.jpg")
-Record.create!(collection_id: collection.id, name: "The Art of Game Design", width: 355, height: 499, color: "#eac4ac", src: "501.jpg")
-Record.create!(collection_id: collection.id, name: "CSS Secrets", width: 260, height: 317, color: "#e7e2e7", src: "502.jpg")
-Record.create!(collection_id: collection.id, name: "The Non-Designer's Design Book", width: 490, height: 700, color: "#626d69", src: "503.jpg")
-Record.create!(collection_id: collection.id, name: "Presentation Zen", width: 410, height: 500, color: "#7480ab", src: "504.jpg")
+collection = Collection.create!(user_id: 2, collection_category_id: 3, width: 1024, height: 682, color: "#421607", angle: 0, src: "/images/5.jpg")
+Record.create!(collection_id: collection.id, name: "The Art of Game Design", width: 355, height: 499, color: "#eac4ac", src: "/images/501.jpg")
+Record.create!(collection_id: collection.id, name: "CSS Secrets", width: 260, height: 317, color: "#e7e2e7", src: "/images/502.jpg")
+Record.create!(collection_id: collection.id, name: "The Non-Designer's Design Book", width: 490, height: 700, color: "#626d69", src: "/images/503.jpg")
+Record.create!(collection_id: collection.id, name: "Presentation Zen", width: 410, height: 500, color: "#7480ab", src: "/images/504.jpg")
 
 # CODE PROJECTS
-collection = Collection.create!(user_id: 2, collection_category_id: 5, width: 1024, height: 786, color: "#2f54a8", src: "2.jpg")
-Record.create!(collection_id: collection.id, name: "AvsP video editor", width: 458, height: 317, color: "#acbedb", src: "201.png")
-Record.create!(collection_id: collection.id, name: "DSNotes Homebrew", width: 425, height: 427, color: "#c3c0be", src: "202.jpg")
-Record.create!(collection_id: collection.id, name: "HTML5 Canvas with Redux", width: 932, height: 812, color: "#202021", src: "206.jpg")
-Record.create!(collection_id: collection.id, name: "QuickFits Rails application", width: 1428, height: 1230, color: "#797889", src: "203.jpg")
+collection = Collection.create!(user_id: 2, collection_category_id: 5, width: 1024, height: 786, color: "#2f54a8", src: "/images/2.jpg")
+Record.create!(collection_id: collection.id, name: "AvsP video editor", width: 458, height: 317, color: "#acbedb", src: "/images/201.png")
+Record.create!(collection_id: collection.id, name: "DSNotes Homebrew", width: 425, height: 427, color: "#c3c0be", src: "/images/202.jpg")
+Record.create!(collection_id: collection.id, name: "HTML5 Canvas with Redux", width: 932, height: 812, color: "#202021", src: "/images/206.jpg")
+Record.create!(collection_id: collection.id, name: "QuickFits Rails application", width: 1428, height: 1230, color: "#797889", src: "/images/203.jpg")

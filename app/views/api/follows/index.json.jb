@@ -8,7 +8,7 @@
     angle: 0,
     scale: 1,
     color: @parent.color || "#000",
-    src: @parent.src || "6.jpg",
+    src: @parent.src || "/images/6.jpg",
     type: @parent_type
   },
   items: @children.map do |child|
@@ -18,7 +18,7 @@
       body: "",
       x: child.x,
       y: child.y,
-      src: child.src || "6.jpg",
+      src: child.src || "/images/6.jpg",
       width: child.width || 320,
       height: child.height || 240,
       color: child.color || "#000",
