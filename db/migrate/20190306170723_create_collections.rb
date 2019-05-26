@@ -3,12 +3,12 @@ class CreateCollections < ActiveRecord::Migration[5.2]
     create_table :collections do |t|
       t.integer :user_id
       t.integer :collection_category_id
-      t.float :x
-      t.float :y
+      t.float :x, default: 0
+      t.float :y, default: 0
       t.integer :width
       t.integer :height
       t.float :angle, default: 0
-      t.float :scale
+      t.float :scale, default: 1
       t.boolean :border, default: true
       t.string :src
       t.string :color

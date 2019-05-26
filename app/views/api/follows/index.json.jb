@@ -16,14 +16,14 @@
       id: child.id,
       caption: child.following.username,
       body: "",
-      x: child.x || @parent.x || 0,
-      y: child.y || @parent.y || 0,
+      x: child.x,
+      y: child.y,
       src: child.src || "6.jpg",
       width: child.width || 320,
       height: child.height || 240,
       color: child.color || "#000",
-      angle: child.angle || 0,
-      scale: child.scale || 1,
+      angle: child.angle,
+      scale: child.scale,
       border: child.border || true,
       type: @children_type
     }

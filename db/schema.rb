@@ -27,12 +27,12 @@ ActiveRecord::Schema.define(version: 2019_03_06_171121) do
   create_table "collections", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_category_id"
-    t.float "x"
-    t.float "y"
+    t.float "x", default: 0.0
+    t.float "y", default: 0.0
     t.integer "width"
     t.integer "height"
     t.float "angle", default: 0.0
-    t.float "scale"
+    t.float "scale", default: 1.0
     t.boolean "border", default: true
     t.string "src"
     t.string "color"
@@ -44,12 +44,12 @@ ActiveRecord::Schema.define(version: 2019_03_06_171121) do
   create_table "follows", force: :cascade do |t|
     t.integer "follower_id"
     t.integer "following_id"
-    t.float "x"
-    t.float "y"
+    t.float "x", default: 0.0
+    t.float "y", default: 0.0
     t.integer "width"
     t.integer "height"
     t.float "angle", default: 0.0
-    t.float "scale"
+    t.float "scale", default: 1.0
     t.boolean "border", default: true
     t.string "src"
     t.string "color"
@@ -62,12 +62,12 @@ ActiveRecord::Schema.define(version: 2019_03_06_171121) do
     t.string "name"
     t.text "description"
     t.integer "collection_id"
-    t.float "x"
-    t.float "y"
+    t.float "x", default: 0.0
+    t.float "y", default: 0.0
     t.integer "width"
     t.integer "height"
     t.float "angle", default: 0.0
-    t.float "scale"
+    t.float "scale", default: 1.0
     t.boolean "border", default: true
     t.string "src"
     t.string "color"
@@ -84,12 +84,12 @@ ActiveRecord::Schema.define(version: 2019_03_06_171121) do
     t.string "first_name"
     t.string "last_name"
     t.string "avatar"
-    t.float "x"
-    t.float "y"
+    t.float "x", default: 0.0
+    t.float "y", default: 0.0
     t.integer "width"
     t.integer "height"
     t.float "angle", default: 0.0
-    t.float "scale"
+    t.float "scale", default: 1.0
     t.boolean "border", default: true
     t.string "src"
     t.string "color"

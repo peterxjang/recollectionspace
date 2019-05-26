@@ -4,12 +4,12 @@ class CreateRecords < ActiveRecord::Migration[5.2]
       t.string :name
       t.text :description
       t.integer :collection_id
-      t.float :x
-      t.float :y
+      t.float :x, default: 0
+      t.float :y, default: 0
       t.integer :width
       t.integer :height
       t.float :angle, default: 0
-      t.float :scale
+      t.float :scale, default: 1
       t.boolean :border, default: true
       t.string :src
       t.string :color
