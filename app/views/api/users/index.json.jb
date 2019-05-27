@@ -2,8 +2,8 @@
   {
     id: user.id,
     username: user.username,
-    avatar: user.avatar || "default.jpg",
-    src: user.src || "default.jpg",
+    avatar: user.avatar,
+    src: user.src,
     collections: user.collections
   }
 end
