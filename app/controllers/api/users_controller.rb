@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
   def index
-    @users = User.all
+    @users = User.where(admin: false)
     if params[:username]
       @users = @users.where("username ILIKE ?", "%#{params[:username]}%")
     end

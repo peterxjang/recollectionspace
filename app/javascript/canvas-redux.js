@@ -97,9 +97,8 @@ function loadVisibleImages() {
 }
 
 function changeBackground() {
-  document.querySelector("html").style.background = `${
-    state.canvas.color
-  } url('${state.canvas.src}') no-repeat center center fixed`;
+  document.querySelector("html").style.background = `${state.canvas.color ||
+    "#000"} url('${state.canvas.src}') no-repeat center center fixed`;
   document.querySelector("html").style.backgroundSize = "cover";
 }
 
