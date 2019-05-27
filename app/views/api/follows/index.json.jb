@@ -7,8 +7,8 @@
     y: 0,
     angle: 0,
     scale: 1,
-    color: @parent.color,
-    src: @parent.src,
+    color: "#000",
+    src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558976015/root.jpg",
     type: @parent_type
   },
   items: @children.map do |child|
