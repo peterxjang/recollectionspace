@@ -18,12 +18,12 @@ class User < ApplicationRecord
     return if admin
     CollectionCategory.find_by(name: "Favorite Music")
       .collections
-      .create!(user_id: id, width: 1920, height: 1280, color: "#421607", angle: 0, src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558926002/music.jpg")
+      .create!(user_id: id, width: 1920, height: 1280, color: "#000", angle: 0.253, src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558926002/music.jpg", scale: 0.725, x: -153, y: -383)
     CollectionCategory.find_by(name: "Favorite Movies")
       .collections
-      .create!(user_id: id, width: 1280, height: 720, color: "#421607", angle: 0, src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558927370/movies.jpg")
+      .create!(user_id: id, width: 1280, height: 720, color: "#000", angle: 0, src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558927370/movies.jpg", scale: 1.17, x: -2.44, y: 1011.9)
     CollectionCategory.find_by(name: "Favorite Books")
       .collections
-      .create!(user_id: id, width: 1280, height: 853, color: "#421607", angle: 0, src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558928371/books.jpg")
+      .create!(user_id: id, width: 1280, height: 853, color: "#000", angle: -0.12, src: "https://res.cloudinary.com/recollectionspace/image/upload/v1558928371/books.jpg", scale: 0.95, x: -1829.5, y: 293.5)
   end
 end

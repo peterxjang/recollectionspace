@@ -909,7 +909,6 @@ function stateWithValidDefaults(newState) {
       };
     }
   });
-  console.log(validState);
   return validState;
 }
 
