@@ -5,6 +5,7 @@ const ModalNewSession = {
   $buttonCancel: document.getElementById("modal-new-session-cancel"),
   $inputEmail: document.getElementById("modal-new-session-email"),
   $inputPassword: document.getElementById("modal-new-session-password"),
+  $buttonSignup: document.getElementById("modal-new-session-signup"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -34,6 +35,11 @@ const ModalNewSession = {
     this.$buttonSave.onclick = event => {
       event.preventDefault();
       this.props.onLogin(this.$inputEmail.value, this.$inputPassword.value);
+      this.hide();
+    };
+    this.$buttonSignup.onclick = event => {
+      event.preventDefault();
+      this.props.onShowSignup();
       this.hide();
     };
   }

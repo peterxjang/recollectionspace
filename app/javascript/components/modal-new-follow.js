@@ -32,7 +32,6 @@ const ModalNewFollow = {
     this.visible = true;
   },
   showSearchResults: function(users) {
-    console.log("showSearchResults", users);
     this.users = users;
     this.$inputUsers.innerHTML = users
       .map(user => `<option value=${user.id}>${user.username}</option>`)

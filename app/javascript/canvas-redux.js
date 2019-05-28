@@ -429,7 +429,6 @@ function onInputDown(evt) {
   }
   const item = state.items.filter(item => item.id === state.selectedItem)[0];
   if (item && item.id !== null) {
-    console.log(state.isOwner);
     draggingItemType = Record.isPointInRecord({
       ...item,
       inputX,

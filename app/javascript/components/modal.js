@@ -3,6 +3,7 @@ import ModalNewRecord from "./modal-new-record";
 import ModalNewFollow from "./modal-new-follow";
 import ModalNewCollection from "./modal-new-collection";
 import ModalNewSession from "./modal-new-session";
+import ModalNewUser from "./modal-new-user";
 import ModalEdit from "./modal-edit";
 import ModalDelete from "./modal-delete";
 
@@ -20,6 +21,7 @@ const Modal = {
     ModalNewFollow.hide();
     ModalNewCollection.hide();
     ModalNewSession.hide();
+    ModalNewUser.hide();
     ModalEdit.hide();
     ModalDelete.hide();
     this.makeInvisible();
@@ -56,6 +58,10 @@ const Modal = {
   showNewSession: function(props) {
     this.makeVisible();
     ModalNewSession.show({ ...props, onHide: this.makeInvisible.bind(this) });
+  },
+  showNewUser: function(props) {
+    this.makeVisible();
+    ModalNewUser.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
   showEdit: function(props) {
     this.makeVisible();

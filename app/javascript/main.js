@@ -72,10 +72,7 @@ const Application = {
         console.error(error);
         Canvas.transitionRouteFailure();
         if (error.status === 401) {
-          Modal.showNewSession({
-            onLogin: this.handleLogin.bind(this),
-            onCancel: this.handleLoginCancel
-          });
+          this.handleShowLogin();
         }
       });
   },
@@ -106,10 +103,7 @@ const Application = {
       this.loadCanvasData("/api/follows", delta, item);
       return true;
     } else if (item && item.type === "root") {
-      Modal.showNewSession({
-        onLogin: this.handleLogin.bind(this),
-        onCancel: this.handleLoginCancel
-      });
+      this.handleShowLogin();
     }
     return false;
   },
@@ -122,6 +116,45 @@ const Application = {
       return true;
     }
     return false;
+  },
+  handleShowSignup: function() {
+    Modal.showNewUser({
+      onSignup: this.handleSignup.bind(this),
+      onShowLogin: this.handleShowLogin.bind(this),
+      onCancel: this.handleLoginCancel
+    });
+  },
+  handleSignup: function(email, username, password, passwordConfirmation) {
+    var params = new FormData();
+    params.append("email", email);
+    params.append("username", username);
+    params.append("password", password);
+    params.append("password_confirmation", passwordConfirmation);
+    fetch("/api/users", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: params
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.handleLogin(email, password);
+      })
+      .catch(error => console.error(error));
+  },
+  handleShowLogin: function() {
+    Modal.showNewSession({
+      onLogin: this.handleLogin.bind(this),
+      onShowSignup: this.handleShowSignup.bind(this),
+      onCancel: this.handleLoginCancel
+    });
   },
   handleLogin: function(email, password) {
     var params = new FormData();

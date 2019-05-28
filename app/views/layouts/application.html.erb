@@ -163,6 +163,32 @@
   <canvas id="canvas"></canvas>
   <div id="modal" class="modal" style="">
     <a id="modal-close">&times;</a>
+    <div id="modal-new-user" class="modal-section">
+      <form>
+        <div class="form-group">
+          <label for="modal-new-user-email">Email</label>
+          <input id="modal-new-user-email" class="form-control" type="email" placeholder="Email" aria-label="Email">
+        </div>
+        <div class="form-group">
+          <label for="modal-new-user-username">Username</label>
+          <input id="modal-new-user-username" class="form-control" type="text" placeholder="Username" aria-label="Username">
+        </div>
+        <div class="form-group">
+          <label for="modal-new-user-password">Password</label>
+          <input id="modal-new-user-password" class="form-control" type="password" placeholder="Password" aria-label="Password">
+        </div>
+        <div class="form-group">
+          <label for="modal-new-user-password-confirmation">Password confirmation</label>
+          <input id="modal-new-user-password-confirmation" class="form-control" type="password" placeholder="Password confirmation" aria-label="Password confirmation">
+        </div>
+        <button id="modal-new-user-save" class="btn btn-primary">Sign in</button>
+        <button id="modal-new-user-cancel" class="btn btn-secondary">Cancel</button>
+        <div>
+          <br>
+          <a href="" id="modal-new-user-login">Login</a>
+        </div>
+      </form>
+    </div>
     <div id="modal-new-session" class="modal-section">
       <form>
         <div class="form-group">
@@ -175,6 +201,10 @@
         </div>
         <button id="modal-new-session-save" class="btn btn-primary">Sign in</button>
         <button id="modal-new-session-cancel" class="btn btn-secondary">Cancel</button>
+        <div>
+          <br>
+          <a href="" id="modal-new-session-signup">Signup</a>
+        </div>
       </form>
     </div>
     <div id="modal-info" class="modal-section hidden-scrollbar">

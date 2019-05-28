@@ -19,6 +19,9 @@ class Api::UsersController < ApplicationController
       first_name: params[:first_name],
       last_name: params[:last_name],
       avatar: params[:avatar],
+      src: params[:src] || "https://res.cloudinary.com/recollectionspace/image/upload/v1558827677/placeholder.jpg",
+      width: params[:width] || 640,
+      height: params[:height] || 480,
     )
     if user.save
       render json: {message: 'User created successfully'}, status: :created
