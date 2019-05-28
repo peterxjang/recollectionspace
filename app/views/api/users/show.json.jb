@@ -1,5 +1,6 @@
 {
   clientUrl: @parent.following.username,
+  isOwner: @is_owner,
   selectedItem: -1,
   canvas: {
     id: @parent.id,

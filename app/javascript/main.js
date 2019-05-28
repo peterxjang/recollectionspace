@@ -61,7 +61,7 @@ const Application = {
         if (modalId) {
           const modalItem = json.items.filter(child => child.id === modalId)[0];
           if (modalItem) {
-            this.handleShowModalInfo(modalItem);
+            this.handleShowModalInfo(modalItem, json.isOwner);
           }
         } else if (json.clientUrl) {
           Router.setUrl(json.clientUrl);
@@ -79,13 +79,13 @@ const Application = {
         }
       });
   },
-  handleTransition: function(delta, item) {
+  handleTransition: function(delta, item, isOwner) {
     if (delta < 0) {
       return this.transitionOut(delta, item);
     } else if (item && item.type !== "record") {
       return this.transitionIn(delta, item);
     } else if (item) {
-      this.handleShowModalInfo(item);
+      this.handleShowModalInfo(item, isOwner);
       return true;
     }
     return false;
@@ -248,7 +248,10 @@ const Application = {
         Canvas.replaceItemProperties(item, itemNew);
         URL.revokeObjectURL(item.src);
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error(error);
+        Canvas.deleteItem(item);
+      });
   },
   handleEditRecord: function(item) {
     Modal.showEdit({
@@ -377,11 +380,12 @@ const Application = {
       })
       .catch(error => console.error(error));
   },
-  handleShowModalInfo: function(item) {
+  handleShowModalInfo: function(item, isOwner) {
     Modal.showInfo({
       item: item,
       onEdit: this.handleEditRecord.bind(this),
-      onDelete: this.handleConfirmDeleteRecord.bind(this)
+      onDelete: this.handleConfirmDeleteRecord.bind(this),
+      isOwner: isOwner
     });
     Router.matchUrl("/:username/:collection_name", params => {
       Router.setUrl(`/${params.username}/${params.collection_name}/${item.id}`);

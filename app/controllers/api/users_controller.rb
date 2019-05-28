@@ -34,6 +34,7 @@ class Api::UsersController < ApplicationController
       @parent_type = "follow"
       @children = user.collections
       @children_type = "collection"
+      @is_owner = user == current_user
       render "show.json.jb"
     else
       render json: {errors: ["Invalid username"]}, status: :bad_request

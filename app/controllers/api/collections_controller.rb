@@ -6,6 +6,7 @@ class Api::CollectionsController < ApplicationController
     @parent_type = "follow"
     @children = @parent.following.collections
     @children_type = "collection"
+    @is_owner = true
     render "index.json.jb"
   end
 
@@ -49,6 +50,7 @@ class Api::CollectionsController < ApplicationController
       @children = @parent.records
       @children_type = "record"
       @client_url = "/#{@parent.user.username}/#{@parent.name.parameterize}"
+      @is_owner = @parent.user == current_user
       render "index.json.jb"
     else
       render json: {errors: ["Invalid parameters"]}, status: :bad_request
@@ -56,7 +58,11 @@ class Api::CollectionsController < ApplicationController
   end
 
   def update
-    @collection = Collection.find_by(id: params[:id])
+    @collection = Collection.find_by(id: params[:id], user_id: current_user.id)
+    if !@collection
+      render json: {errors: ["Invalid collection"]}, status: 422
+      return
+    end
     @collection.x = params[:x] || @collection.x
     @collection.y = params[:y] || @collection.y
     @collection.width = params[:width] || @collection.width
@@ -75,7 +81,11 @@ class Api::CollectionsController < ApplicationController
   end
 
   def destroy
-    @collection = Collection.find_by(id: params[:id])
+    @collection = Collection.find_by(id: params[:id], user_id: current_user.id)
+    if !@collection
+      render json: {errors: ["Invalid collection"]}, status: 422
+      return
+    end
     @collection.destroy
     render json: {message: "Collection successfully destroyed!"}
   end

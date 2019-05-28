@@ -38,6 +38,7 @@ class Api::FollowsController < ApplicationController
     @children = @parent.following.collections
     @children_type = "collection"
     @client_url = "/#{@parent.following.username}"
+    @is_owner = @parent.following == current_user
     render "show.json.jb"
   end
 

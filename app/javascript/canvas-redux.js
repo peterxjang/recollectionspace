@@ -108,7 +108,7 @@ function checkTransition(delta) {
     0
   );
   if (delta < 0 && totalVisibleWidth < 100) {
-    return props.onTransition(-1, state.canvas);
+    return props.onTransition(-1, state.canvas, state.isOwner);
   } else if (delta > 0) {
     let item;
     for (let i = 0; i < state.items.length; i++) {
@@ -124,7 +124,7 @@ function checkTransition(delta) {
           canvas.height / state.canvas.scale
         )
       ) {
-        return props.onTransition(1, item);
+        return props.onTransition(1, item, state.isOwner);
       }
     }
   }
@@ -429,6 +429,7 @@ function onInputDown(evt) {
   }
   const item = state.items.filter(item => item.id === state.selectedItem)[0];
   if (item && item.id !== null) {
+    console.log(state.isOwner);
     draggingItemType = Record.isPointInRecord({
       ...item,
       inputX,
@@ -459,11 +460,17 @@ function withinMovementThreshold(inputX, inputY) {
 }
 
 function onLongPress() {
+  if (!state.isOwner) {
+    return;
+  }
   if (state.loadingItems) {
-    props.onShowModalInfo({
-      caption: "Loading",
-      body: "Items can't be editing during loading."
-    });
+    props.onShowModalInfo(
+      {
+        caption: "Loading",
+        body: "Items can't be editing during loading."
+      },
+      state.isOwner
+    );
     return;
   }
   const selectedItem = state.items.filter(
@@ -493,7 +500,7 @@ function onLongPress() {
         translateItemStart(lastInputX, lastInputY, item);
         return;
       } else {
-        props.onShowModalInfo(item);
+        props.onShowModalInfo(item, state.isOwner);
         return;
       }
     } else if (
@@ -519,7 +526,7 @@ function onDoubleClick() {
     });
     if (itemType === "record") {
       if (item.type === "record" || item.type === "collection") {
-        props.onShowModalInfo(item);
+        props.onShowModalInfo(item, state.isOwner);
         return;
       }
       const { x, y, width, height } = Record.getTransformedDimensions(item);

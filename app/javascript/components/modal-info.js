@@ -7,6 +7,8 @@ const ModalInfo = {
   $buttonDelete: document.getElementById("modal-info-delete"),
   visible: false,
   initialize: function() {
+    this.$buttonEdit.style.display = "none";
+    this.$buttonDelete.style.display = "none";
     this.bindEvents();
     return this;
   },
@@ -27,7 +29,11 @@ const ModalInfo = {
     this.$caption.innerHTML = this.props.item.caption;
     this.$body.innerText =
       this.props.item.body !== undefined ? this.props.item.body : "Loading...";
-    if (this.props.item.id && this.props.item.body !== undefined) {
+    if (
+      this.props.item.id &&
+      this.props.item.body !== undefined &&
+      this.props.isOwner
+    ) {
       this.$buttonEdit.style.display = "inline";
       this.$buttonDelete.style.display = "inline";
     }

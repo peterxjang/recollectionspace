@@ -90,7 +90,8 @@ export function changeRouteSuccess(state, isChangingRoute) {
     type: CHANGE_ROUTE_SUCCESS,
     canvas: state.canvas,
     items: state.items,
-    isChangingRoute: isChangingRoute
+    isChangingRoute: isChangingRoute,
+    isOwner: state.isOwner
   };
 }
 

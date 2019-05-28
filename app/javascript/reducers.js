@@ -28,7 +28,8 @@ const initialState = {
   items: [],
   selectedItem: -1,
   loadingItems: false,
-  isChangingRoute: false
+  isChangingRoute: false,
+  isOwner: false
 };
 
 function canvas(state = initialState.canvas, action) {
@@ -167,11 +168,16 @@ function isChangingRoute(state = initialState.isChangingRoute, action) {
   return state;
 }
 
+function isOwner(state = initialState.isOwner, action) {
+  return state;
+}
+
 const appReducer = combineReducers({
   canvas,
   selectedItem,
   loadingItems,
   isChangingRoute,
+  isOwner,
   items,
   parent
 });
@@ -192,7 +198,8 @@ const rootReducer = (state, action) => {
       ...state,
       canvas: action.canvas,
       items: action.items,
-      isChangingRoute: action.isChangingRoute
+      isChangingRoute: action.isChangingRoute,
+      isOwner: action.isOwner
     };
   } else if (action.type === LOAD_ITEMS) {
     state = {

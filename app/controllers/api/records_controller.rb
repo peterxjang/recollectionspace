@@ -2,6 +2,11 @@ class Api::RecordsController < ApplicationController
   before_action :authenticate_user
 
   def create
+    collection = Collection.find_by(id: params[:collection_id], user_id: current_user.id)
+    if !collection
+      render json: {errors: ["Invalid collection"]}, status: 422
+      return
+    end
     response = Cloudinary::Uploader.upload(params[:image])
     @record = Record.new(
       name: params[:name],
@@ -27,6 +32,10 @@ class Api::RecordsController < ApplicationController
 
   def update
     @record = Record.find_by(id: params[:id])
+    if @record && @record.collection.user_id != current_user.id
+      render json: {errors: ["Invalid collection"]}, status: 422
+      return
+    end
     @record.name = params[:name] || @record.name
     @record.description = params[:description] || @record.description
     @record.collection_id = params[:collection_id] || @record.collection_id
@@ -49,6 +58,10 @@ class Api::RecordsController < ApplicationController
 
   def destroy
     @record = Record.find_by(id: params[:id])
+    if @record && @record.collection.user_id != current_user.id
+      render json: {errors: ["Invalid collection"]}, status: 422
+      return
+    end
     @record.destroy
     render json: {message: "Record successfully destroyed!"}
   end

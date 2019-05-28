@@ -1,5 +1,6 @@
 {
   clientUrl: @client_url,
+  isOwner: @is_owner,
   selectedItem: -1,
   canvas: {
     id: @parent.id,
