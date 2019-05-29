@@ -1,12 +1,13 @@
 class Api::UsersController < ApplicationController
   def index
-    @users = User.where(admin: false)
+    @users = User.includes(:collections).where(admin: false)
     if params[:username]
       @users = @users.where("username ILIKE ?", "%#{params[:username]}%")
     end
     if params[:new]
-      @users = @users.select { |user| current_user.followings.exclude?(user) }
+      @users = @users.where.not(id: current_user.followings.pluck(:following_id))
     end
+    @users = @users.limit(5)
     render "index.json.jb"
   end
 
