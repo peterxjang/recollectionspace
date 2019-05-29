@@ -135,11 +135,18 @@ const Record = {
         if (imgQueue.length > 0) {
           imgQueue.pop().call();
         }
+        imgCache[props.type + props.id] = img;
       },
       false
     );
+    img.onerror = () => {
+      imgLoading = false;
+      img.alpha = 0;
+      if (imgQueue.length > 0) {
+        imgQueue.pop().call();
+      }
+    };
     img.src = props.src;
-    imgCache[props.type + props.id] = img;
   },
   renderImageAnimate: function(props) {
     const img = imgCache[props.type + props.id];
