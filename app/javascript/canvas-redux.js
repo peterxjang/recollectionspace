@@ -949,7 +949,29 @@ function createItem(image, caption, body, options = {}) {
     smoothDispatch(addItem({ ...item, caption: "Saving..." }));
     props.onSaveRecord(state.canvas, item, image, options);
   };
-  img.src = image instanceof File ? URL.createObjectURL(image) : image;
+  img.onerror = function(error) {
+    console.error("Image could not load", image, error);
+  };
+  if (image instanceof File) {
+    img.src = URL.createObjectURL(image);
+  } else {
+    let item = {
+      id: null,
+      src: image,
+      caption: caption,
+      body: body,
+      angle: 0,
+      x: startingCenter.x,
+      y: startingCenter.y,
+      width: options.width,
+      height: options.height,
+      scale: (0.25 * canvas.width) / state.canvas.scale / options.width,
+      border: true,
+      color: null
+    };
+    smoothDispatch(addItem({ ...item, caption: "Saving..." }));
+    props.onSaveRecord(state.canvas, item, image, options);
+  }
 }
 
 function getVisiblePoint() {

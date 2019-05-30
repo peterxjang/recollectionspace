@@ -186,7 +186,8 @@ const Application = {
   handleNewRecord: function(state) {
     if (state.canvas.type === "collection") {
       Modal.showNewRecord({
-        onSaveRecord: Canvas.createItem
+        onSaveRecord: Canvas.createItem,
+        onSearch: this.handleSearchBooks.bind(this)
       });
     } else if (state.canvas.type === "follow") {
       this.handleGetCollectionCategories(function(data) {
@@ -228,6 +229,31 @@ const Application = {
       })
       .then(data => {
         callback(data);
+      });
+  },
+  handleSearchBooks: function(searchText, callback) {
+    fetch("http://openlibrary.org/search.json?title=" + searchText)
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        const books = [];
+        data.docs.forEach(doc => {
+          if (doc.ia) {
+            doc.ia.forEach(id => {
+              books.push({
+                caption: doc.title,
+                thumbnailImage: "https://archive.org/services/img/" + id,
+                fullImage:
+                  "https://archive.org/download/" + id + "/page/cover_t.jpg"
+              });
+            });
+          }
+        });
+        callback(books.slice(0, 5));
       });
   },
   handleSaveRecord: function(parent, item, image, options) {

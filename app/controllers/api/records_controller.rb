@@ -7,7 +7,7 @@ class Api::RecordsController < ApplicationController
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
-    response = Cloudinary::Uploader.upload(params[:image])
+    src = Cloudinary::Uploader.upload(params[:image])["secure_url"]
     @record = Record.new(
       name: params[:name],
       description: params[:description],
@@ -19,7 +19,7 @@ class Api::RecordsController < ApplicationController
       angle: params[:angle],
       scale: params[:scale],
       border: params[:border],
-      src: response["secure_url"],
+      src: src,
       color: params[:color],
       zindex: params[:zindex]
     )
