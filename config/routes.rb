@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     post "/records" => "records#create"
     patch "/records/:id" => "records#update"
     delete "/records/:id" => "records#destroy"
+    get "/books" => "books#index"
+    get "/movies" => "movies#index"
   end
 
   get "/*path" => "pages#index"

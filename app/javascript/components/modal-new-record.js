@@ -48,13 +48,13 @@ const ModalNewRecord = {
       );
     }
   },
-  showSearchResults: function(books) {
-    this.$inputSearchResults.innerHTML = books
+  showSearchResults: function(items) {
+    this.$inputSearchResults.innerHTML = items
       .map(
-        book =>
-          `<img src="${book.thumbnailImage}" alt="${
-            book.caption
-          }" data-image="${book.fullImage}" data-caption="${book.caption}">`
+        item =>
+          `<img src="${item.image}" alt="${item.caption}" data-body="${
+            item.body
+          }" data-caption="${item.caption}">`
       )
       .join("");
   },
@@ -71,6 +71,7 @@ const ModalNewRecord = {
     this.$inputSearchResults.onclick = event => {
       if (event.target.matches("img")) {
         this.$inputCaption.value = event.target.dataset.caption;
+        this.$inputBody.value = event.target.dataset.body;
         this.imageUrl = event.target.src;
         this.imageWidth = event.target.width;
         this.imageHeight = event.target.height;
