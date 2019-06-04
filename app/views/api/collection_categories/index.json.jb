@@ -1,7 +1,0 @@
-@collection_categories.map do |collection_category|
-  {
-    id: collection_category.id,
-    name: collection_category.name,
-    description: collection_category.description
-  }
-end

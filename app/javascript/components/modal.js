@@ -1,7 +1,7 @@
 import ModalInfo from "./modal-info";
 import ModalNewRecord from "./modal-new-record";
 import ModalNewFollow from "./modal-new-follow";
-import ModalNewCollection from "./modal-new-collection";
+import ModalNewUserCollection from "./modal-new-user-collection";
 import ModalNewSession from "./modal-new-session";
 import ModalNewUser from "./modal-new-user";
 import ModalEdit from "./modal-edit";
@@ -19,7 +19,7 @@ const Modal = {
     ModalInfo.hide();
     ModalNewRecord.hide();
     ModalNewFollow.hide();
-    ModalNewCollection.hide();
+    ModalNewUserCollection.hide();
     ModalNewSession.hide();
     ModalNewUser.hide();
     ModalEdit.hide();
@@ -48,9 +48,9 @@ const Modal = {
     this.makeVisible();
     ModalNewFollow.show({ ...props, onHide: this.makeInvisible.bind(this) });
   },
-  showNewCollection: function(props) {
+  showNewUserCollection: function(props) {
     this.makeVisible();
-    ModalNewCollection.show({
+    ModalNewUserCollection.show({
       ...props,
       onHide: this.makeInvisible.bind(this)
     });

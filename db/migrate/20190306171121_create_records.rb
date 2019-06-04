@@ -3,7 +3,7 @@ class CreateRecords < ActiveRecord::Migration[5.2]
     create_table :records do |t|
       t.string :name
       t.text :description
-      t.integer :collection_id
+      t.integer :user_collection_id
       t.float :x, default: 0
       t.float :y, default: 0
       t.integer :width

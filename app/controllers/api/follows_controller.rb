@@ -35,7 +35,7 @@ class Api::FollowsController < ApplicationController
   def show
     @parent = Follow.find_by(id: params[:id])
     @parent_type = "follow"
-    @children = @parent.following.collections
+    @children = @parent.following.user_collections
     @children_type = "collection"
     @client_url = "/#{@parent.following.username}"
     @is_owner = @parent.following == current_user

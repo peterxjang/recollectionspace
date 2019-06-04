@@ -61,7 +61,9 @@ const ModalNewFollow = {
       )[0];
       if (user) {
         this.props.onSaveFollow(user.src, user.username, "", {
-          following_id: user.id
+          following_id: user.id,
+          width: user.width,
+          height: user.height
         });
       }
       this.hide();

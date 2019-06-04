@@ -10,33 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_06_171121) do
+ActiveRecord::Schema.define(version: 2019_06_04_171937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "collection_categories", force: :cascade do |t|
-    t.integer "user_id"
+  create_table "collections", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.boolean "public", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "collections", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "collection_category_id"
-    t.float "x", default: 0.0
-    t.float "y", default: 0.0
+    t.string "src"
     t.integer "width"
     t.integer "height"
-    t.float "angle", default: 0.0
-    t.float "scale", default: 1.0
-    t.boolean "border", default: true
-    t.string "src"
     t.string "color"
-    t.integer "zindex", default: 0
+    t.boolean "public", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -61,6 +47,23 @@ ActiveRecord::Schema.define(version: 2019_03_06_171121) do
   create_table "records", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.integer "user_collection_id"
+    t.float "x", default: 0.0
+    t.float "y", default: 0.0
+    t.integer "width"
+    t.integer "height"
+    t.float "angle", default: 0.0
+    t.float "scale", default: 1.0
+    t.boolean "border", default: true
+    t.string "src"
+    t.string "color"
+    t.integer "zindex", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_collections", force: :cascade do |t|
+    t.integer "user_id"
     t.integer "collection_id"
     t.float "x", default: 0.0
     t.float "y", default: 0.0

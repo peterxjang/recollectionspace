@@ -1,8 +1,8 @@
-class CreateCollections < ActiveRecord::Migration[5.2]
+class CreateUserCollections < ActiveRecord::Migration[5.2]
   def change
-    create_table :collections do |t|
+    create_table :user_collections do |t|
       t.integer :user_id
-      t.integer :collection_category_id
+      t.integer :collection_id
       t.float :x, default: 0
       t.float :y, default: 0
       t.integer :width

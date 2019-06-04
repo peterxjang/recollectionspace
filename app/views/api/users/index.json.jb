@@ -4,6 +4,8 @@
     username: user.username,
     avatar: user.avatar,
     src: user.src,
-    collections: user.collections
+    width: user.width,
+    height: user.height,
+    collections: user.user_collections
   }
 end

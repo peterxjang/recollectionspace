@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
   def index
-    @users = User.includes(:collections).where(admin: false)
+    @users = User.includes(:user_collections).where(admin: false)
     if params[:username]
       @users = @users.where("username ILIKE ?", "%#{params[:username]}%")
     end
@@ -36,7 +36,7 @@ class Api::UsersController < ApplicationController
     if user
       @parent = Follow.find_by(follower_id: user.id, following_id: user.id)
       @parent_type = "follow"
-      @children = user.collections
+      @children = user.user_collections
       @children_type = "collection"
       @is_owner = user == current_user
       render "show.json.jb"

@@ -1,0 +1,17 @@
+{
+  id: @user_collection.id,
+  name: @user_collection.name,
+  description: @user_collection.description,
+  collection_id: @user_collection.collection_id,
+  x: @user_collection.x,
+  y: @user_collection.y,
+  width: @user_collection.width,
+  height: @user_collection.height,
+  angle: @user_collection.angle,
+  scale: @user_collection.scale,
+  border: @user_collection.border,
+  src: @user_collection.src,
+  color: @user_collection.color,
+  zindex: @user_collection.zindex,
+  type: "collection"
+}

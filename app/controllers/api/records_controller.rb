@@ -2,8 +2,8 @@ class Api::RecordsController < ApplicationController
   before_action :authenticate_user
 
   def create
-    collection = Collection.find_by(id: params[:collection_id], user_id: current_user.id)
-    if !collection
+    user_collection = UserCollection.find_by(id: params[:user_collection_id], user_id: current_user.id)
+    if !user_collection
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
@@ -11,7 +11,7 @@ class Api::RecordsController < ApplicationController
     @record = Record.new(
       name: params[:name],
       description: params[:description],
-      collection_id: params[:collection_id],
+      user_collection_id: params[:user_collection_id],
       x: params[:x],
       y: params[:y],
       width: params[:width],
@@ -32,13 +32,13 @@ class Api::RecordsController < ApplicationController
 
   def update
     @record = Record.find_by(id: params[:id])
-    if @record && @record.collection.user_id != current_user.id
+    if @record && @record.user_collection.user_id != current_user.id
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
     @record.name = params[:name] || @record.name
     @record.description = params[:description] || @record.description
-    @record.collection_id = params[:collection_id] || @record.collection_id
+    @record.user_collection_id = params[:user_collection_id] || @record.user_collection_id
     @record.x = params[:x] || @record.x
     @record.y = params[:y] || @record.y
     @record.width = params[:width] || @record.width
@@ -58,7 +58,7 @@ class Api::RecordsController < ApplicationController
 
   def destroy
     @record = Record.find_by(id: params[:id])
-    if @record && @record.collection.user_id != current_user.id
+    if @record && @record.user_collection.user_id != current_user.id
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end

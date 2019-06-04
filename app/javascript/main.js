@@ -17,12 +17,12 @@ const Application = {
       apiUrl = "/api/users/" + params.username;
     });
     Router.matchUrl("/:username/:collection_name", params => {
-      apiUrl = `/api/collections/search?username=${
+      apiUrl = `/api/user_collections/search?username=${
         params.username
       }&collection_name=${params.collection_name}`;
     });
     Router.matchUrl("/:username/:collection_name/:id", params => {
-      apiUrl = `/api/collections/search?username=${
+      apiUrl = `/api/user_collections/search?username=${
         params.username
       }&collection_name=${params.collection_name}`;
       modalId = parseInt(params.id);
@@ -109,7 +109,7 @@ const Application = {
   },
   transitionIn: function(delta, item) {
     if (item.type === "collection") {
-      this.loadCanvasData("/api/collections/" + item.id, delta, item);
+      this.loadCanvasData("/api/user_collections/" + item.id, delta, item);
       return true;
     } else if (item.type === "follow") {
       this.loadCanvasData("/api/follows/" + item.id, delta, item);
@@ -198,10 +198,10 @@ const Application = {
         onSearch: searchFunction
       });
     } else if (state.canvas.type === "follow") {
-      this.handleGetCollectionCategories(function(data) {
-        Modal.showNewCollection({
-          collectionCategories: data,
-          onSaveCollection: Canvas.createItem
+      this.handleGetCollections(function(data) {
+        Modal.showNewUserCollection({
+          collections: data,
+          onSaveUserCollection: Canvas.createItem
         });
       });
     } else if (state.canvas.type === "root") {
@@ -211,8 +211,8 @@ const Application = {
       });
     }
   },
-  handleGetCollectionCategories: function(callback) {
-    fetch("/api/collection_categories?public=true", {
+  handleGetCollections: function(callback) {
+    fetch("/api/collections?public=true", {
       headers: { Authorization: `Bearer ${localStorage.jwt}` }
     })
       .then(response => {
@@ -265,24 +265,28 @@ const Application = {
   },
   handleSaveRecord: function(parent, item, image, options) {
     let url, params;
+    params = new FormData();
+    Object.keys(item).forEach(key => {
+      if (item[key] || item[key] === 0) {
+        params.append(key, item[key]);
+      }
+    });
     if (parent.type === "collection") {
       url = "/api/records";
-      params = new FormData();
-      Object.keys(item).forEach(key => params.append(key, item[key]));
-      params.append("collection_id", parent.id);
+      params.append("user_collection_id", parent.id);
       params.append("name", item.caption);
       params.append("description", item.body);
-      params.append("image", image);
+      if (image) {
+        params.append("image", image);
+      }
     } else if (parent.type === "follow") {
-      url = "/api/collections";
-      params = new FormData();
-      Object.keys(item).forEach(key => params.append(key, item[key]));
-      params.append("collection_category_id", options.collection_category_id);
-      params.append("image", image);
+      url = "/api/user_collections";
+      params.append("user_collection_id", options.user_collection_id);
+      if (image) {
+        params.append("image", image);
+      }
     } else if (parent.type === "root") {
       url = "/api/follows";
-      params = new FormData();
-      Object.keys(item).forEach(key => params.append(key, item[key]));
       params.append("following_id", options.following_id);
     } else {
       return;
@@ -369,7 +373,7 @@ const Application = {
         description: item.body
       };
     } else if (item.type === "collection") {
-      url = "/api/collections/" + item.id;
+      url = "/api/user_collections/" + item.id;
       params = {
         ...item
       };
@@ -414,7 +418,7 @@ const Application = {
     if (item.type === "record") {
       url = "/api/records/" + item.id;
     } else if (item.type === "collection") {
-      url = "/api/collections/" + item.id;
+      url = "/api/user_collections/" + item.id;
     } else if (item.type === "follow") {
       url = "/api/follows/" + item.id;
     } else {
