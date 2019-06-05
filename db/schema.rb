@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2019_06_05_043710) do
 
   create_table "records", force: :cascade do |t|
     t.string "api_id"
+    t.integer "collection_id"
     t.string "name"
     t.text "description"
     t.integer "width"

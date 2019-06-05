@@ -7,11 +7,12 @@ class Api::UserRecordsController < ApplicationController
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
-    record = Record.find_by(api_id: params[:api_id])
+    record = Record.find_by(api_id: params[:api_id], collection_id: user_collection.collection.id)
     unless record
       response = Cloudinary::Uploader.upload(params[:image], folder: "records")
       record = Record.new(
         api_id: params[:api_id],
+        collection_id: user_collection.collection.id,
         src: response["secure_url"],
         width: response["width"],
         height: response["height"],
