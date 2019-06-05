@@ -282,7 +282,7 @@ const Application = {
       }
     } else if (parent.type === "follow") {
       url = "/api/user_collections";
-      params.append("user_collection_id", options.user_collection_id);
+      params.append("collection_id", options.collection_id);
       if (image) {
         params.append("image", image);
       }

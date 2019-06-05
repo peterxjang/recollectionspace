@@ -12,7 +12,11 @@ class Api::UserCollectionsController < ApplicationController
 
   def create
     collection = Collection.find_by(id: params[:collection_id])
-    if params[:image]
+    if !collection
+      render json: {errors: ["Invalid collection"]}, status: 422
+      return
+    end
+    if params[:image] && params[:image] != collection.src
       response = Cloudinary::Uploader.upload(params[:image], folder: "collections")
       src = response["secure_url"]
       width = response["width"]
@@ -30,7 +34,7 @@ class Api::UserCollectionsController < ApplicationController
       width: width,
       height: height,
       angle: params[:angle],
-      scale: params[:scale],
+      scale: params[:scale].to_f * params[:width].to_i / width.to_f,
       border: params[:border],
       src: src,
       color: params[:color] || collection.color,
