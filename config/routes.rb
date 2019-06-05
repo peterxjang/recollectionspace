@@ -17,9 +17,9 @@ Rails.application.routes.draw do
     get "/user_collections/:id" => "user_collections#show"
     patch "/user_collections/:id" => "user_collections#update"
     delete "/user_collections/:id" => "user_collections#destroy"
-    post "/records" => "records#create"
-    patch "/records/:id" => "records#update"
-    delete "/records/:id" => "records#destroy"
+    post "/user_records" => "user_records#create"
+    patch "/user_records/:id" => "user_records#update"
+    delete "/user_records/:id" => "user_records#destroy"
     get "/books" => "books#index"
     get "/movies" => "movies#index"
   end

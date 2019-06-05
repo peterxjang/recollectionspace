@@ -44,10 +44,9 @@ ActiveRecord::Schema.define(version: 2019_06_04_171937) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "records", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "user_collection_id"
+  create_table "user_collections", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "collection_id"
     t.float "x", default: 0.0
     t.float "y", default: 0.0
     t.integer "width"
@@ -62,9 +61,10 @@ ActiveRecord::Schema.define(version: 2019_06_04_171937) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_collections", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "collection_id"
+  create_table "user_records", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "user_collection_id"
     t.float "x", default: 0.0
     t.float "y", default: 0.0
     t.integer "width"

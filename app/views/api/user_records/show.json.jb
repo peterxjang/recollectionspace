@@ -1,0 +1,17 @@
+{
+  id: @user_record.id,
+  name: @user_record.name,
+  description: @user_record.description,
+  user_collection_id: @user_record.user_collection_id,
+  x: @user_record.x,
+  y: @user_record.y,
+  width: @user_record.width,
+  height: @user_record.height,
+  angle: @user_record.angle,
+  scale: @user_record.scale,
+  border: @user_record.border,
+  src: @user_record.src,
+  color: @user_record.color,
+  zindex: @user_record.zindex,
+  type: "record"
+}

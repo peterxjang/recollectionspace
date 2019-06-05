@@ -1,7 +1,7 @@
 class UserCollection < ApplicationRecord
   belongs_to :collection
   belongs_to :user
-  has_many :records, :dependent => :destroy
+  has_many :user_records, :dependent => :destroy
   before_destroy :delete_cloudinary_image
 
   def name

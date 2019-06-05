@@ -52,7 +52,7 @@ class Api::UserCollectionsController < ApplicationController
     end
     if @parent
       @parent_type = "collection"
-      @children = @parent.records
+      @children = @parent.user_records
       @children_type = "record"
       @client_url = "/#{@parent.user.username}/#{@parent.name.parameterize}"
       @is_owner = @parent.user == current_user

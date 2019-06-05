@@ -272,7 +272,7 @@ const Application = {
       }
     });
     if (parent.type === "collection") {
-      url = "/api/records";
+      url = "/api/user_records";
       params.append("user_collection_id", parent.id);
       params.append("name", item.caption);
       params.append("description", item.body);
@@ -332,7 +332,7 @@ const Application = {
   handleUpdateRecordText: function(id, type, caption, body) {
     let url, params;
     if (type === "record") {
-      url = "/api/records/" + id;
+      url = "/api/user_records/" + id;
       params = {
         name: caption,
         description: body
@@ -366,7 +366,7 @@ const Application = {
   handleUpdateRecord: function(item) {
     let url, params;
     if (item.type === "record") {
-      url = "/api/records/" + item.id;
+      url = "/api/user_records/" + item.id;
       params = {
         ...item,
         name: item.caption,
@@ -416,7 +416,7 @@ const Application = {
   handleDeleteRecord: function(item) {
     let url, params;
     if (item.type === "record") {
-      url = "/api/records/" + item.id;
+      url = "/api/user_records/" + item.id;
     } else if (item.type === "collection") {
       url = "/api/user_collections/" + item.id;
     } else if (item.type === "follow") {
