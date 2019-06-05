@@ -35,7 +35,7 @@ class Api::UserRecordsController < ApplicationController
       width: record.width || params[:width],
       height: record.height || params[:height],
       angle: params[:angle],
-      scale: params[:scale],
+      scale: params[:scale].to_f * params[:width].to_i / record.width.to_f,
       border: params[:border],
       src: record.src,
       color: record.color || params[:color],

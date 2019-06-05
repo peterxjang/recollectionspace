@@ -314,6 +314,7 @@ const Application = {
           src: data.src,
           width: data.width,
           height: data.height,
+          scale: data.scale,
           caption: data.name,
           body: data.description,
           type: data.type

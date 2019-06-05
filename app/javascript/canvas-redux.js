@@ -922,9 +922,6 @@ function replaceItems(newItems) {
 }
 
 function replaceItemProperties(itemOld, itemNew) {
-  if (itemOld.id === null) {
-    itemNew.scale = (0.25 * canvas.width) / state.canvas.scale / itemNew.width;
-  }
   smoothDispatch(replaceItem(itemOld, itemNew), allTransformEnd);
 }
 
