@@ -7,20 +7,37 @@ class Api::UserRecordsController < ApplicationController
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
-    src = Cloudinary::Uploader.upload(params[:image])["secure_url"]
+    record = Record.find_by(api_id: params[:api_id])
+    unless record
+      src = Cloudinary::Uploader.upload(params[:image])["secure_url"]
+      record = Record.new(
+        api_id: params[:api_id],
+        src: src,
+        width: params[:width],
+        height: params[:height],
+        color: params[:color],
+        name: params[:name],
+        description: params[:description],
+      )
+      unless record.save
+        render json: {errors: record.errors.full_messages}, status: 422
+        return
+      end
+    end
     @user_record = UserRecord.new(
-      name: params[:name],
-      description: params[:description],
+      record_id: record.id,
+      name: record.name || params[:name],
+      description: record.description || params[:description],
       user_collection_id: params[:user_collection_id],
       x: params[:x],
       y: params[:y],
-      width: params[:width],
-      height: params[:height],
+      width: record.width || params[:width],
+      height: record.height || params[:height],
       angle: params[:angle],
       scale: params[:scale],
       border: params[:border],
-      src: src,
-      color: params[:color],
+      src: record.src,
+      color: record.color || params[:color],
       zindex: params[:zindex]
     )
     if @user_record.save

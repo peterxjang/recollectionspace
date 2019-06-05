@@ -13,6 +13,7 @@ const ModalNewRecord = {
   imageUrl: null,
   imageWidth: null,
   imageHeight: null,
+  apiId: null,
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -54,7 +55,7 @@ const ModalNewRecord = {
         item =>
           `<img src="${item.image}" alt="${item.caption}" data-body="${
             item.body
-          }" data-caption="${item.caption}">`
+          }" data-caption="${item.caption}" data-id="${item.id}">`
       )
       .join("");
   },
@@ -72,6 +73,7 @@ const ModalNewRecord = {
       if (event.target.matches("img")) {
         this.$inputCaption.value = event.target.dataset.caption;
         this.$inputBody.value = event.target.dataset.body;
+        this.apiId = event.target.dataset.id;
         this.imageUrl = event.target.src;
         this.imageWidth = event.target.width;
         this.imageHeight = event.target.height;
@@ -84,7 +86,7 @@ const ModalNewRecord = {
         image,
         this.$inputCaption.value,
         this.$inputBody.value,
-        { width: this.imageWidth, height: this.imageHeight }
+        { width: this.imageWidth, height: this.imageHeight, api_id: this.apiId }
       );
       this.hide();
     };

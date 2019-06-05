@@ -7,6 +7,7 @@ class Api::BooksController < ApplicationController
       if doc["ia"]
         doc["ia"].each do |id|
           data << {
+            id: id,
             caption: doc["title"],
             image: "https://archive.org/services/img/#{id}",
             body: ""
