@@ -69,12 +69,19 @@ const Record = {
     height,
     fullHeight,
     caption,
+    type,
     border,
     borderSize,
     isZooming
   }) {
     if (!border) {
       return;
+    }
+    if (type === "collection") {
+      caption = "#" + caption;
+    }
+    if (type === "follow") {
+      caption = "@" + caption;
     }
     const bottomBorderHeight = fullHeight - height - borderSize;
     const fontHeight = 0.5 * bottomBorderHeight;
