@@ -9,7 +9,7 @@ class Api::UserRecordsController < ApplicationController
     end
     record = Record.find_by(api_id: params[:api_id])
     unless record
-      src = Cloudinary::Uploader.upload(params[:image])["secure_url"]
+      src = Cloudinary::Uploader.upload(params[:image], folder: "records")["secure_url"]
       record = Record.new(
         api_id: params[:api_id],
         src: src,

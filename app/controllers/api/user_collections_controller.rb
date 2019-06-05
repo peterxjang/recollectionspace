@@ -13,7 +13,7 @@ class Api::UserCollectionsController < ApplicationController
   def create
     collection = Collection.find_by(id: params[:collection_id])
     if params[:image]
-      src = Cloudinary::Uploader.upload(params[:image])["secure_url"]
+      src = Cloudinary::Uploader.upload(params[:image], folder: "collections")["secure_url"]
     else
       src = collection.src
     end
