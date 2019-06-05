@@ -13,17 +13,22 @@ class Api::UserCollectionsController < ApplicationController
   def create
     collection = Collection.find_by(id: params[:collection_id])
     if params[:image]
-      src = Cloudinary::Uploader.upload(params[:image], folder: "collections")["secure_url"]
+      response = Cloudinary::Uploader.upload(params[:image], folder: "collections")
+      src = response["secure_url"]
+      width = response["width"]
+      height = response["height"]
     else
       src = collection.src
+      width = collection.width
+      height = collection.height
     end
     @user_collection = UserCollection.new(
       user_id: current_user.id,
       collection_id: collection.id,
       x: params[:x],
       y: params[:y],
-      width: params[:width] || collection.width,
-      height: params[:height] || collection.height,
+      width: width,
+      height: height,
       angle: params[:angle],
       scale: params[:scale],
       border: params[:border],

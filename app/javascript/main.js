@@ -312,6 +312,8 @@ const Application = {
           ...item,
           id: data.id,
           src: data.src,
+          width: data.width,
+          height: data.height,
           caption: data.name,
           body: data.description,
           type: data.type

@@ -922,8 +922,6 @@ function replaceItems(newItems) {
 }
 
 function replaceItemProperties(itemOld, itemNew) {
-  // TODO: Fix scale to match initial created scale
-  console.log(itemOld.id, itemOld, itemNew);
   if (itemOld.id === null) {
     itemNew.scale = (0.25 * canvas.width) / state.canvas.scale / itemNew.width;
   }
