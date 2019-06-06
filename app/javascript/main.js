@@ -192,6 +192,8 @@ const Application = {
         searchFunction = this.handleSearchMovies.bind(this);
       } else if (url.endsWith("books")) {
         searchFunction = this.handleSearchBooks.bind(this);
+      } else if (url.endsWith("music")) {
+        searchFunction = this.handleSearchMusic.bind(this);
       }
       Modal.showNewRecord({
         onSaveRecord: Canvas.createItem,
@@ -253,6 +255,18 @@ const Application = {
   },
   handleSearchMovies: function(searchText, callback) {
     fetch("/api/movies?q=" + searchText)
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        callback(data);
+      });
+  },
+  handleSearchMusic: function(searchText, callback) {
+    fetch("/api/music?q=" + searchText)
       .then(response => {
         if (!response.ok) {
           throw response;

@@ -32,4 +32,18 @@ class Api::RecordsController < ApplicationController
     end
     render json: data
   end
+
+  def search_music
+    query = URI.encode params[:q]
+    response = HTTP.get("http://musicbrainz.org/ws/2/release/?query=#{query}&fmt=json")
+    data = response.parse["releases"].map do |result|
+      {
+        id: result["id"],
+        caption: result["title"],
+        body: result["artist-credit"].map { |artist| artist["artist"]["name"] }.join(", "),
+        image: "http://coverartarchive.org/release/#{result["id"]}/front"
+      }
+    end
+    render json: data.first(5)
+  end
 end

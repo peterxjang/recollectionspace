@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     delete "/user_records/:id" => "user_records#destroy"
     get "/books" => "records#search_books"
     get "/movies" => "records#search_movies"
+    get "/music" => "records#search_music"
   end
 
   get "/*path" => "pages#index"
