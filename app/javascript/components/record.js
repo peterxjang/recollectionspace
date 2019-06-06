@@ -78,7 +78,7 @@ const Record = {
       return;
     }
     if (type === "collection") {
-      caption = "#" + caption;
+      caption = "[ " + caption + " ]";
     }
     if (type === "follow") {
       caption = "@" + caption;
