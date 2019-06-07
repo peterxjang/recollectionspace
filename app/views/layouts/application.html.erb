@@ -91,7 +91,7 @@
     }
     textarea {
       font-family: inherit;
-      height: 50vh;
+      height: 20vh;
     }
     .form-control {
       width: 100%;
@@ -107,13 +107,20 @@
       outline: 0;
     }
     #modal-new-record-search-results {
-      max-height: 200px;
+      height: 200px;
       overflow-x: scroll;
       overflow-y: hidden;
       white-space: nowrap;
       padding: 5px;
     }
     #modal-new-record-search-results img {
+      height: 190px;
+      margin: 5px;
+      display: inline-block;
+      line-height: 190px;
+      vertical-align: middle;
+    }
+    #modal-new-record-image-preview {
       height: 190px;
       margin: 5px;
       display: inline-block;
@@ -280,7 +287,8 @@
           </div>
           <div id="modal-new-record-upload-tab" class="form-group tab-pane">
             <label for="modal-new-record-image">Image</label>
-            <input id="modal-new-record-image" class="form-control" type="file" placeholder="image" aria-label="image">
+            <input id="modal-new-record-image" class="form-control" type="file" accept="image/*" placeholder="image" aria-label="image">
+            <img id="modal-new-record-image-preview" alt="Image preview">
           </div>
         </div>
         <div class="form-group">
@@ -325,7 +333,7 @@
         </div>
         <div class="form-group">
           <label for="modal-new-user-collection-image">Image</label>
-          <input id="modal-new-user-collection-image" class="form-control" type="file" placeholder="image" aria-label="image">
+          <input id="modal-new-user-collection-image" class="form-control" type="file" accept="image/*" placeholder="image" aria-label="image">
         </div>
         <div class="form-group">
           <button id="modal-new-user-collection-save" class="btn btn-primary">Create</button>

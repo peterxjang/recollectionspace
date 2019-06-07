@@ -10,6 +10,7 @@ const ModalNewRecord = {
     "modal-new-record-search-results"
   ),
   $inputImage: document.getElementById("modal-new-record-image"),
+  $inputImagePreview: document.getElementById("modal-new-record-image-preview"),
   $inputCaption: document.getElementById("modal-new-record-caption"),
   $inputBody: document.getElementById("modal-new-record-body"),
   imageUrl: null,
@@ -19,20 +20,26 @@ const ModalNewRecord = {
   visible: false,
   initialize: function() {
     this.bindEvents();
-    initializeTabs(this.$modal);
+    initializeTabs(this.$modal, this.resetValues.bind(this));
     return this;
   },
   hide: function() {
     this.$modal.style.display = "none";
-    this.$inputSearch.value = "";
-    this.$inputSearchResults.innerHTML = "";
-    this.$inputImage.value = "";
-    this.$inputCaption.value = "";
-    this.$inputBody.value = "";
+    this.resetValues();
     this.visible = false;
     if (this.props) {
       this.props.onHide();
     }
+  },
+  resetValues: function() {
+    this.$inputSearch.value = "";
+    this.$inputSearchResults.innerHTML = "";
+    this.$inputImage.value = "";
+    const url = this.$inputImagePreview.src;
+    this.$inputImagePreview.src = "";
+    URL.revokeObjectURL(url);
+    this.$inputCaption.value = "";
+    this.$inputBody.value = "";
   },
   show: function(props) {
     this.props = props;
@@ -88,6 +95,10 @@ const ModalNewRecord = {
         this.imageHeight = event.target.height;
         this.highlightImage(event.target);
       }
+    };
+    this.$inputImage.onchange = event => {
+      URL.revokeObjectURL(this.$inputImagePreview.src);
+      this.$inputImagePreview.src = URL.createObjectURL(event.target.files[0]);
     };
     this.$buttonSave.onclick = event => {
       event.preventDefault();

@@ -1,4 +1,4 @@
-export default function initializeTabs($parent) {
+export default function initializeTabs($parent, callback) {
   const element = $parent.querySelector(".nav");
   element.addEventListener(
     "click",
@@ -11,6 +11,7 @@ export default function initializeTabs($parent) {
       event.target.parentElement.className += " active";
       $parent.querySelector("#" + event.target.href.split("#")[1]).className +=
         " active";
+      callback();
     },
     false
   );
