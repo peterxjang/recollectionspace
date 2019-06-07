@@ -200,12 +200,16 @@ const Application = {
         onSearch: searchFunction
       });
     } else if (state.canvas.type === "follow") {
-      this.handleGetCollections(function(data) {
-        Modal.showNewUserCollection({
-          collections: data,
-          onSaveUserCollection: Canvas.createItem
-        });
+      Modal.showNewUserCollection({
+        onSaveUserCollection: Canvas.createItem,
+        onSearch: this.handleGetCollections.bind(this)
       });
+      // this.handleGetCollections(function(data) {
+      //   Modal.showNewUserCollection({
+      //     collections: data,
+      //     onSaveUserCollection: Canvas.createItem
+      //   });
+      // });
     } else if (state.canvas.type === "root") {
       Modal.showNewFollow({
         onSearchUsers: this.handleSearchUsers,
@@ -213,8 +217,8 @@ const Application = {
       });
     }
   },
-  handleGetCollections: function(callback) {
-    fetch("/api/collections?public=true", {
+  handleGetCollections: function(searchText, callback) {
+    fetch("/api/collections?name=" + searchText, {
       headers: { Authorization: `Bearer ${localStorage.jwt}` }
     })
       .then(response => {
@@ -298,7 +302,9 @@ const Application = {
       }
     } else if (parent.type === "follow") {
       url = "/api/user_collections";
-      params.append("collection_id", options.collection_id);
+      if (options.collection_id) {
+        params.append("collection_id", options.collection_id);
+      }
       if (image) {
         params.append("image", image);
       }

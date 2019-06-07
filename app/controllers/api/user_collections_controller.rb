@@ -13,19 +13,29 @@ class Api::UserCollectionsController < ApplicationController
   def create
     collection = Collection.find_by(id: params[:collection_id])
     if !collection
-      render json: {errors: ["Invalid collection"]}, status: 422
-      return
-    end
-    if params[:image] && params[:image] != collection.src
+      unless params[:caption] && params[:image]
+        render json: {errors: ["Invalid collection"]}, status: 422
+        return
+      end
       response = Cloudinary::Uploader.upload(params[:image], folder: "collections")
       src = response["secure_url"]
       width = response["width"]
       height = response["height"]
-    else
-      src = collection.src
-      width = collection.width
-      height = collection.height
+      collection = Collection.new(
+        name: params[:caption],
+        src: src,
+        width: width,
+        height: height,
+        color: params[:color]
+      )
+      unless collection.save
+        render json: {errors: collection.errors.full_messages}, status: 422
+        return
+      end
     end
+    src = collection.src
+    width = collection.width
+    height = collection.height
     @user_collection = UserCollection.new(
       user_id: current_user.id,
       collection_id: collection.id,

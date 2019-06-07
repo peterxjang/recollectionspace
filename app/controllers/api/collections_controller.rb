@@ -1,13 +1,12 @@
 class Api::CollectionsController < ApplicationController
   def index
-    @collections = Collection.all
-    if params[:public]
-      @collections = @collections.where(public: true)
+    @collections = Collection.where(public: true)
+    if params[:name]
+      @collections = @collections.where("name ILIKE ?", "%#{params[:name]}%")
     end
     current_user_collection_ids = current_user.user_collections.pluck(:collection_id)
-    @collections = @collections.reject do |collection|
-      current_user_collection_ids.include? collection.id
-    end
+    @collections = @collections.where.not(id: current_user_collection_ids)
+    @collections = @collections.limit(5)
     render "index.json.jb"
   end
 end

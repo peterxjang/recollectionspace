@@ -106,6 +106,12 @@
       box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
       outline: 0;
     }
+    .form-check {
+      padding: 0.5rem 0.75rem;
+    }
+    .form-check .form-check-label {
+      display: inline;
+    }
     #modal-new-record-search-results {
       height: 200px;
       overflow-x: scroll;
@@ -325,15 +331,26 @@
     </div>
     <div id="modal-new-user-collection" class="modal-section">
       <form>
-        <div class="form-group">
-          <label for="modal-new-user-collection-collections">Category</label>
-          <select id="modal-new-user-collection-collections" class="form-control">
-            <option value=""></option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="modal-new-user-collection-image">Image</label>
-          <input id="modal-new-user-collection-image" class="form-control" type="file" accept="image/*" placeholder="image" aria-label="image">
+        <ul class="nav">
+          <li class="active"><a href="#modal-new-user-collection-search-tab">Search collections</a></li>
+          <li><a href="#modal-new-user-collection-upload-tab">New collection</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="modal-new-user-collection-search-tab" class="form-group tab-pane active">
+            <label for="modal-new-user-collection-search">Name</label>
+            <input id="modal-new-user-collection-search" class="form-control" type="text" placeholder="Name" aria-label="Name">
+            <fieldset id="modal-new-user-collection-list"></fieldset>
+          </div>
+          <div id="modal-new-user-collection-upload-tab" class="form-group tab-pane">
+            <div class="form-group">
+              <label for="modal-new-user-collection-name">Name</label>
+              <input id="modal-new-user-collection-name" class="form-control" type="text" placeholder="Name" aria-label="Name">
+            </div>
+            <div class="form-group">
+              <label for="modal-new-user-collection-image">Image</label>
+              <input id="modal-new-user-collection-image" class="form-control" type="file" accept="image/*" placeholder="image" aria-label="image">
+          </div>
+            </div>
         </div>
         <div class="form-group">
           <button id="modal-new-user-collection-save" class="btn btn-primary">Create</button>
