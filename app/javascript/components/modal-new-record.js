@@ -59,6 +59,12 @@ const ModalNewRecord = {
       )
       .join("");
   },
+  highlightImage: function(image) {
+    this.$inputSearchResults.querySelectorAll("img").forEach(item => {
+      item.style.opacity = 0.25;
+    });
+    image.style.opacity = 1.0;
+  },
   bindEvents: function() {
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
@@ -77,6 +83,7 @@ const ModalNewRecord = {
         this.imageUrl = event.target.src;
         this.imageWidth = event.target.width;
         this.imageHeight = event.target.height;
+        this.highlightImage(event.target);
       }
     };
     this.$buttonSave.onclick = event => {
