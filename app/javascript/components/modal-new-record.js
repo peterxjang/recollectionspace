@@ -1,3 +1,5 @@
+import initializeTabs from "./ui-tabs";
+
 const ModalNewRecord = {
   props: null,
   $modal: document.getElementById("modal-new-record"),
@@ -17,6 +19,7 @@ const ModalNewRecord = {
   visible: false,
   initialize: function() {
     this.bindEvents();
+    initializeTabs(this.$modal);
     return this;
   },
   hide: function() {
