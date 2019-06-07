@@ -290,7 +290,9 @@ const Application = {
       params.append("user_collection_id", parent.id);
       params.append("name", item.caption);
       params.append("description", item.body);
-      params.append("api_id", options.api_id);
+      if (options.api_id) {
+        params.append("api_id", options.api_id);
+      }
       if (image) {
         params.append("image", image);
       }

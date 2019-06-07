@@ -80,7 +80,11 @@ class Api::UserRecordsController < ApplicationController
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
+    record = @user_record.record
     @user_record.destroy
+    if !record.api_id && record.user_records.length == 0
+      record.destroy
+    end
     render json: {message: "Record successfully destroyed!"}
   end
 end
