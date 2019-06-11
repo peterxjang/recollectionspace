@@ -2,9 +2,9 @@ const ModalNewFollow = {
   props: null,
   $modal: document.getElementById("modal-new-follow"),
   $inputSearch: document.getElementById("modal-new-follow-search"),
+  $inputList: document.getElementById("modal-new-follow-list"),
   $buttonSave: document.getElementById("modal-new-follow-save"),
   $buttonCancel: document.getElementById("modal-new-follow-cancel"),
-  $inputUsers: document.getElementById("modal-new-follow-users"),
   visible: false,
   users: [],
   typingTimer: null,
@@ -15,7 +15,6 @@ const ModalNewFollow = {
   hide: function() {
     this.$modal.style.display = "none";
     this.$inputSearch.value = "";
-    this.$inputUsers.value = "";
     this.visible = false;
     if (this.props) {
       this.props.onHide();
@@ -29,10 +28,10 @@ const ModalNewFollow = {
     this.endTyping();
   },
   startTyping: function() {
-    this.$inputUsers.disabled = true;
+    this.$inputList.disabled = true;
   },
   endTyping: function() {
-    this.$inputUsers.disabled = false;
+    this.$inputList.disabled = false;
     this.props.onSearchUsers(
       this.$inputSearch.value,
       this.showSearchResults.bind(this)
@@ -40,9 +39,23 @@ const ModalNewFollow = {
   },
   showSearchResults: function(users) {
     this.users = users;
-    this.$inputUsers.innerHTML = users
-      .map(user => `<option value=${user.id}>${user.username}</option>`)
-      .join();
+    this.$inputList.innerHTML =
+      users.length === 0
+        ? `<div class="form-group">No matching users.</div>`
+        : users
+            .map(
+              user => `
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="userId" id="radio-user-${
+              user.id
+            }" value="${user.id}">
+            <label class="form-check-label" for="radio-user-${user.id}">${
+                user.username
+              }</label>
+          </div>
+            `
+            )
+            .join("");
   },
   bindEvents: function() {
     this.$buttonCancel.onclick = event => {
@@ -56,10 +69,13 @@ const ModalNewFollow = {
     };
     this.$buttonSave.onclick = event => {
       event.preventDefault();
-      const user = this.users.filter(
-        user => user.id === parseInt(this.$inputUsers.value)
-      )[0];
-      if (user) {
+      const $selected = this.$modal.querySelector(
+        `input[name="userId"]:checked`
+      );
+      if ($selected) {
+        const user = this.users.filter(
+          user => user.id === parseInt($selected.value)
+        )[0];
         this.props.onSaveFollow(user.src, user.username, "", {
           following_id: user.id,
           width: user.width,

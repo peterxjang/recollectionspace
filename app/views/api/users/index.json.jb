@@ -3,9 +3,9 @@
     id: user.id,
     username: user.username,
     avatar: user.avatar,
-    src: user.src,
-    width: user.width,
-    height: user.height,
+    src: user.src || "https://res.cloudinary.com/recollectionspace/image/upload/v1558827677/placeholder.jpg",
+    width: user.width || 640,
+    height: user.height || 480,
     collections: user.user_collections
   }
 end
