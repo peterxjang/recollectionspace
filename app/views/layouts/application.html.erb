@@ -177,6 +177,10 @@
     .hidden {
       display: none;
     }
+    .errors {
+      color: red;
+      margin-left: 1rem;
+    }
     ul.nav {
       list-style: none;
       padding: 0;
@@ -225,6 +229,7 @@
     <a id="modal-close">&times;</a>
     <div id="modal-new-user" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <div class="form-group">
           <label for="modal-new-user-email">Email</label>
           <input id="modal-new-user-email" class="form-control" type="email" placeholder="Email" aria-label="Email">
@@ -252,6 +257,7 @@
     </div>
     <div id="modal-new-session" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <div class="form-group">
           <label for="modal-new-session-email">Email</label>
           <input id="modal-new-session-email" class="form-control" type="email" placeholder="Email" aria-label="Email">
@@ -281,6 +287,7 @@
     </div>
     <div id="modal-new-record" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <ul class="nav">
           <li class="active"><a href="#modal-new-record-search-tab">Web Search</a></li>
           <li><a href="#modal-new-record-upload-tab">File Upload</a></li>
@@ -313,6 +320,7 @@
     </div>
     <div id="modal-new-follow" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <div class="form-group">
           <label for="modal-new-follow-search">Search by username</label>
           <input id="modal-new-follow-search" class="form-control" type="text" placeholder="Search by username">
@@ -326,6 +334,7 @@
     </div>
     <div id="modal-new-user-collection" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <ul class="nav">
           <li class="active"><a href="#modal-new-user-collection-search-tab">Search collections</a></li>
           <li><a href="#modal-new-user-collection-upload-tab">New collection</a></li>
@@ -355,6 +364,7 @@
     </div>
     <div id="modal-edit" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <div class="form-group">
           <label for="modal-edit-caption">Caption</label>
           <input id="modal-edit-caption" class="form-control" type="text" placeholder="caption" aria-label="caption">
@@ -371,6 +381,7 @@
     </div>
     <div id="modal-delete" class="modal-section">
       <form>
+        <ul class="errors"></ul>
         <div class="form-group">
           <h2>Confirm</h2>
           <hr>

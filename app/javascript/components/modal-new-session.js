@@ -1,6 +1,7 @@
 const ModalNewSession = {
   props: null,
   $modal: document.getElementById("modal-new-session"),
+  $errors: document.querySelector("#modal-new-session .errors"),
   $buttonSave: document.getElementById("modal-new-session-save"),
   $buttonCancel: document.getElementById("modal-new-session-cancel"),
   $inputEmail: document.getElementById("modal-new-session-email"),
@@ -15,6 +16,7 @@ const ModalNewSession = {
     this.$modal.style.display = "none";
     this.$inputEmail.value = "";
     this.$inputPassword.value = "";
+    this.$errors.innerHTML = "";
     this.visible = false;
     if (this.props) {
       this.props.onHide();
@@ -35,7 +37,6 @@ const ModalNewSession = {
     this.$buttonSave.onclick = event => {
       event.preventDefault();
       this.props.onLogin(this.$inputEmail.value, this.$inputPassword.value);
-      this.hide();
     };
     this.$buttonSignup.onclick = event => {
       event.preventDefault();

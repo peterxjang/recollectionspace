@@ -1,6 +1,7 @@
 const ModalDelete = {
   props: null,
   $modal: document.getElementById("modal-delete"),
+  $errors: document.querySelector("#modal-delete .errors"),
   $buttonSave: document.getElementById("modal-delete-save"),
   $buttonCancel: document.getElementById("modal-delete-cancel"),
   visible: false,
@@ -10,6 +11,7 @@ const ModalDelete = {
   },
   hide: function() {
     this.$modal.style.display = "none";
+    this.$errors.innerHTML = "";
     this.visible = false;
     if (this.props) {
       this.props.onHide();
@@ -29,7 +31,6 @@ const ModalDelete = {
     this.$buttonSave.onclick = event => {
       event.preventDefault();
       this.props.onDelete(this.props.item);
-      this.hide();
     };
   }
 };

@@ -3,6 +3,7 @@ import initializeTabs from "./ui-tabs";
 const ModalNewRecord = {
   props: null,
   $modal: document.getElementById("modal-new-record"),
+  $errors: document.querySelector("#modal-new-record .errors"),
   $buttonSave: document.getElementById("modal-new-record-save"),
   $buttonCancel: document.getElementById("modal-new-record-cancel"),
   $inputSearch: document.getElementById("modal-new-record-search"),
@@ -40,6 +41,7 @@ const ModalNewRecord = {
     URL.revokeObjectURL(url);
     this.$inputCaption.value = "";
     this.$inputBody.value = "";
+    this.$errors.innerHTML = "";
   },
   show: function(props) {
     this.props = props;
@@ -109,7 +111,6 @@ const ModalNewRecord = {
         this.$inputBody.value,
         { width: this.imageWidth, height: this.imageHeight, api_id: this.apiId }
       );
-      this.hide();
     };
   }
 };

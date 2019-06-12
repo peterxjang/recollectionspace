@@ -12,7 +12,7 @@ class Api::SessionsController < ApplicationController
       )
       render json: {jwt: jwt, email: user.email, user_id: user.id}, status: :created
     else
-      render json: {}, status: :unauthorized
+      render json: {errors: ["Invalid email or password."]}, status: :unauthorized
     end
   end
 end

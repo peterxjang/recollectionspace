@@ -3,6 +3,7 @@ import initializeTabs from "./ui-tabs";
 const ModalNewUserCollection = {
   props: null,
   $modal: document.getElementById("modal-new-user-collection"),
+  $errors: document.querySelector("#modal-new-user-collection .errors"),
   $inputSearch: document.getElementById("modal-new-user-collection-search"),
   $inputName: document.getElementById("modal-new-user-collection-name"),
   $inputList: document.getElementById("modal-new-user-collection-list"),
@@ -28,6 +29,7 @@ const ModalNewUserCollection = {
     this.$inputSearch.value = "";
     this.$inputName.value = "";
     this.$inputImage.value = "";
+    this.$errors.innerHTML = "";
   },
   show: function(props) {
     this.props = props;
@@ -104,7 +106,6 @@ const ModalNewUserCollection = {
         width: width,
         height: height
       });
-      this.hide();
     };
   }
 };

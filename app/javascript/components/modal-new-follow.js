@@ -1,6 +1,7 @@
 const ModalNewFollow = {
   props: null,
   $modal: document.getElementById("modal-new-follow"),
+  $errors: document.querySelector("#modal-new-follow .errors"),
   $inputSearch: document.getElementById("modal-new-follow-search"),
   $inputList: document.getElementById("modal-new-follow-list"),
   $buttonSave: document.getElementById("modal-new-follow-save"),
@@ -15,6 +16,7 @@ const ModalNewFollow = {
   hide: function() {
     this.$modal.style.display = "none";
     this.$inputSearch.value = "";
+    this.$errors.innerHTML = "";
     this.visible = false;
     if (this.props) {
       this.props.onHide();
@@ -82,7 +84,6 @@ const ModalNewFollow = {
           height: user.height
         });
       }
-      this.hide();
     };
   }
 };

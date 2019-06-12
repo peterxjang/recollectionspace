@@ -1,6 +1,7 @@
 const ModalNewUser = {
   props: null,
   $modal: document.getElementById("modal-new-user"),
+  $errors: document.querySelector("#modal-new-user .errors"),
   $buttonSave: document.getElementById("modal-new-user-save"),
   $buttonCancel: document.getElementById("modal-new-user-cancel"),
   $inputEmail: document.getElementById("modal-new-user-email"),
@@ -21,6 +22,7 @@ const ModalNewUser = {
     this.$inputUsername.value = "";
     this.$inputPassword.value = "";
     this.$inputPasswordConfirmation.value = "";
+    this.$errors.innerHTML = "";
     this.visible = false;
     if (this.props) {
       this.props.onHide();
@@ -46,7 +48,6 @@ const ModalNewUser = {
         this.$inputPassword.value,
         this.$inputPasswordConfirmation.value
       );
-      this.hide();
     };
     this.$buttonLogin.onclick = event => {
       event.preventDefault();

@@ -146,8 +146,11 @@ const Application = {
       })
       .then(data => {
         this.handleLogin(email, password);
+        Modal.hide();
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        error.json().then(data => Modal.setErrors(data.errors));
+      });
   },
   handleShowLogin: function() {
     Modal.showNewSession({
@@ -177,8 +180,11 @@ const Application = {
       .then(data => {
         localStorage.setItem("jwt", data.jwt);
         this.loadRouteData();
+        Modal.hide();
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        error.json().then(data => Modal.setErrors(data.errors));
+      });
   },
   handleLoginCancel: function() {
     Canvas.zoomToFitAll();
@@ -343,10 +349,11 @@ const Application = {
         };
         Canvas.replaceItemProperties(item, itemNew);
         URL.revokeObjectURL(item.src);
+        Modal.hide();
       })
       .catch(error => {
-        console.error(error);
         Canvas.deleteItem(item);
+        error.json().then(data => Modal.setErrors(data.errors));
       });
   },
   handleEditRecord: function(item) {
@@ -386,8 +393,11 @@ const Application = {
       })
       .then(data => {
         Canvas.updateItem(id, { caption, body });
+        Modal.hide();
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        error.json().then(data => Modal.setErrors(data.errors));
+      });
   },
   handleUpdateRecord: function(item) {
     let url, params;
@@ -431,7 +441,12 @@ const Application = {
         }
         return response.json();
       })
-      .catch(error => console.error(error));
+      .then(data => {
+        Modal.close();
+      })
+      .catch(error => {
+        error.json().then(data => Modal.setErrors(data.errors));
+      });
   },
   handleConfirmDeleteRecord: function(item) {
     Modal.showDelete({
@@ -473,8 +488,11 @@ const Application = {
         Router.matchUrl("/:username/:collection_name/:id", params => {
           Router.setUrl(`/${params.username}/${params.collection_name}`);
         });
+        Modal.hide();
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        error.json().then(data => Modal.setErrors(data.errors));
+      });
   },
   handleShowModalInfo: function(item, isOwner) {
     Modal.showInfo({
