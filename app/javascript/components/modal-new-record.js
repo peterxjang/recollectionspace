@@ -26,6 +26,7 @@ const ModalNewRecord = {
   },
   hide: function() {
     this.$modal.style.display = "none";
+    this.$modal.resetTabs();
     this.resetValues();
     this.visible = false;
     if (this.props) {
@@ -45,6 +46,9 @@ const ModalNewRecord = {
   },
   show: function(props) {
     this.props = props;
+    if (!this.props.onSearch) {
+      this.$modal.disableTab("#modal-new-record-search-tab");
+    }
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
     this.visible = true;
