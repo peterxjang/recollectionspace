@@ -8,6 +8,10 @@ class Api::UserRecordsController < ApplicationController
       return
     end
     record = Record.find_by(api_id: params[:api_id], collection_id: user_collection.collection.id)
+    if record && UserRecord.find_by(record_id: record.id)
+      render json: {errors: ["Record already exists"]}, status: 422
+      return
+    end
     unless record
       response = Cloudinary::Uploader.upload(params[:image], folder: "records")
       record = Record.new(
