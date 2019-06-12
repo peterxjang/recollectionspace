@@ -701,7 +701,7 @@ function onScroll(evt) {
   if (!isScrolling) {
     scaleCanvasMoveInitial();
   }
-  const delta = evt.deltaY / 40;
+  const delta = evt.deltaMode === 1 ? evt.deltaY / 3 : evt.deltaY / 40;
   if (delta && isScrolling) {
     const { inputX, inputY } = getInputPos(evt);
     scaleCanvasMove(inputX, inputY, delta);
