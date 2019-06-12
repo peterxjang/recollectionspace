@@ -441,11 +441,8 @@ const Application = {
         }
         return response.json();
       })
-      .then(data => {
-        Modal.close();
-      })
       .catch(error => {
-        error.json().then(data => Modal.setErrors(data.errors));
+        console.error(error);
       });
   },
   handleConfirmDeleteRecord: function(item) {
