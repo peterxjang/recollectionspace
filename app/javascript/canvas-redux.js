@@ -39,6 +39,7 @@ let draggingItemGroup;
 let draggingCanvas;
 let touchScaling;
 let currentItemId;
+let lastDoubleClickedItem;
 
 let pressTimer;
 let clickTimer = null;
@@ -414,7 +415,7 @@ function onInputDown(evt) {
       inputY2 === undefined &&
       withinMovementThreshold(inputX, inputY)
     ) {
-      onDoubleClick();
+      onDoubleClick(evt);
       return;
     }
   }
@@ -513,7 +514,7 @@ function onLongPress() {
   props.onNewRecord(state);
 }
 
-function onDoubleClick() {
+function onDoubleClick(evt) {
   for (let i = state.items.length - 1; i >= 0; i--) {
     const item = state.items[i];
     const itemType = Record.isPointInRecord({
@@ -524,16 +525,61 @@ function onDoubleClick() {
       skipCheckHandle: true
     });
     if (itemType === "record") {
-      if (item.type === "record" || item.type === "collection") {
-        props.onShowModalInfo(item, state.isOwner);
+      if (item === lastDoubleClickedItem) {
+        if (item.type === "record") {
+          props.onShowModalInfo(item, state.isOwner);
+        } else {
+          zoomIntoItem(item);
+        }
+        lastDoubleClickedItem = item;
         return;
       }
       const { x, y, width, height } = Record.getTransformedDimensions(item);
       zoomToFit(x, y, width, height);
+      lastDoubleClickedItem = item;
       return;
     }
   }
-  zoomToFitAll();
+  if (lastDoubleClickedItem && state.canvas.id === lastDoubleClickedItem.id) {
+    zoomOutToNextLevel(evt);
+    lastDoubleClickedItem = null;
+  } else {
+    zoomToFitAll();
+    lastDoubleClickedItem = state.canvas;
+  }
+}
+
+function zoomIntoItem(item) {
+  const { x, y, width, height } = Record.getTransformedDimensions({
+    ...item,
+    width: item.width / 4,
+    height: item.height / 4
+  });
+  zoomToFit(x, y, width, height);
+}
+
+function zoomOutToNextLevel(evt) {
+  if (state.items.length === 0) {
+    return props.onTransition(-1, state.canvas, state.isOwner);
+  }
+  const { inputX, inputY } = getInputPos(evt);
+  let starttime;
+  let duration = 300;
+  let draw = function(timestamp) {
+    scaleCanvasMove(inputX, inputY, -0.5);
+    let runtime = timestamp - starttime;
+    if (runtime < duration) {
+      requestAnimationFrame(draw);
+    } else {
+      isAnimating = false;
+      return props.onTransition(-1, state.canvas, state.isOwner);
+    }
+  };
+  isAnimating = true;
+  requestAnimationFrame(function(timestamp) {
+    starttime = timestamp;
+    draw(timestamp);
+  });
 }
 
 function getZoomToFitProperties(x, y, width, height, padding = 0.05) {
@@ -632,6 +678,7 @@ function animateScaleCanvas(
       isAnimating = false;
       allTransformEnd();
       store.dispatch(changeRouteFailure());
+      checkTransition(1);
     }
   };
   isAnimating = true;
