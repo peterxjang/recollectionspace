@@ -841,10 +841,10 @@ function transitionRouteFailure() {
   store.dispatch(changeRouteFailure());
 }
 
-function transitionRouteSuccess(newState, delta, item) {
+function transitionRouteSuccess(newState, delta, item, modalItem) {
   if (delta > 0) {
     currentItemId = item ? item.id : newState.canvas.id;
-    replaceState(newState);
+    replaceState(newState, false, modalItem);
   } else {
     const currentItem = newState.items.filter(
       item => item.id === currentItemId
@@ -932,11 +932,17 @@ function animateInItem(newState, item) {
   });
 }
 
-function replaceState(newState, isChangingRoute = false) {
+function replaceState(newState, isChangingRoute = false, modalItem = null) {
   store.dispatch(
     changeRouteSuccess(stateWithValidDefaults(newState), isChangingRoute)
   );
-  zoomToFitAll(0.2, false);
+  if (modalItem) {
+    const { x, y, width, height } = Record.getTransformedDimensions(modalItem);
+    zoomToFit(x, y, width, height, false, 0.05, false);
+    lastDoubleClickedItem = modalItem;
+  } else {
+    zoomToFitAll(0.2, false);
+  }
   changeBackground();
 }
 

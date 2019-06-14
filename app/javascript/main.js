@@ -57,9 +57,11 @@ const Application = {
       })
       .then(json => {
         document.getElementById("loading").style.opacity = 0;
-        Canvas.transitionRouteSuccess(json, delta, item);
+        const modalItem = modalId
+          ? json.items.filter(child => child.id === modalId)[0]
+          : null;
+        Canvas.transitionRouteSuccess(json, delta, item, modalItem);
         if (modalId) {
-          const modalItem = json.items.filter(child => child.id === modalId)[0];
           if (modalItem) {
             this.handleShowModalInfo(modalItem, json.isOwner);
           }
