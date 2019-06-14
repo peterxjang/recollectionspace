@@ -21,9 +21,6 @@ const ModalNewUserCollection = {
     this.$modal.style.display = "none";
     this.resetValues();
     this.visible = false;
-    if (this.props) {
-      this.props.onHide();
-    }
   },
   resetValues: function() {
     this.$inputSearch.value = "";
@@ -73,7 +70,7 @@ const ModalNewUserCollection = {
   bindEvents: function() {
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
-      this.hide();
+      this.props.onCancel();
     };
     this.$inputSearch.oninput = event => {
       clearTimeout(this.typingTimer);

@@ -18,9 +18,6 @@ const ModalNewFollow = {
     this.$inputSearch.value = "";
     this.$errors.innerHTML = "";
     this.visible = false;
-    if (this.props) {
-      this.props.onHide();
-    }
   },
   show: function(props) {
     this.props = props;
@@ -62,7 +59,7 @@ const ModalNewFollow = {
   bindEvents: function() {
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
-      this.hide();
+      this.props.onCancel();
     };
     this.$inputSearch.oninput = event => {
       clearTimeout(this.typingTimer);

@@ -13,9 +13,6 @@ const ModalDelete = {
     this.$modal.style.display = "none";
     this.$errors.innerHTML = "";
     this.visible = false;
-    if (this.props) {
-      this.props.onHide();
-    }
   },
   show: function(props) {
     this.props = props;
@@ -26,7 +23,7 @@ const ModalDelete = {
   bindEvents: function() {
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
-      this.hide();
+      this.props.onCancel();
     };
     this.$buttonSave.onclick = event => {
       event.preventDefault();

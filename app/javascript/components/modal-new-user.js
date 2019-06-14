@@ -24,9 +24,6 @@ const ModalNewUser = {
     this.$inputPasswordConfirmation.value = "";
     this.$errors.innerHTML = "";
     this.visible = false;
-    if (this.props) {
-      this.props.onHide();
-    }
   },
   show: function(props) {
     this.props = props;
@@ -38,7 +35,6 @@ const ModalNewUser = {
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.props.onCancel();
-      this.hide();
     };
     this.$buttonSave.onclick = event => {
       event.preventDefault();
@@ -52,7 +48,6 @@ const ModalNewUser = {
     this.$buttonLogin.onclick = event => {
       event.preventDefault();
       this.props.onShowLogin();
-      this.hide();
     };
   }
 };

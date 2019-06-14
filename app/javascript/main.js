@@ -5,6 +5,7 @@ import Router from "./router";
 const Application = {
   initialize: function() {
     this.initializeCanvas();
+    Modal.onClose = this.handleHideModal.bind(this);
     this.loadRouteData();
   },
   loadRouteData: function() {
@@ -38,12 +39,11 @@ const Application = {
       onSaveRecord: this.handleSaveRecord.bind(this),
       onUpdateRecord: this.handleUpdateRecord.bind(this),
       onShowModalInfo: this.handleShowModalInfo.bind(this),
-      onHideModalInfo: this.handleHideModalInfo.bind(this),
+      onHideModalInfo: this.handleHideModal.bind(this),
       isModalInfoVisible: () => Modal.visible
     });
   },
   loadCanvasData: function(url, delta, item, modalId) {
-    // TODO: Slower due to url routing somehow???
     document.getElementById("loading").style.opacity = 1;
     Canvas.transitionRouteRequest();
     fetch(url, {
@@ -120,6 +120,7 @@ const Application = {
     return false;
   },
   handleShowSignup: function() {
+    Modal.hide();
     Modal.showNewUser({
       onSignup: this.handleSignup.bind(this),
       onShowLogin: this.handleShowLogin.bind(this),
@@ -155,6 +156,7 @@ const Application = {
       });
   },
   handleShowLogin: function() {
+    Modal.hide();
     Modal.showNewSession({
       onLogin: this.handleLogin.bind(this),
       onShowSignup: this.handleShowSignup.bind(this),
@@ -190,6 +192,7 @@ const Application = {
   },
   handleLoginCancel: function() {
     Canvas.zoomToFitAll();
+    Modal.hide();
   },
   handleNewRecord: function(state) {
     if (state.canvas.type === "collection") {
@@ -205,23 +208,20 @@ const Application = {
       }
       Modal.showNewRecord({
         onSaveRecord: Canvas.createItem,
-        onSearch: searchFunction
+        onSearch: searchFunction,
+        onCancel: Modal.hide.bind(Modal)
       });
     } else if (state.canvas.type === "follow") {
       Modal.showNewUserCollection({
         onSaveUserCollection: Canvas.createItem,
-        onSearch: this.handleGetCollections.bind(this)
+        onSearch: this.handleGetCollections.bind(this),
+        onCancel: Modal.hide.bind(Modal)
       });
-      // this.handleGetCollections(function(data) {
-      //   Modal.showNewUserCollection({
-      //     collections: data,
-      //     onSaveUserCollection: Canvas.createItem
-      //   });
-      // });
     } else if (state.canvas.type === "root") {
       Modal.showNewFollow({
         onSearchUsers: this.handleSearchUsers,
-        onSaveFollow: Canvas.createItem
+        onSaveFollow: Canvas.createItem,
+        onCancel: Modal.hide.bind(Modal)
       });
     }
   },
@@ -359,9 +359,11 @@ const Application = {
       });
   },
   handleEditRecord: function(item) {
+    Modal.hide();
     Modal.showEdit({
       item: item,
-      onEditRecord: this.handleUpdateRecordText.bind(this)
+      onEditRecord: this.handleUpdateRecordText.bind(this),
+      onCancel: Modal.hide.bind(Modal)
     });
   },
   handleUpdateRecordText: function(id, type, caption, body) {
@@ -448,9 +450,11 @@ const Application = {
       });
   },
   handleConfirmDeleteRecord: function(item) {
+    Modal.hide();
     Modal.showDelete({
-      item,
-      onDelete: this.handleDeleteRecord.bind(this)
+      item: item,
+      onDelete: this.handleDeleteRecord.bind(this),
+      onCancel: Modal.hide.bind(Modal)
     });
   },
   handleDeleteRecord: function(item) {
@@ -504,12 +508,12 @@ const Application = {
       Router.setUrl(`/${params.username}/${params.collection_name}/${item.id}`);
     });
   },
-  handleHideModalInfo: function() {
-    // TODO: Zoom to fit if closing modal info from max zoom in...
+  handleHideModal: function() {
     if (Modal.visible) {
       Modal.hide();
       Router.matchUrl("/:username/:collection_name/:id", params => {
         Router.setUrl(`/${params.username}/${params.collection_name}`);
+        Canvas.zoomToFitAll();
       });
     }
   }

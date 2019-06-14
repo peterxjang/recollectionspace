@@ -11,6 +11,7 @@ const Modal = {
   $modal: document.getElementById("modal"),
   $buttonClose: document.querySelector("#modal-close"),
   visible: false,
+  onClose: null,
   currentModal: null,
   initialize: function() {
     this.bindEvents();
@@ -44,45 +45,42 @@ const Modal = {
   },
   showInfo: function(props) {
     this.makeVisible();
-    ModalInfo.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalInfo.show(props);
     this.currentModal = ModalInfo;
   },
   showNewRecord: function(props) {
     this.makeVisible();
-    ModalNewRecord.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalNewRecord.show(props);
     this.currentModal = ModalNewRecord;
   },
   showNewFollow: function(props) {
     this.makeVisible();
-    ModalNewFollow.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalNewFollow.show(props);
     this.currentModal = ModalNewFollow;
   },
   showNewUserCollection: function(props) {
     this.makeVisible();
-    ModalNewUserCollection.show({
-      ...props,
-      onHide: this.makeInvisible.bind(this)
-    });
+    ModalNewUserCollection.show(props);
     this.currentModal = ModalNewUserCollection;
   },
   showNewSession: function(props) {
     this.makeVisible();
-    ModalNewSession.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalNewSession.show(props);
     this.currentModal = ModalNewSession;
   },
   showNewUser: function(props) {
     this.makeVisible();
-    ModalNewUser.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalNewUser.show(props);
     this.currentModal = ModalNewUser;
   },
   showEdit: function(props) {
     this.makeVisible();
-    ModalEdit.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalEdit.show(props);
     this.currentModal = ModalEdit;
   },
   showDelete: function(props) {
     this.makeVisible();
-    ModalDelete.show({ ...props, onHide: this.makeInvisible.bind(this) });
+    ModalDelete.show(props);
     this.currentModal = ModalDelete;
   },
   setErrors: function(errors) {
@@ -98,7 +96,7 @@ const Modal = {
   bindEvents: function() {
     this.$buttonClose.onclick = event => {
       event.preventDefault();
-      this.hide();
+      this.onClose();
     };
   }
 };

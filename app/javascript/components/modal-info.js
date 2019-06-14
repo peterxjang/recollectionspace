@@ -19,9 +19,6 @@ const ModalInfo = {
     this.$buttonEdit.style.display = "none";
     this.$buttonDelete.style.display = "none";
     this.visible = false;
-    if (this.props) {
-      this.props.onHide();
-    }
   },
   show: function(props) {
     this.props = props;
@@ -44,12 +41,10 @@ const ModalInfo = {
     this.$buttonEdit.onclick = event => {
       event.preventDefault();
       this.props.onEdit(this.props.item);
-      this.hide();
     };
     this.$buttonDelete.onclick = event => {
       event.preventDefault();
       this.props.onDelete(this.props.item);
-      this.hide();
     };
   }
 };
