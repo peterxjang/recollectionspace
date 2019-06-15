@@ -515,6 +515,9 @@ const Application = {
         Router.setUrl(`/${params.username}/${params.collection_name}`);
         Canvas.zoomToFitAll();
       });
+      Router.matchUrl("/", params => {
+        Canvas.zoomToFitAll();
+      });
     }
   }
 };
