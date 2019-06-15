@@ -540,12 +540,10 @@ function onDoubleClick(evt) {
       return;
     }
   }
-  if (lastDoubleClickedItem && state.canvas.id === lastDoubleClickedItem.id) {
-    zoomOutToNextLevel(evt);
-    lastDoubleClickedItem = null;
-  } else {
+  if (lastDoubleClickedItem) {
     zoomToFitAll();
-    lastDoubleClickedItem = state.canvas;
+  } else {
+    zoomOutToNextLevel(evt);
   }
 }
 
@@ -708,6 +706,7 @@ function getAllItemsDimensions(items) {
 function zoomToFitAll(padding = 0.1, animate = true) {
   const { x, y, width, height } = getAllItemsDimensions(state.items);
   zoomToFit(x, y, width, height, true, padding, animate);
+  lastDoubleClickedItem = null;
 }
 
 function onInputUp() {
