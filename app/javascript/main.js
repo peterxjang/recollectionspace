@@ -74,7 +74,7 @@ const Application = {
         console.error(error);
         Canvas.transitionRouteFailure();
         if (error.status === 401) {
-          this.handleShowLogin();
+          this.handleShowLogin(false);
         }
       });
   },
@@ -105,7 +105,7 @@ const Application = {
       this.loadCanvasData("/api/follows", delta, item);
       return true;
     } else if (item && item.type === "root") {
-      this.handleShowLogin();
+      this.handleShowLogin(false);
     }
     return false;
   },
@@ -155,8 +155,10 @@ const Application = {
         error.json().then(data => Modal.setErrors(data.errors));
       });
   },
-  handleShowLogin: function() {
-    Modal.hide();
+  handleShowLogin: function(userClick = true) {
+    if (userClick) {
+      Modal.hide();
+    }
     Modal.showNewSession({
       onLogin: this.handleLogin.bind(this),
       onShowSignup: this.handleShowSignup.bind(this),
