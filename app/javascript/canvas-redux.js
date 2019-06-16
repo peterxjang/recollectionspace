@@ -415,7 +415,7 @@ function onInputDown(evt) {
       inputY2 === undefined &&
       withinMovementThreshold(inputX, inputY)
     ) {
-      onDoubleClick(evt);
+      onDoubleClick();
       return;
     }
   }
@@ -514,7 +514,7 @@ function onLongPress() {
   props.onNewRecord(state);
 }
 
-function onDoubleClick(evt) {
+function onDoubleClick() {
   for (let i = state.items.length - 1; i >= 0; i--) {
     const item = state.items[i];
     const itemType = Record.isPointInRecord({
@@ -543,7 +543,7 @@ function onDoubleClick(evt) {
   if (lastDoubleClickedItem) {
     zoomToFitAll();
   } else {
-    zoomOutToNextLevel(evt);
+    zoomOutToNextLevel();
   }
 }
 
@@ -556,11 +556,14 @@ function zoomIntoItem(item) {
   zoomToFit(x, y, width, height);
 }
 
-function zoomOutToNextLevel(evt) {
+function zoomOutToNextLevel() {
   if (state.items.length === 0) {
     return props.onTransition(-1, state.canvas, state.isOwner);
   }
-  const { inputX, inputY } = getInputPos(evt);
+  const { inputX, inputY } = getInputPos({
+    clientX: window.innerWidth / 2,
+    clientY: window.innerHeight / 2
+  });
   let starttime;
   let duration = 300;
   let draw = function(timestamp) {
