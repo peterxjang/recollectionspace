@@ -14,6 +14,7 @@ const Record = {
     imgCache = {};
   },
   render: function(props, isZooming = false) {
+    isZooming = false;
     const { borderSize, fullWidth, fullHeight } = this.computeBorderSize(props);
     const fullProps = {
       ...props,
