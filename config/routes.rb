@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     post "/users" => "users#create"
     get "/users/:username" => "users#show"
     post "/sessions" => "sessions#create"
+    delete "/sessions" => "sessions#destroy"
     get "/follows" => "follows#index"
     post "/follows" => "follows#create"
     get "/follows/:id" => "follows#show"

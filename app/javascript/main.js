@@ -2,6 +2,8 @@ import Canvas from "./canvas-redux";
 import Modal from "./components/modal";
 import Router from "./router";
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
 const Application = {
   initialize: function() {
     this.initializeCanvas();
@@ -47,7 +49,7 @@ const Application = {
     document.getElementById("loading").style.opacity = 1;
     Canvas.transitionRouteRequest();
     fetch(url, {
-      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+      headers: { "X-CSRF-Token": csrfToken }
     })
       .then(response => {
         if (!response.ok) {
@@ -139,7 +141,8 @@ const Application = {
       cache: "no-cache",
       redirect: "follow",
       referrer: "no-referrer",
-      body: params
+      body: params,
+      headers: { "X-CSRF-Token": csrfToken }
     })
       .then(response => {
         if (!response.ok) {
@@ -175,7 +178,8 @@ const Application = {
       cache: "no-cache",
       redirect: "follow",
       referrer: "no-referrer",
-      body: params
+      body: params,
+      headers: { "X-CSRF-Token": csrfToken }
     })
       .then(response => {
         if (!response.ok) {
@@ -184,7 +188,6 @@ const Application = {
         return response.json();
       })
       .then(data => {
-        localStorage.setItem("jwt", data.jwt);
         this.loadRouteData();
         Modal.hide();
       })
@@ -229,7 +232,7 @@ const Application = {
   },
   handleGetCollections: function(searchText, callback) {
     fetch("/api/collections?name=" + searchText, {
-      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+      headers: { "X-CSRF-Token": csrfToken }
     })
       .then(response => {
         if (!response.ok) {
@@ -243,7 +246,7 @@ const Application = {
   },
   handleSearchUsers: function(searchText, callback) {
     fetch("/api/users?new=true&username=" + searchText, {
-      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+      headers: { "X-CSRF-Token": csrfToken }
     })
       .then(response => {
         if (!response.ok) {
@@ -331,7 +334,7 @@ const Application = {
       redirect: "follow",
       referrer: "no-referrer",
       body: params,
-      headers: { Authorization: `Bearer ${localStorage.jwt}` }
+      headers: { "X-CSRF-Token": csrfToken }
     })
       .then(response => {
         if (!response.ok) {
@@ -385,7 +388,7 @@ const Application = {
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.jwt}`
+        "X-CSRF-Token": csrfToken
       },
       redirect: "follow",
       referrer: "no-referrer",
@@ -435,7 +438,7 @@ const Application = {
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.jwt}`
+        "X-CSRF-Token": csrfToken
       },
       redirect: "follow",
       referrer: "no-referrer",
@@ -476,7 +479,7 @@ const Application = {
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.jwt}`
+        "X-CSRF-Token": csrfToken
       },
       redirect: "follow",
       referrer: "no-referrer",

@@ -11,7 +11,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 gem 'jb'
 gem 'bcrypt', '~> 3.1.7'
-gem 'jwt'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'cloudinary'
