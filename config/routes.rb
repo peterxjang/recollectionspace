@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get "/" => "pages#index"
-
   namespace :api do
     get "/users" => "users#index"
     post "/users" => "users#create"
@@ -26,5 +24,7 @@ Rails.application.routes.draw do
     get "/music" => "records#search_music"
   end
 
-  get "/*path" => "pages#index"
+  get "/" => "pages#main"
+  get "/:username/:collection_name/new" => "user_records#new"
+  get "/*path" => "pages#main"
 end

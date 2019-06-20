@@ -7,7 +7,7 @@ class Api::UserRecordsController < ApplicationController
       render json: {errors: ["Invalid collection"]}, status: 422
       return
     end
-    record = Record.find_by(api_id: params[:api_id], collection_id: user_collection.collection.id)
+    record = params[:api_id] ? Record.find_by(api_id: params[:api_id], collection_id: user_collection.collection.id) : nil
     if record && UserRecord.find_by(record_id: record.id)
       render json: {errors: ["Record already exists"]}, status: 422
       return
@@ -29,21 +29,22 @@ class Api::UserRecordsController < ApplicationController
         return
       end
     end
+    options = get_valid_options(params, user_collection, record.width || params[:width].to_i)
     @user_record = UserRecord.new(
       record_id: record.id,
       name: record.name || params[:name],
       description: record.description || params[:description],
       user_collection_id: params[:user_collection_id],
-      x: params[:x],
-      y: params[:y],
+      x: options[:x],
+      y: options[:y],
       width: record.width || params[:width],
       height: record.height || params[:height],
-      angle: params[:angle],
-      scale: params[:scale].to_f * params[:width].to_i / record.width.to_f,
-      border: params[:border],
+      angle: options[:angle],
+      scale: options[:scale].to_f * (record.width || params[:width]).to_i / record.width.to_f,
+      border: options[:border],
       src: record.src,
-      color: record.color || params[:color],
-      zindex: params[:zindex]
+      color: record.color || options[:color],
+      zindex: options[:zindex]
     )
     if @user_record.save
       render "show.json.jb"
@@ -90,5 +91,38 @@ class Api::UserRecordsController < ApplicationController
       record.destroy
     end
     render json: {message: "Record successfully destroyed!"}
+  end
+
+  private
+
+  def get_valid_options(input_params, user_collection, width)
+    options = {}
+    if input_params[:x]
+      options[:x] = input_params[:x]
+      options[:y] = input_params[:y]
+      options[:angle] = input_params[:angle]
+      options[:scale] = input_params[:scale]
+      options[:border] = input_params[:border]
+      options[:color] = input_params[:color]
+      options[:zindex] = input_params[:zindex]
+    else
+      xcoords = user_collection.user_records
+        .map { |ur| ur.x }
+      ycoords = user_collection.user_records
+        .map { |ur| ur.y }
+      xspan = xcoords.max - xcoords.min
+
+      options[:x] = xcoords
+        .reduce(0) { |sum, x| sum + x } / xcoords.length
+      options[:y] = ycoords
+        .reduce(0) { |sum, y| sum + y } / ycoords.length
+      options[:scale] = 0.5 * xspan / width
+
+      options[:angle] = 0
+      options[:border] = true
+      options[:color] = "#000"
+      options[:zindex] = 1
+    end
+    options
   end
 end

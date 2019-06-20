@@ -1,0 +1,175 @@
+<div id="app"></div>
+<canvas id="canvas"></canvas>
+<div id="modal" class="modal" style="">
+  <a id="modal-close">&times;</a>
+  <div id="modal-new-user" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <div class="form-group">
+        <label for="modal-new-user-email">Email</label>
+        <input id="modal-new-user-email" class="form-control" type="email" placeholder="Email" aria-label="Email">
+      </div>
+      <div class="form-group">
+        <label for="modal-new-user-username">Username</label>
+        <input id="modal-new-user-username" class="form-control" type="text" placeholder="Username" aria-label="Username">
+      </div>
+      <div class="form-group">
+        <label for="modal-new-user-password">Password</label>
+        <input id="modal-new-user-password" class="form-control" type="password" placeholder="Password" aria-label="Password">
+      </div>
+      <div class="form-group">
+        <label for="modal-new-user-password-confirmation">Password confirmation</label>
+        <input id="modal-new-user-password-confirmation" class="form-control" type="password" placeholder="Password confirmation" aria-label="Password confirmation">
+      </div>
+      <div class="form-group">
+        <button id="modal-new-user-save" class="btn btn-primary">Sign in</button>
+        <button id="modal-new-user-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+      <div class="form-group">
+        <a href="" id="modal-new-user-login">Login</a>
+      </div>
+    </form>
+  </div>
+  <div id="modal-new-session" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <div class="form-group">
+        <label for="modal-new-session-email">Email</label>
+        <input id="modal-new-session-email" class="form-control" type="email" placeholder="Email" aria-label="Email">
+      </div>
+      <div class="form-group">
+        <label for="modal-new-session-password">Password</label>
+        <input id="modal-new-session-password" class="form-control" type="password" placeholder="Password" aria-label="Password">
+      </div>
+      <div class="form-group">
+        <button id="modal-new-session-save" class="btn btn-primary">Sign in</button>
+        <button id="modal-new-session-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+      <div class="form-group">
+        <a href="" id="modal-new-session-signup">Signup</a>
+      </div>
+    </form>
+  </div>
+  <div id="modal-info" class="modal-section hidden-scrollbar">
+    <div id="modal-info-toolbar" class="form-group">
+      <button id="modal-info-edit" class="btn btn-secondary">Edit</button>
+      <button id="modal-info-delete" class="btn btn-secondary">Delete</button>
+    </div>
+    <div class="form-group">
+      <h1 id="modal-info-caption"></h1>
+      <p id="modal-info-body"></p>
+    </div>
+  </div>
+  <div id="modal-new-record" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <ul class="nav">
+        <li class="active"><a href="#modal-new-record-search-tab">Web Search</a></li>
+        <li><a href="#modal-new-record-upload-tab">File Upload</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="modal-new-record-search-tab" class="form-group tab-pane active">
+          <label for="modal-new-record-search">Search</label>
+          <input id="modal-new-record-search" class="form-control" type="text" placeholder="search" aria-label="search">
+          <div id="modal-new-record-search-results"></div>
+        </div>
+        <div id="modal-new-record-upload-tab" class="form-group tab-pane">
+          <label for="modal-new-record-image">Image</label>
+          <input id="modal-new-record-image" class="form-control" type="file" accept="image/*" placeholder="image" aria-label="image">
+          <img id="modal-new-record-image-preview" alt="Image preview">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modal-new-record-caption">Caption</label>
+        <input id="modal-new-record-caption" class="form-control" type="text" placeholder="caption" aria-label="caption">
+      </div>
+      <div class="form-group">
+        <label for="modal-new-record-body">Body</label>
+        <a id="modal-new-record-full-editor-link" href="">Go to full editor</a>
+        <textarea id="modal-new-record-body" class="form-control" placeholder="body" aria-label="body"></textarea>
+      </div>
+      <div class="form-group">
+        <button id="modal-new-record-save" class="btn btn-primary">Create</button>
+        <button id="modal-new-record-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div id="modal-new-follow" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <div class="form-group">
+        <label for="modal-new-follow-search">Search by username</label>
+        <input id="modal-new-follow-search" class="form-control" type="text" placeholder="Search by username">
+        <fieldset id="modal-new-follow-list"></fieldset>
+      </div>
+      <div class="form-group">
+        <button id="modal-new-follow-save" class="btn btn-primary">Create</button>
+        <button id="modal-new-follow-cancel" class="btn btn-primary">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div id="modal-new-user-collection" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <ul class="nav">
+        <li class="active"><a href="#modal-new-user-collection-search-tab">Search collections</a></li>
+        <li><a href="#modal-new-user-collection-upload-tab">New collection</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="modal-new-user-collection-search-tab" class="form-group tab-pane active">
+          <label for="modal-new-user-collection-search">Name</label>
+          <input id="modal-new-user-collection-search" class="form-control" type="text" placeholder="Name" aria-label="Name">
+          <fieldset id="modal-new-user-collection-list"></fieldset>
+        </div>
+        <div id="modal-new-user-collection-upload-tab" class="form-group tab-pane">
+          <div class="form-group">
+            <label for="modal-new-user-collection-name">Name</label>
+            <input id="modal-new-user-collection-name" class="form-control" type="text" placeholder="Name" aria-label="Name">
+          </div>
+          <div class="form-group">
+            <label for="modal-new-user-collection-image">Image</label>
+            <input id="modal-new-user-collection-image" class="form-control" type="file" accept="image/*" placeholder="image" aria-label="image">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button id="modal-new-user-collection-save" class="btn btn-primary">Create</button>
+        <button id="modal-new-user-collection-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div id="modal-edit" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <div class="form-group">
+        <label for="modal-edit-caption">Caption</label>
+        <input id="modal-edit-caption" class="form-control" type="text" placeholder="caption" aria-label="caption">
+      </div>
+      <div class="form-group">
+        <label for="modal-edit-body">Body</label>
+        <textarea id="modal-edit-body" class="form-control" placeholder="body" aria-label="body"></textarea>
+      </div>
+      <div class="form-group">
+        <button id="modal-edit-save" class="btn btn-primary">Update</button>
+        <button id="modal-edit-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div id="modal-delete" class="modal-section">
+    <form>
+      <ul class="errors"></ul>
+      <div class="form-group">
+        <h2>Confirm</h2>
+        <hr>
+        <p>Are you sure you want to delete this item?</p>
+      </div>
+      <div class="form-group">
+        <button id="modal-delete-save" class="btn btn-primary">Delete</button>
+        <button id="modal-delete-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="loading">
+  <h2>Loading...</h2>
+</div>

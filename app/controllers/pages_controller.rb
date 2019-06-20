@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  def index
-    render "index.html.erb"
+  def main
+    render "main.html.erb"
   end
 end

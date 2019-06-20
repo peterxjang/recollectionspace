@@ -14,6 +14,7 @@ const ModalNewRecord = {
   $inputImagePreview: document.getElementById("modal-new-record-image-preview"),
   $inputCaption: document.getElementById("modal-new-record-caption"),
   $inputBody: document.getElementById("modal-new-record-body"),
+  $linkFullEditor: document.getElementById("modal-new-record-full-editor-link"),
   imageUrl: null,
   imageWidth: null,
   imageHeight: null,
@@ -46,6 +47,7 @@ const ModalNewRecord = {
     if (!this.props.onSearch) {
       this.$modal.disableTab("#modal-new-record-search-tab");
     }
+    this.$linkFullEditor.href = `${window.location.href}/new`;
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
     this.visible = true;
