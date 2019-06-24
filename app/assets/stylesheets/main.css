@@ -126,7 +126,7 @@ textarea {
   line-height: 190px;
   vertical-align: middle;
 }
-#modal-new-record-full-editor-link {
+#modal-new-record-full-editor-link, #modal-edit-record-full-editor-link {
   color: gray;
   font-size: 0.8rem;
   margin-bottom: 0.2rem;

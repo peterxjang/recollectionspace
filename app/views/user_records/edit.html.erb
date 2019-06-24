@@ -1,0 +1,17 @@
+<div class="container">
+  <form data-username="<%= @username %>" data-collection-name="<%= @collection_name %>" data-collection-id="<%= @collection_id %>" data-record-id="<%= @user_record.id %>">
+    <ul class="errors"></ul>
+    <div class="form-group">
+      <label for="caption">Caption</label>
+      <input name="caption" id="caption" class="form-control" type="text" placeholder="caption" aria-label="caption" value="<%= @user_record.name %>">
+    </div>
+    <div class="form-group">
+      <label for="body">Body</label>
+      <textarea name="body" id="body" cols="30" rows="10"><%= @user_record.description %></textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" id="save" class="btn btn-primary">Update</button>
+      <button id="cancel" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+</div>

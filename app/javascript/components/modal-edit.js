@@ -6,6 +6,9 @@ const ModalEdit = {
   $buttonCancel: document.getElementById("modal-edit-cancel"),
   $inputCaption: document.getElementById("modal-edit-caption"),
   $inputBody: document.getElementById("modal-edit-body"),
+  $linkFullEditor: document.getElementById(
+    "modal-edit-record-full-editor-link"
+  ),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -23,6 +26,7 @@ const ModalEdit = {
     this.$modal.style.display = "block";
     this.$inputCaption.value = this.props.item.caption;
     this.$inputBody.value = this.props.item.body;
+    this.$linkFullEditor.href = this.props.fullEditLink;
     this.$modal.scrollTo(0, 0);
     this.visible = true;
   },

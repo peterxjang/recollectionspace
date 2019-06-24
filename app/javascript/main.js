@@ -364,9 +364,21 @@ const Application = {
       });
   },
   handleEditRecord: function(item) {
+    let fullEditLink;
+    Router.matchUrl("/:username/:collection_name/:id", params => {
+      fullEditLink = `/${params.username}/${params.collection_name}/${
+        params.id
+      }/edit`;
+    });
+    Router.matchUrl("/:username/:collection_name/", params => {
+      fullEditLink = `/${params.username}/${params.collection_name}/${
+        item.id
+      }/edit`;
+    });
     Modal.hide();
     Modal.showEdit({
       item: item,
+      fullEditLink: fullEditLink,
       onEditRecord: this.handleUpdateRecordText.bind(this),
       onCancel: Modal.hide.bind(Modal)
     });
