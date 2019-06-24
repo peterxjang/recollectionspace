@@ -212,8 +212,8 @@ function setDraggingItemGroup() {
 function translateItemStart(x, y, item) {
   draggingItem = item;
   setDraggingItemGroup();
-  lastInputX = x;
-  lastInputY = y;
+  lastInputX = x !== null ? x : lastInputX;
+  lastInputY = y !== null ? y : lastInputY;
   canvas.style.cursor = "pointer";
   smoothDispatch(selectItem(draggingItem.id, draggingItem.pinBack));
 }
@@ -978,6 +978,7 @@ function replaceItems(newItems) {
 
 function replaceItemProperties(itemOld, itemNew) {
   smoothDispatch(replaceItem(itemOld, itemNew), allTransformEnd);
+  translateItemStart(lastInputX, lastInputY, itemNew);
 }
 
 function createItem(image, caption, body, options = {}) {
