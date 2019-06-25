@@ -91,6 +91,9 @@ const Modal = {
       this.currentModal.$errors.innerHTML = errors
         .map(error => `<li>${error}</li>`)
         .join("");
+      if (this.currentModal.enableInputs) {
+        this.currentModal.enableInputs();
+      }
     }
   },
   bindEvents: function() {

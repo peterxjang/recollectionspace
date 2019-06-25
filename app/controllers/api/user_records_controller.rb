@@ -13,6 +13,10 @@ class Api::UserRecordsController < ApplicationController
       return
     end
     unless record
+      unless params[:image]
+        render json: {errors: ["Invalid image"]}, status: 422
+        return
+      end
       response = Cloudinary::Uploader.upload(params[:image], folder: "records")
       record = Record.new(
         api_id: params[:api_id],

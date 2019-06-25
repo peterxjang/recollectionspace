@@ -3,6 +3,7 @@ import initializeTabs from "./ui-tabs";
 const ModalNewRecord = {
   props: null,
   $modal: document.getElementById("modal-new-record"),
+  $form: document.querySelector("#modal-new-record form"),
   $errors: document.querySelector("#modal-new-record .errors"),
   $buttonSave: document.getElementById("modal-new-record-save"),
   $buttonCancel: document.getElementById("modal-new-record-cancel"),
@@ -50,6 +51,7 @@ const ModalNewRecord = {
     this.$linkFullEditor.href = `${window.location.href}/new`;
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
+    this.enableInputs();
     this.visible = true;
   },
   startTyping: function() {
@@ -80,6 +82,12 @@ const ModalNewRecord = {
     });
     image.style.opacity = 1.0;
   },
+  disableInputs: function() {
+    [...this.$form.elements].forEach(element => (element.disabled = true));
+  },
+  enableInputs: function() {
+    [...this.$form.elements].forEach(element => (element.disabled = false));
+  },
   bindEvents: function() {
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
@@ -107,6 +115,7 @@ const ModalNewRecord = {
     };
     this.$buttonSave.onclick = event => {
       event.preventDefault();
+      this.disableInputs();
       const image = this.imageUrl || this.$inputImage.files[0];
       this.props.onSaveRecord(
         image,
