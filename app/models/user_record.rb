@@ -2,6 +2,11 @@ class UserRecord < ApplicationRecord
   belongs_to :record
   belongs_to :user_collection
   before_destroy :delete_cloudinary_image
+  before_save :assign_rendered_description, if: -> { description_changed? }
+
+  def self.markdown
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, safe_links_only: true, escape_html: true)
+  end
 
   private
   def delete_cloudinary_image
@@ -11,5 +16,9 @@ class UserRecord < ApplicationRecord
       public_id = matches[4]
       Cloudinary::Uploader.destroy(public_id, options = {})
     end
+  end
+
+  def assign_rendered_description
+    assign_attributes(rendered_description: self.class.markdown.render(description))
   end
 end

@@ -413,7 +413,7 @@ const Application = {
         return response.json();
       })
       .then(data => {
-        Canvas.updateItem(id, { caption, body });
+        Canvas.updateItem(id, { caption: data.name, body: data.description });
         Modal.hide();
       })
       .catch(error => {
@@ -426,8 +426,7 @@ const Application = {
       url = "/api/user_records/" + item.id;
       params = {
         ...item,
-        name: item.caption,
-        description: item.body
+        name: item.caption
       };
     } else if (item.type === "collection") {
       url = "/api/user_collections/" + item.id;

@@ -24,7 +24,7 @@ const ModalInfo = {
     this.props = props;
     this.$modal.style.display = "block";
     this.$caption.innerHTML = this.props.item.caption;
-    this.$body.innerText =
+    this.$body.innerHTML =
       this.props.item.body !== undefined ? this.props.item.body : "Loading...";
     if (
       this.props.item.id &&

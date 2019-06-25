@@ -16,7 +16,7 @@
     {
       id: child.id,
       caption: child.name,
-      body: child.description,
+      body: child.rendered_description || child.description,
       x: child.x,
       y: child.y,
       src: child.src,

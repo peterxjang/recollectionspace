@@ -1,7 +1,7 @@
 {
   id: @user_record.id,
   name: @user_record.name,
-  description: @user_record.description,
+  description: @user_record.rendered_description || @user_record.description,
   user_collection_id: @user_record.user_collection_id,
   x: @user_record.x,
   y: @user_record.y,
