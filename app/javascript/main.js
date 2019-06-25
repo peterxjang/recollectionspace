@@ -375,50 +375,7 @@ const Application = {
         item.id
       }/edit`;
     });
-    Modal.hide();
-    Modal.showEdit({
-      item: item,
-      fullEditLink: fullEditLink,
-      onEditRecord: this.handleUpdateRecordText.bind(this),
-      onCancel: Modal.hide.bind(Modal)
-    });
-  },
-  handleUpdateRecordText: function(id, type, caption, body) {
-    let url, params;
-    if (type === "record") {
-      url = "/api/user_records/" + id;
-      params = {
-        name: caption,
-        description: body
-      };
-    } else {
-      return;
-    }
-    fetch(url, {
-      method: "PATCH",
-      mode: "cors",
-      cache: "no-cache",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken
-      },
-      redirect: "follow",
-      referrer: "no-referrer",
-      body: JSON.stringify(params)
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      })
-      .then(data => {
-        Canvas.updateItem(id, { caption: data.name, body: data.description });
-        Modal.hide();
-      })
-      .catch(error => {
-        error.json().then(data => Modal.setErrors(data.errors));
-      });
+    window.location.href = fullEditLink;
   },
   handleUpdateRecord: function(item) {
     let url, params;
