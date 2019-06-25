@@ -38,7 +38,7 @@ Router.matchUrl("/:username/:collection_name/new", routeParams => {
       .then(data => {
         window.location.href = `/${$form.dataset.username}/${
           $form.dataset.collectionName
-        }`;
+        }/${data.id}`;
       })
       .catch(error => {
         error.json().then(data => {
@@ -81,7 +81,7 @@ Router.matchUrl("/:username/:collection_name/:id/edit", routeParams => {
       .then(data => {
         window.location.href = `/${$form.dataset.username}/${
           $form.dataset.collectionName
-        }`;
+        }/${data.id}`;
       })
       .catch(error => {
         error.json().then(data => {
