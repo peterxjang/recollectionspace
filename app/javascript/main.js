@@ -375,7 +375,9 @@ const Application = {
         item.id
       }/edit`;
     });
-    window.location.href = fullEditLink;
+    if (fullEditLink) {
+      window.location.href = fullEditLink;
+    }
   },
   handleUpdateRecord: function(item) {
     let url, params;
