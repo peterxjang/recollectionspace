@@ -24,4 +24,9 @@ end
 group :development do
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem "capistrano", "~> 3.11"
+  gem "capistrano-rails", "~> 1.4"
+  gem "capistrano-passenger", "~> 0.2.0"
+	gem "capistrano-rbenv", "~> 2.1"
+  gem "capistrano-yarn"
 end
