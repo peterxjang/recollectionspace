@@ -29,4 +29,5 @@ group :development do
   gem "capistrano-passenger", "~> 0.2.0"
 	gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano-yarn"
+  gem 'capistrano-rails-console', require: false
 end

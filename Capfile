@@ -8,6 +8,7 @@ require 'capistrano/rails'
 require 'capistrano/passenger'
 require 'capistrano/rbenv'
 require 'capistrano/yarn'
+require 'capistrano/rails/console'
 
 set :rbenv_type, :user
 set :rbenv_ruby, '2.5.1'
