@@ -192,7 +192,7 @@ const Application = {
         Modal.hide();
       })
       .catch(error => {
-        error.json().then(data => Modal.setErrors(data.errors));
+        Modal.setErrors(["Invalid email or password"]);
       });
   },
   handleLoginCancel: function() {
