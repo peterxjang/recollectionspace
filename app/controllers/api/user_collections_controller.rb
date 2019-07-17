@@ -17,6 +17,10 @@ class Api::UserCollectionsController < ApplicationController
         render json: {errors: ["Invalid collection"]}, status: 422
         return
       end
+      unless current_user.admin
+        render json: {errors: ["You must be an admin to create a new collection."]}, status: 422
+        return
+      end
       response = Cloudinary::Uploader.upload(params[:image], folder: "collections")
       src = response["secure_url"]
       width = response["width"]
