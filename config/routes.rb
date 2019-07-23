@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     post "/user_records" => "user_records#create"
     patch "/user_records/:id" => "user_records#update"
     delete "/user_records/:id" => "user_records#destroy"
+    post "/images" => "images#create"
     get "/books" => "records#search_books"
     get "/movies" => "records#search_movies"
     get "/music" => "records#search_music"
