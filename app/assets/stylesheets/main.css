@@ -146,6 +146,61 @@ textarea {
 #modal-info p {
   font-size: 1rem;
   line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+#modal-info h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+#modal-info ul, #modal-info ol {
+  padding-left: 1.5rem;
+}
+#modal-info blockquote p {
+  font-size: 1.2rem;
+}
+#modal-info blockquote{
+  font-style:italic;
+  color: #555555;
+  padding:1.2rem 30px 0.25rem 75px;
+  border-left:8px solid #78C0A8 ;
+  line-height:1.6;
+  position: relative;
+  background:#EDEDED;
+  margin-bottom: 1.5rem;
+}
+#modal-info blockquote::before{
+  font-family:Arial;
+  content: "\201C";
+  color:#78C0A8;
+  font-size:4em;
+  position: absolute;
+  left: 10px;
+  top:-10px;
+}
+#modal-info blockquote::after{
+  content: '';
+}
+#modal-info blockquote span{
+  display:block;
+  color:#333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top:1em;
+}
+#modal-info pre {
+  margin-bottom: 1.5rem;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  padding: 0.5rem;
+  overflow: auto;
+}
+#modal-info code {
+  background-color: #eee;
+  padding: 0.25rem;
+}
+#modal-info img {
+  width: 100%;
+  padding: 1rem 3rem;
 }
 .btn {
   font-size: 1rem;
