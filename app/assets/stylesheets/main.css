@@ -71,7 +71,10 @@ canvas {
   padding: 1.5rem;
   border-radius: .25rem;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow-y: scroll;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-overflow-scrolling: touch;
 }
 .form-group {
   padding: 0.5rem;
