@@ -23,7 +23,7 @@ canvas {
   display: block;
 }
 #loading {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -37,7 +37,7 @@ canvas {
   font-size: 3em;
 }
 .modal {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -200,7 +200,32 @@ textarea {
 }
 #modal-info img {
   width: 100%;
-  padding: 1rem 3rem;
+  padding: 1rem 0rem;
+}
+[style*="--aspect-ratio"] {
+  margin: 2rem 0;
+}
+[style*="--aspect-ratio"] > :first-child {
+  width: 100%;
+}
+[style*="--aspect-ratio"] > img {
+  height: auto;
+}
+@supports (--custom:property) {
+  [style*="--aspect-ratio"] {
+    position: relative;
+  }
+  [style*="--aspect-ratio"]::before {
+    content: "";
+    display: block;
+    padding-bottom: calc(100% / (var(--aspect-ratio)));
+  }
+  [style*="--aspect-ratio"] > :first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+  }
 }
 .btn {
   font-size: 1rem;
