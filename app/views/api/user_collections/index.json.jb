@@ -14,7 +14,7 @@
   },
   items: @children.map do |child|
     {
-      id: child.id,
+      id: child.slug_id,
       caption: child.name,
       body: child.rendered_description || child.description,
       x: child.x,

@@ -28,7 +28,7 @@ const Application = {
       apiUrl = `/api/user_collections/search?username=${
         params.username
       }&collection_name=${params.collection_name}`;
-      modalId = parseInt(params.id);
+      modalId = params.id;
     });
     if (apiUrl) {
       this.loadCanvasData(apiUrl, 1, null, modalId);

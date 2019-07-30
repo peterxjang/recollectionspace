@@ -4,6 +4,10 @@ class UserRecord < ApplicationRecord
   before_destroy :delete_cloudinary_image
   before_save :assign_rendered_description, if: -> { description_changed? }
 
+  def slug_id
+    "#{id}-#{name.parameterize}"
+  end
+
   def self.markdown
     Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, safe_links_only: true, escape_html: true, fenced_code_blocks: true)
   end
