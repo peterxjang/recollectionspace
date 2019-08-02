@@ -151,17 +151,46 @@ textarea {
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
-#modal-info h3 {
+
+#record-content {
+	background-color: rgba(255, 255, 255, 0.8);
+	display: none;
+	margin: 0;
+	padding: 0;
+}
+#record-content-body {
+	max-width: 52rem;
+	margin: 0 auto;
+	padding: 0 2rem;
+	background-color: white;
+	min-height: 100vh;
+}
+#record-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  padding-bottom: 1.5rem;
+}
+#record-content h1 {
+  font-size: 4rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+@media (max-width: 640px) {
+	#record-content h1 {
+		font-size: 2rem;
+	}
+}
+#record-content h3 {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
-#modal-info ul, #modal-info ol {
+#record-content ul, #record-content ol {
   padding-left: 1.5rem;
 }
-#modal-info blockquote p {
+#record-content blockquote p {
   font-size: 1.2rem;
 }
-#modal-info blockquote{
+#record-content blockquote{
   font-style:italic;
   color: #555555;
   padding:1.2rem 30px 0.25rem 75px;
@@ -171,7 +200,7 @@ textarea {
   background:#EDEDED;
   margin-bottom: 1.5rem;
 }
-#modal-info blockquote::before{
+#record-content blockquote::before{
   font-family:Arial;
   content: "\201C";
   color:#78C0A8;
@@ -180,28 +209,30 @@ textarea {
   left: 10px;
   top:-10px;
 }
-#modal-info blockquote::after{
+#record-content blockquote::after{
   content: '';
 }
-#modal-info blockquote span{
+#record-content blockquote span{
   display:block;
   color:#333333;
   font-style: normal;
   font-weight: bold;
   margin-top:1em;
 }
-#modal-info pre {
+#record-content pre {
   margin-bottom: 1.5rem;
   border: 1px solid #ccc;
   background-color: #eee;
   padding: 0.5rem;
   overflow: auto;
+	font-size: 1rem;
+	line-height: 1.3;
 }
-#modal-info code {
+#record-content code {
   background-color: #eee;
   padding: 0.25rem;
 }
-#modal-info img {
+#record-content img {
   width: 100%;
   padding: 1rem 0rem;
 }

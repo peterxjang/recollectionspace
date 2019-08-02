@@ -1,5 +1,6 @@
 import Canvas from "./canvas-redux";
 import Modal from "./components/modal";
+import RecordContent from "./components/record-content";
 import Router from "./router";
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
@@ -473,12 +474,16 @@ const Application = {
       });
   },
   handleShowModalInfo: function(item, isOwner) {
-    Modal.showInfo({
-      item: item,
-      onEdit: this.handleEditRecord.bind(this),
-      onDelete: this.handleConfirmDeleteRecord.bind(this),
-      isOwner: isOwner
-    });
+    if (item.type === "record") {
+      RecordContent.show(item);
+    } else {
+      Modal.showInfo({
+        item: item,
+        onEdit: this.handleEditRecord.bind(this),
+        onDelete: this.handleConfirmDeleteRecord.bind(this),
+        isOwner: isOwner
+      });
+    }
     Router.matchUrl("/:username/:collection_name", params => {
       Router.setUrl(`/${params.username}/${params.collection_name}/${item.id}`);
     });
