@@ -511,6 +511,10 @@ function onLongPress() {
       return;
     }
   }
+  onNewRecord();
+}
+
+function onNewRecord() {
   props.onNewRecord(state);
 }
 
@@ -540,6 +544,10 @@ function onDoubleClick() {
       return;
     }
   }
+  zoomOut();
+}
+
+function zoomOut() {
   if (lastDoubleClickedItem) {
     zoomToFitAll();
   } else {
@@ -1055,5 +1063,7 @@ export default {
   createItem,
   deleteItem,
   updateItem,
-  zoomToFitAll
+  zoomToFitAll,
+  zoomOut,
+  onNewRecord
 };

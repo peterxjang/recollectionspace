@@ -18,6 +18,18 @@ body {
   margin: 2rem auto;
   max-width: 50rem;
 }
+nav {
+	position: fixed;
+	padding: 0.5rem;
+	background-color: rgba(0, 0, 0, 0.6);
+	width: 100%;
+	z-index: 2;
+  font-family: American Typewriter, Courier New, sans-serif;
+}
+nav a {
+	padding-right: 1rem;
+	color: #ccc;
+}
 canvas {
   height: 100%;
   display: block;
@@ -172,7 +184,7 @@ textarea {
 }
 #record-content h1 {
   font-size: 4rem;
-	padding-top: 1rem;
+	padding-top: 3rem;
 	padding-bottom: 1rem;
 }
 @media (max-width: 640px) {

@@ -1,5 +1,6 @@
 import Canvas from "./canvas-redux";
 import Modal from "./components/modal";
+import Navbar from "./components/navbar";
 import RecordContent from "./components/record-content";
 import Router from "./router";
 
@@ -9,7 +10,29 @@ const Application = {
   initialize: function() {
     this.initializeCanvas();
     Modal.onClose = this.handleHideModal.bind(this);
+    Navbar.initialize({
+      onNew: this.handleNavbarNew.bind(this),
+      onBack: this.handleNavbarBack.bind(this)
+    });
     this.loadRouteData();
+  },
+  handleNavbarNew: function() {
+    if (RecordContent.visible) {
+      this.handleNavbarBack();
+    } else {
+      Canvas.onNewRecord();
+    }
+  },
+  handleNavbarBack: function() {
+    RecordContent.hide({
+      onHide: this.handleRecordContentHide.bind(this)
+    });
+  },
+  handleRecordContentHide: function() {
+    Canvas.zoomOut();
+    Router.matchUrl("/:username/:collection_name/:id", params => {
+      Router.setUrl(`/${params.username}/${params.collection_name}`);
+    });
   },
   loadRouteData: function() {
     let apiUrl = null;
