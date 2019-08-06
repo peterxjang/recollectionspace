@@ -125,6 +125,7 @@ function checkTransition(delta) {
           canvas.height / state.canvas.scale
         )
       ) {
+        lastDoubleClickedItem = item;
         return props.onTransition(1, item, state.isOwner);
       }
     }
