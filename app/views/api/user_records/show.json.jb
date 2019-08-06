@@ -1,5 +1,5 @@
 {
-  id: @user_record.id,
+  id: @user_record.slug_id,
   name: @user_record.name,
   description: @user_record.rendered_description || @user_record.description,
   user_collection_id: @user_record.user_collection_id,
