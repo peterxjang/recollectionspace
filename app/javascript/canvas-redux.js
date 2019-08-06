@@ -549,7 +549,6 @@ function onDoubleClick() {
 }
 
 function zoomOut() {
-  resizeCanvas();
   if (lastDoubleClickedItem) {
     zoomToFitAll();
   } else {
