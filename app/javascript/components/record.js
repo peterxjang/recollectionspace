@@ -243,8 +243,7 @@ const Record = {
       yCorner,
       fullWidth,
       fullHeight,
-      scale,
-      canvasScale
+      scale
     );
     let output;
     if (!skipCheckHandle && isPointInHandle) {
