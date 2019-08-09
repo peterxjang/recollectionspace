@@ -1,4 +1,4 @@
-import RecordHandle from "./recordHandle";
+import RecordControls from "./record-controls";
 
 let imgCache = {};
 let imgLoading = false;
@@ -8,7 +8,7 @@ const BOTTOM_BORDER_FACTOR = 6;
 const Record = {
   init: function(ctx) {
     this.ctx = ctx;
-    RecordHandle.init(ctx);
+    RecordControls.init(ctx);
   },
   clearImageCache: function() {
     imgCache = {};
@@ -29,7 +29,7 @@ const Record = {
     this.renderText(fullProps);
     const visibleOpacity = this.renderImageAnimate(fullProps);
     if (props.selected) {
-      RecordHandle.render(fullProps);
+      RecordControls.render(fullProps);
     }
     this.ctx.restore();
     return visibleOpacity;
@@ -236,8 +236,9 @@ const Record = {
     this.ctx.beginPath();
     const xCorner = x - fullWidth / 2;
     const yCorner = y - fullHeight / 2;
-    RecordHandle.draw(
-      this.ctx.rect,
+    const isPointInHandle = RecordControls.isPointInHandle(
+      inputX,
+      inputY,
       xCorner,
       yCorner,
       fullWidth,
@@ -246,7 +247,7 @@ const Record = {
       canvasScale
     );
     let output;
-    if (!skipCheckHandle && this.ctx.isPointInPath(inputX, inputY)) {
+    if (!skipCheckHandle && isPointInHandle) {
       output = "handle";
     } else {
       this.ctx.beginPath();
