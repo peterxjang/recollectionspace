@@ -223,28 +223,11 @@ const Record = {
     };
     this.ctx.save();
     this.transformToItem(fullProps);
-    this.ctx.beginPath();
-    const isPointInHandle = RecordControls.isPointInHandle(
+    const output = RecordControls.getTypeAtPoint(
       props.inputX,
       props.inputY,
       fullProps
     );
-    let output;
-    if (!props.skipCheckHandle && isPointInHandle) {
-      output = "handle";
-    } else {
-      this.ctx.beginPath();
-      this.draw(
-        this.ctx.rect,
-        props.x - fullWidth / 2,
-        props.y - fullHeight / 2,
-        fullWidth,
-        fullHeight
-      );
-      output = this.ctx.isPointInPath(props.inputX, props.inputY)
-        ? "record"
-        : false;
-    }
     this.ctx.restore();
     return output;
   },

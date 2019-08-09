@@ -435,7 +435,7 @@ function onInputDown(evt) {
       ...item,
       inputX,
       inputY,
-      canvasScale: state.canvas.scale
+      selected: item.id === state.selectedItem
     });
     if (draggingItemType === "record") {
       translateItemStart(inputX, inputY, item);
@@ -483,7 +483,7 @@ function onLongPress() {
       ...item,
       inputX: lastInputX,
       inputY: lastInputY,
-      canvasScale: state.canvas.scale
+      selected: item.id === state.selectedItem
     });
     if (draggingItemType === "record") {
       if (
@@ -526,8 +526,7 @@ function onDoubleClick() {
       ...item,
       inputX: lastInputX,
       inputY: lastInputY,
-      canvasScale: state.canvas.scale,
-      skipCheckHandle: true
+      selected: item.id === state.selectedItem
     });
     if (itemType === "record") {
       if (item === lastDoubleClickedItem) {

@@ -46,9 +46,41 @@ const RecordControls = {
     );
     this.ctx.lineWidth = 1;
   },
-  isPointInHandle: function(inputX, inputY, props) {
+  drawBase: function(drawFn, props) {
+    drawFn.call(
+      this.ctx,
+      props.x - props.fullWidth / 2,
+      props.y - props.fullHeight / 2,
+      props.fullWidth,
+      props.fullHeight
+    );
+  },
+  getTypeAtPoint: function(x, y, props) {
+    this.ctx.beginPath();
     this.drawHandle(this.ctx.rect, props);
-    return this.ctx.isPointInPath(inputX, inputY);
+    const isPointInHandle = this.ctx.isPointInPath(x, y);
+    if (props.selected && isPointInHandle) {
+      return "handle";
+    }
+    this.ctx.beginPath();
+    this.drawEditButton(this.ctx.rect, props);
+    const isPointInEditButton = this.ctx.isPointInPath(x, y);
+    if (props.selected && isPointInEditButton) {
+      return "edit-button";
+    }
+    this.ctx.beginPath();
+    this.drawDestroyButton(this.ctx.rect, props);
+    const isPointInDestroyButton = this.ctx.isPointInPath(x, y);
+    if (props.selected && isPointInDestroyButton) {
+      return "destroy-button";
+    }
+    this.ctx.beginPath();
+    this.drawBase(this.ctx.rect, props);
+    const isPointInRecord = this.ctx.isPointInPath(x, y);
+    if (isPointInRecord) {
+      return "record";
+    }
+    return false;
   }
 };
 
