@@ -213,45 +213,37 @@ const Record = {
     const opacity = (factor - threshold) / (0.5 * threshold);
     return Math.max(0, Math.min(opacity, 1));
   },
-  isPointInRecord: function({
-    x,
-    y,
-    height,
-    width,
-    scale,
-    angle,
-    inputX,
-    inputY,
-    border,
-    canvasScale,
-    skipCheckHandle
-  }) {
-    const { fullWidth, fullHeight } = this.computeBorderSize({
-      width,
-      height,
-      border
-    });
-    this.ctx.save();
-    this.transformToItem({ x, y, fullWidth, fullHeight, scale, angle });
-    this.ctx.beginPath();
-    const xCorner = x - fullWidth / 2;
-    const yCorner = y - fullHeight / 2;
-    const isPointInHandle = RecordControls.isPointInHandle(
-      inputX,
-      inputY,
-      xCorner,
-      yCorner,
+  isPointInRecord: function(props) {
+    const { borderSize, fullWidth, fullHeight } = this.computeBorderSize(props);
+    const fullProps = {
+      ...props,
+      borderSize,
       fullWidth,
-      fullHeight,
-      scale
+      fullHeight
+    };
+    this.ctx.save();
+    this.transformToItem(fullProps);
+    this.ctx.beginPath();
+    const isPointInHandle = RecordControls.isPointInHandle(
+      props.inputX,
+      props.inputY,
+      fullProps
     );
     let output;
-    if (!skipCheckHandle && isPointInHandle) {
+    if (!props.skipCheckHandle && isPointInHandle) {
       output = "handle";
     } else {
       this.ctx.beginPath();
-      this.draw(this.ctx.rect, xCorner, yCorner, fullWidth, fullHeight);
-      output = this.ctx.isPointInPath(inputX, inputY) ? "record" : false;
+      this.draw(
+        this.ctx.rect,
+        props.x - fullWidth / 2,
+        props.y - fullHeight / 2,
+        fullWidth,
+        fullHeight
+      );
+      output = this.ctx.isPointInPath(props.inputX, props.inputY)
+        ? "record"
+        : false;
     }
     this.ctx.restore();
     return output;

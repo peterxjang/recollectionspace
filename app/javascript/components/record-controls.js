@@ -2,73 +2,52 @@ const RecordControls = {
   init: function(ctx) {
     this.ctx = ctx;
   },
-  render: function({ x, y, fullWidth, fullHeight, scale }) {
-    this.drawHandle(
-      this.ctx.strokeRect,
-      x - fullWidth / 2,
-      y - fullHeight / 2,
-      fullWidth,
-      fullHeight,
-      scale
-    );
-    this.drawEditButton(
-      this.ctx.strokeRect,
-      x - fullWidth / 2,
-      y - fullHeight / 2,
-      fullWidth,
-      fullHeight,
-      scale
-    );
-    this.drawDestroyButton(
-      this.ctx.strokeRect,
-      x - fullWidth / 2,
-      y - fullHeight / 2,
-      fullWidth,
-      fullHeight,
-      scale
-    );
+  render: function(props) {
+    this.drawHandle(this.ctx.strokeRect, props);
+    this.drawEditButton(this.ctx.strokeRect, props);
+    this.drawDestroyButton(this.ctx.strokeRect, props);
   },
-  drawHandle: function(drawFn, x, y, width, height, scale) {
-    const handleSize = 0.1 * width;
+  drawHandle: function(drawFn, props) {
+    const handleSize = 0.1 * props.fullWidth;
     this.ctx.strokeStyle = "#00f";
     this.ctx.lineWidth = 0.2 * handleSize;
     drawFn.call(
       this.ctx,
-      x - handleSize / 2 + width,
-      y - handleSize / 2 + height,
+      props.x + 0.5 * props.fullWidth - handleSize / 2,
+      props.y + 0.5 * props.fullHeight - handleSize / 2,
       handleSize,
       handleSize
     );
     this.ctx.lineWidth = 1;
   },
-  drawEditButton: function(drawFn, x, y, width, height, scale) {
-    const buttonSize = 0.25 * width;
+  drawEditButton: function(drawFn, props) {
+    const buttonSize = 0.25 * props.fullWidth;
     this.ctx.strokeStyle = "#00f";
-    this.ctx.lineWidth = buttonSize / 10;
+    this.ctx.lineWidth = 0.2 * buttonSize;
     drawFn.call(
       this.ctx,
-      x - 0.5 * buttonSize + 0.25 * width,
-      y - 0.5 * buttonSize + 0.5 * height,
+      props.x - 0.25 * props.fullWidth - 0.5 * buttonSize,
+      props.y - 0.5 * buttonSize,
       buttonSize,
       buttonSize
     );
     this.ctx.lineWidth = 1;
   },
-  drawDestroyButton: function(drawFn, x, y, width, height, scale) {
-    const buttonSize = 0.25 * width;
+  drawDestroyButton: function(drawFn, props) {
+    const buttonSize = 0.25 * props.fullWidth;
     this.ctx.strokeStyle = "#00f";
-    this.ctx.lineWidth = buttonSize / 10;
+    this.ctx.lineWidth = 0.2 * buttonSize;
     drawFn.call(
       this.ctx,
-      x - 0.5 * buttonSize + 0.75 * width,
-      y - 0.5 * buttonSize + 0.5 * height,
+      props.x + 0.25 * props.fullWidth - 0.5 * buttonSize,
+      props.y - 0.5 * buttonSize,
       buttonSize,
       buttonSize
     );
     this.ctx.lineWidth = 1;
   },
-  isPointInHandle: function(inputX, inputY, x, y, width, height, scale) {
-    this.drawHandle(this.ctx.rect, x, y, width, height, scale);
+  isPointInHandle: function(inputX, inputY, props) {
+    this.drawHandle(this.ctx.rect, props);
     return this.ctx.isPointInPath(inputX, inputY);
   }
 };
