@@ -441,6 +441,10 @@ function onInputDown(evt) {
       translateItemStart(inputX, inputY, item);
     } else if (draggingItemType === "handle") {
       transformItemStart(inputX, inputY, item);
+    } else if (draggingItemType === "edit-button") {
+      props.onShowModalEdit(item);
+    } else if (draggingItemType === "destroy-button") {
+      props.onShowModalDestroy(item);
     } else {
       props.onUpdateRecord(item);
       translateCanvasStart(inputX, inputY);

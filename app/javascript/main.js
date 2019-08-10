@@ -66,6 +66,8 @@ const Application = {
       onUpdateRecord: this.handleUpdateRecord.bind(this),
       onShowModalInfo: this.handleShowModalInfo.bind(this),
       onHideModalInfo: this.handleHideModal.bind(this),
+      onShowModalEdit: this.handleEditRecord.bind(this),
+      onShowModalDestroy: this.handleConfirmDeleteRecord.bind(this),
       isModalInfoVisible: () => Modal.visible
     });
   },
@@ -394,7 +396,7 @@ const Application = {
         params.id
       }/edit`;
     });
-    Router.matchUrl("/:username/:collection_name/", params => {
+    Router.matchUrl("/:username/:collection_name", params => {
       fullEditLink = `/${params.username}/${params.collection_name}/${
         item.id
       }/edit`;
