@@ -21,6 +21,9 @@ const RecordControls = {
     this.ctx.lineWidth = 1;
   },
   drawEditButton: function(drawFn, props) {
+    if (props.type !== "record") {
+      return;
+    }
     const buttonSize = 0.25 * props.fullWidth;
     this.ctx.strokeStyle = "#00f";
     this.ctx.lineWidth = 0.2 * buttonSize;
