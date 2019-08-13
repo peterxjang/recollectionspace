@@ -3,10 +3,10 @@ const RecordControls = {
     this.ctx = ctx;
     this.imageEdit = new Image();
     this.imageEdit.src =
-      "https://www.pngfind.com/pngs/m/70-704184_png-file-svg-pencil-edit-icon-png-transparent.png";
+      "https://res.cloudinary.com/recollectionspace/image/upload/v1565711672/edit-icon.png";
     this.imageDestroy = new Image();
     this.imageDestroy.src =
-      "https://icon2.kisspng.com/20180604/uzx/kisspng-computer-icons-x-icon-5b15133351dc76.4903214215281078273353.jpg";
+      "https://res.cloudinary.com/recollectionspace/image/upload/v1565711727/destroy-icon.png";
   },
   render: function(props) {
     this.drawHandle(this.ctx.strokeRect, props);
@@ -30,28 +30,28 @@ const RecordControls = {
     if (props.type !== "record") {
       return;
     }
-    const buttonSize = 0.25 * props.fullWidth;
-    const x = props.x - 0.25 * props.fullWidth - 0.5 * buttonSize;
-    const y = props.y - 0.5 * buttonSize;
+    const buttonSize = 0.15 * props.fullWidth;
+    const x = props.x + 0.5 * props.fullWidth - 2.5 * buttonSize;
+    const y = props.y - 0.5 * props.fullHeight + 0.25 * buttonSize;
     this.ctx.strokeStyle = "#00f";
-    this.ctx.lineWidth = 0.2 * buttonSize;
-    drawFn.call(this.ctx, x, y, buttonSize, buttonSize);
+    this.ctx.lineWidth = 0;
     if (drawImage) {
       this.ctx.drawImage(this.imageEdit, x, y, buttonSize, buttonSize);
+    } else {
+      drawFn.call(this.ctx, x, y, buttonSize, buttonSize);
     }
-    this.ctx.lineWidth = 1;
   },
   drawDestroyButton: function(drawFn, props, drawImage = false) {
-    const buttonSize = 0.25 * props.fullWidth;
-    const x = props.x + 0.25 * props.fullWidth - 0.5 * buttonSize;
-    const y = props.y - 0.5 * buttonSize;
+    const buttonSize = 0.15 * props.fullWidth;
+    const x = props.x + 0.5 * props.fullWidth - 1.25 * buttonSize;
+    const y = props.y - 0.5 * props.fullHeight + 0.25 * buttonSize;
     this.ctx.strokeStyle = "#00f";
-    this.ctx.lineWidth = 0.2 * buttonSize;
-    drawFn.call(this.ctx, x, y, buttonSize, buttonSize);
+    this.ctx.lineWidth = 0;
     if (drawImage) {
       this.ctx.drawImage(this.imageDestroy, x, y, buttonSize, buttonSize);
+    } else {
+      drawFn.call(this.ctx, x, y, buttonSize, buttonSize);
     }
-    this.ctx.lineWidth = 1;
   },
   drawBase: function(drawFn, props) {
     drawFn.call(
