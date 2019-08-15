@@ -1,5 +1,5 @@
 import { createStore } from "redux";
-import rootReducer from "./reducers";
+import rootReducer from "../reducers";
 import {
   addItem,
   replaceItem,
@@ -17,8 +17,8 @@ import {
   changeRouteFailure,
   changeRouteSuccess,
   refreshCanvas
-} from "./actions";
-import Record from "./components/record";
+} from "../actions";
+import Record from "./record";
 
 let props;
 let store;

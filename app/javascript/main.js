@@ -1,4 +1,4 @@
-import Canvas from "./canvas-redux";
+import Canvas from "./components/canvas-redux";
 import Modal from "./components/modal";
 import Navbar from "./components/navbar";
 import RecordContent from "./components/record-content";
