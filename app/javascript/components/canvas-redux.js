@@ -51,6 +51,22 @@ let lockScrolling = false;
 let lastScrollTime = 0;
 let lastScrollDelta = 0;
 
+function initialize(inputCanvas, inputProps) {
+  store = createStore(rootReducer);
+
+  canvas = inputCanvas;
+  props = inputProps;
+  if (canvas.getContext) {
+    ctx = canvas.getContext("2d");
+    Record.init(ctx);
+    store.subscribe(() => render());
+    bindEvents(canvas);
+  } else {
+    console.warn("canvas not supported");
+  }
+  return store;
+}
+
 function render() {
   state = store.getState();
   resetCanvas();
@@ -163,27 +179,6 @@ function resetCanvas() {
     state.canvas.x,
     state.canvas.y
   );
-}
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  adjustForRetinaDisplays();
-  render();
-}
-
-function adjustForRetinaDisplays() {
-  if (window.devicePixelRatio !== 1) {
-    canvas.width = canvas.width * window.devicePixelRatio;
-    canvas.height = canvas.height * window.devicePixelRatio;
-    if (!state) {
-      state = store.getState();
-    }
-    ctx.scale(
-      state.canvas.scale * window.devicePixelRatio,
-      state.canvas.scale * window.devicePixelRatio
-    );
-  }
 }
 
 function setDraggingItemGroup() {
@@ -335,59 +330,6 @@ function scaleCanvasMove(inputX, inputY, delta) {
   }
 }
 
-function pinchStart(x1, y1, x2, y2) {
-  touchScaling = true;
-  lastInputX = x1;
-  lastInputY = y1;
-  lastInputX2 = x2;
-  lastInputY2 = y2;
-  lastCanvasScale = state.canvas.scale;
-}
-
-function pinchMove(inputX, inputY, inputX2, inputY2) {
-  if (state.isChangingRoute) {
-    return;
-  }
-  const originalDistance = Math.sqrt(
-    Math.pow(lastInputX - lastInputX2, 2) +
-      Math.pow(lastInputY - lastInputY2, 2)
-  );
-  const newDistance = Math.sqrt(
-    Math.pow(inputX - inputX2, 2) + Math.pow(inputY - inputY2, 2)
-  );
-  const factor = newDistance / originalDistance;
-  if (draggingItem) {
-    const angle = calculateAngle(
-      lastInputX - lastInputX2,
-      lastInputY - lastInputY2,
-      inputX - inputX2,
-      inputY - inputY2
-    );
-    transformItemWithGroup(
-      draggingItem,
-      draggingItemGroup,
-      draggingItem.scale * factor,
-      angle
-    );
-  } else if (draggingCanvas) {
-    const xCenter = inputX + 0.5 * (inputX2 - inputX);
-    const yCenter = inputY + 0.5 * (inputY2 - inputY);
-    const x =
-      xCenter -
-      ((xCenter - state.canvas.x) * lastCanvasScale * factor) /
-        state.canvas.scale;
-    const y =
-      yCenter -
-      ((yCenter - state.canvas.y) * lastCanvasScale * factor) /
-        state.canvas.scale;
-    const delta = factor > 1 ? 1 : -1;
-    const transitioned = checkTransition(delta);
-    if (!transitioned) {
-      smoothDispatch(scaleCanvas(lastCanvasScale * factor, x, y));
-    }
-  }
-}
-
 function allTransformEnd() {
   draggingItem = null;
   draggingItemGroup = null;
@@ -400,155 +342,8 @@ function allTransformEnd() {
   render();
 }
 
-function onInputDown(evt) {
-  evt.preventDefault();
-  lockScrolling = false;
-  const { inputX, inputY, inputX2, inputY2 } = getInputPos(evt);
-  if (clickTimer === null && !props.isModalInfoVisible()) {
-    clickTimer = setTimeout(function() {
-      clickTimer = null;
-    }, 500);
-  } else if (clickTimer !== null) {
-    clearTimeout(clickTimer);
-    clickTimer = null;
-    if (
-      inputX2 === undefined &&
-      inputY2 === undefined &&
-      withinMovementThreshold(inputX, inputY)
-    ) {
-      onDoubleClick();
-      return;
-    }
-  }
-  isDragging = true;
-  if (inputX2 === undefined && inputY2 === undefined) {
-    pressTimer = setTimeout(onLongPress, 1000);
-  } else {
-    clearTimeout(pressTimer);
-  }
-  if (inputX2 && inputY2) {
-    pinchStart(inputX, inputY, inputX2, inputY2);
-  }
-  const item = state.items.filter(item => item.id === state.selectedItem)[0];
-  if (item && item.id !== null) {
-    draggingItemType = Record.isPointInRecord({
-      ...item,
-      inputX,
-      inputY,
-      selected: item.id === state.selectedItem
-    });
-    if (draggingItemType === "record") {
-      translateItemStart(inputX, inputY, item);
-    } else if (draggingItemType === "handle") {
-      transformItemStart(inputX, inputY, item);
-    } else if (draggingItemType === "edit-button") {
-      props.onShowModalEdit(item);
-    } else if (draggingItemType === "destroy-button") {
-      props.onShowModalDestroy(item);
-    } else {
-      props.onUpdateRecord(item);
-      translateCanvasStart(inputX, inputY);
-    }
-  } else {
-    translateCanvasStart(inputX, inputY);
-  }
-  dragStartX = lastInputX;
-  dragStartY = lastInputY;
-  checkTransition(1);
-}
-
-function withinMovementThreshold(inputX, inputY) {
-  return (
-    Math.abs(inputX - dragStartX) < 0.02 * canvas.width &&
-    Math.abs(inputY - dragStartY) < 0.02 * canvas.height
-  );
-}
-
-function onLongPress() {
-  if (!state.isOwner) {
-    return;
-  }
-  if (state.loadingItems) {
-    props.onShowModalInfo(
-      {
-        caption: "Loading",
-        body: "Items can't be editing during loading."
-      },
-      state.isOwner
-    );
-    return;
-  }
-  const selectedItem = state.items.filter(
-    item => item.id === state.selectedItem
-  )[0];
-  for (let i = state.items.length - 1; i >= 0; i--) {
-    const item = state.items[i];
-    draggingItemType = Record.isPointInRecord({
-      ...item,
-      inputX: lastInputX,
-      inputY: lastInputY,
-      selected: item.id === state.selectedItem
-    });
-    if (draggingItemType === "record") {
-      if (
-        Record.isRecordEnclosed(
-          item,
-          state.canvas,
-          0,
-          0,
-          canvas.width / state.canvas.scale,
-          canvas.height / state.canvas.scale
-        )
-      ) {
-        return;
-      } else if (item !== selectedItem) {
-        translateItemStart(lastInputX, lastInputY, item);
-        return;
-      } else {
-        props.onShowModalInfo(item, state.isOwner);
-        return;
-      }
-    } else if (
-      draggingItemType === "handle" &&
-      item.id === state.selectedItem
-    ) {
-      transformItemStart(lastInputX, lastInputY, item);
-      return;
-    }
-  }
-  onNewRecord();
-}
-
 function onNewRecord() {
   props.onNewRecord(state);
-}
-
-function onDoubleClick() {
-  for (let i = state.items.length - 1; i >= 0; i--) {
-    const item = state.items[i];
-    const itemType = Record.isPointInRecord({
-      ...item,
-      inputX: lastInputX,
-      inputY: lastInputY,
-      selected: item.id === state.selectedItem
-    });
-    if (itemType === "record") {
-      if (item === lastDoubleClickedItem) {
-        if (item.type === "record") {
-          props.onShowModalInfo(item, state.isOwner);
-        } else {
-          zoomIntoItem(item);
-        }
-        lastDoubleClickedItem = item;
-        return;
-      }
-      const { x, y, width, height } = Record.getTransformedDimensions(item);
-      zoomToFit(x, y, width, height);
-      lastDoubleClickedItem = item;
-      return;
-    }
-  }
-  zoomOut();
 }
 
 function zoomOut() {
@@ -724,64 +519,6 @@ function zoomToFitAll(padding = 0.1, animate = true) {
   lastDoubleClickedItem = null;
 }
 
-function onInputUp() {
-  allTransformEnd();
-  clearTimeout(pressTimer);
-}
-
-function onInputMove(evt) {
-  const { inputX, inputY, inputX2, inputY2 } = getInputPos(evt);
-  const scaledInputX = inputX / state.canvas.scale;
-  const scaledInputY = inputY / state.canvas.scale;
-  const lastScaledInputX = lastInputX / state.canvas.scale;
-  const lastScaledInputY = lastInputY / state.canvas.scale;
-  const deltaMouseX = scaledInputX - lastScaledInputX;
-  const deltaMouseY = scaledInputY - lastScaledInputY;
-  if (touchScaling) {
-    pinchMove(inputX, inputY, inputX2, inputY2);
-  } else if (draggingItemType === "handle") {
-    transformItemMove(deltaMouseX, deltaMouseY);
-  } else if (draggingItem) {
-    translateItemMove(deltaMouseX, deltaMouseY);
-  } else if (draggingCanvas) {
-    translateCanvasMove(deltaMouseX, deltaMouseY, inputX, inputY);
-  }
-  if (isDragging && !withinMovementThreshold(inputX, inputY)) {
-    clearTimeout(pressTimer);
-  }
-}
-
-function onScroll(evt) {
-  if (isHumanScroll(evt) && !state.isChangingRoute) {
-    lockScrolling = false;
-  }
-  if (state.isChangingRoute || lockScrolling) {
-    isScrolling = undefined;
-    return evt.preventDefault() && false;
-  }
-  if (!isScrolling) {
-    scaleCanvasMoveInitial();
-  }
-  const delta = evt.deltaMode === 1 ? evt.deltaY / 3 : evt.deltaY / 40;
-  if (delta && isScrolling) {
-    const { inputX, inputY } = getInputPos(evt);
-    scaleCanvasMove(inputX, inputY, delta);
-  }
-  return evt.preventDefault() && false;
-}
-
-function isHumanScroll(evt) {
-  const now = Date.now();
-  const delta = evt.deltaY;
-  const rapidSuccession = now - lastScrollTime < 100;
-  const otherDirection = lastScrollDelta > 0 !== delta > 0;
-  const speedDecrease = Math.abs(delta) <= Math.abs(lastScrollDelta);
-  const isHuman = otherDirection || !rapidSuccession || !speedDecrease;
-  lastScrollTime = now;
-  lastScrollDelta = delta;
-  return isHuman;
-}
-
 function getInputPos(evt) {
   const x = evt.touches
     ? evt.touches[0].clientX
@@ -814,36 +551,6 @@ function calculateAngle(oldWidth, oldHeight, newWidth, newHeight) {
   const rawAngle = draggingItem.angle + angle2 - angle1;
   const angle = rawAngle > Math.PI ? rawAngle - 2 * Math.PI : rawAngle;
   return Math.abs(angle) < 0.05 ? 0 : angle;
-}
-
-function initialize(inputCanvas, inputProps) {
-  store = createStore(rootReducer);
-
-  canvas = inputCanvas;
-  props = inputProps;
-  if (canvas.getContext) {
-    ctx = canvas.getContext("2d");
-    Record.init(ctx);
-
-    canvas.addEventListener("mousedown", onInputDown, false);
-    canvas.addEventListener("touchstart", onInputDown, false);
-
-    window.addEventListener("mousemove", onInputMove, false);
-    window.addEventListener("touchmove", onInputMove, { passive: true });
-
-    window.addEventListener("mouseup", onInputUp, false);
-    window.addEventListener("touchend", onInputUp, false);
-
-    canvas.addEventListener("wheel", onScroll, false);
-
-    window.addEventListener("resize", resizeCanvas, false);
-
-    resizeCanvas();
-    store.subscribe(() => render());
-  } else {
-    console.warn("canvas not supported");
-  }
-  return store;
 }
 
 function transitionRouteRequest() {
@@ -1055,6 +762,302 @@ function updateItem(id, options) {
 
 function deleteItem(item) {
   smoothDispatch(removeItem(item));
+}
+
+function bindEvents(canvas) {
+  function onInputDown(evt) {
+    evt.preventDefault();
+    lockScrolling = false;
+    const { inputX, inputY, inputX2, inputY2 } = getInputPos(evt);
+    if (clickTimer === null && !props.isModalInfoVisible()) {
+      clickTimer = setTimeout(function() {
+        clickTimer = null;
+      }, 500);
+    } else if (clickTimer !== null) {
+      clearTimeout(clickTimer);
+      clickTimer = null;
+      if (
+        inputX2 === undefined &&
+        inputY2 === undefined &&
+        withinMovementThreshold(inputX, inputY)
+      ) {
+        onDoubleClick();
+        return;
+      }
+    }
+    isDragging = true;
+    if (inputX2 === undefined && inputY2 === undefined) {
+      pressTimer = setTimeout(onLongPress, 1000);
+    } else {
+      clearTimeout(pressTimer);
+    }
+    if (inputX2 && inputY2) {
+      pinchStart(inputX, inputY, inputX2, inputY2);
+    }
+    const item = state.items.filter(item => item.id === state.selectedItem)[0];
+    if (item && item.id !== null) {
+      draggingItemType = Record.isPointInRecord({
+        ...item,
+        inputX,
+        inputY,
+        selected: item.id === state.selectedItem
+      });
+      if (draggingItemType === "record") {
+        translateItemStart(inputX, inputY, item);
+      } else if (draggingItemType === "handle") {
+        transformItemStart(inputX, inputY, item);
+      } else if (draggingItemType === "edit-button") {
+        props.onShowModalEdit(item);
+      } else if (draggingItemType === "destroy-button") {
+        props.onShowModalDestroy(item);
+      } else {
+        props.onUpdateRecord(item);
+        translateCanvasStart(inputX, inputY);
+      }
+    } else {
+      translateCanvasStart(inputX, inputY);
+    }
+    dragStartX = lastInputX;
+    dragStartY = lastInputY;
+    checkTransition(1);
+  }
+
+  function onLongPress() {
+    if (!state.isOwner) {
+      return;
+    }
+    if (state.loadingItems) {
+      props.onShowModalInfo(
+        {
+          caption: "Loading",
+          body: "Items can't be editing during loading."
+        },
+        state.isOwner
+      );
+      return;
+    }
+    const selectedItem = state.items.filter(
+      item => item.id === state.selectedItem
+    )[0];
+    for (let i = state.items.length - 1; i >= 0; i--) {
+      const item = state.items[i];
+      draggingItemType = Record.isPointInRecord({
+        ...item,
+        inputX: lastInputX,
+        inputY: lastInputY,
+        selected: item.id === state.selectedItem
+      });
+      if (draggingItemType === "record") {
+        if (
+          Record.isRecordEnclosed(
+            item,
+            state.canvas,
+            0,
+            0,
+            canvas.width / state.canvas.scale,
+            canvas.height / state.canvas.scale
+          )
+        ) {
+          return;
+        } else if (item !== selectedItem) {
+          translateItemStart(lastInputX, lastInputY, item);
+          return;
+        } else {
+          props.onShowModalInfo(item, state.isOwner);
+          return;
+        }
+      } else if (
+        draggingItemType === "handle" &&
+        item.id === state.selectedItem
+      ) {
+        transformItemStart(lastInputX, lastInputY, item);
+        return;
+      }
+    }
+    onNewRecord();
+  }
+
+  function onInputMove(evt) {
+    const { inputX, inputY, inputX2, inputY2 } = getInputPos(evt);
+    const scaledInputX = inputX / state.canvas.scale;
+    const scaledInputY = inputY / state.canvas.scale;
+    const lastScaledInputX = lastInputX / state.canvas.scale;
+    const lastScaledInputY = lastInputY / state.canvas.scale;
+    const deltaMouseX = scaledInputX - lastScaledInputX;
+    const deltaMouseY = scaledInputY - lastScaledInputY;
+    if (touchScaling) {
+      pinchMove(inputX, inputY, inputX2, inputY2);
+    } else if (draggingItemType === "handle") {
+      transformItemMove(deltaMouseX, deltaMouseY);
+    } else if (draggingItem) {
+      translateItemMove(deltaMouseX, deltaMouseY);
+    } else if (draggingCanvas) {
+      translateCanvasMove(deltaMouseX, deltaMouseY, inputX, inputY);
+    }
+    if (isDragging && !withinMovementThreshold(inputX, inputY)) {
+      clearTimeout(pressTimer);
+    }
+  }
+
+  function onInputUp() {
+    allTransformEnd();
+    clearTimeout(pressTimer);
+  }
+
+  function onScroll(evt) {
+    if (isHumanScroll(evt) && !state.isChangingRoute) {
+      lockScrolling = false;
+    }
+    if (state.isChangingRoute || lockScrolling) {
+      isScrolling = undefined;
+      return evt.preventDefault() && false;
+    }
+    if (!isScrolling) {
+      scaleCanvasMoveInitial();
+    }
+    const delta = evt.deltaMode === 1 ? evt.deltaY / 3 : evt.deltaY / 40;
+    if (delta && isScrolling) {
+      const { inputX, inputY } = getInputPos(evt);
+      scaleCanvasMove(inputX, inputY, delta);
+    }
+    return evt.preventDefault() && false;
+  }
+
+  function onDoubleClick() {
+    for (let i = state.items.length - 1; i >= 0; i--) {
+      const item = state.items[i];
+      const itemType = Record.isPointInRecord({
+        ...item,
+        inputX: lastInputX,
+        inputY: lastInputY,
+        selected: item.id === state.selectedItem
+      });
+      if (itemType === "record") {
+        if (item === lastDoubleClickedItem) {
+          if (item.type === "record") {
+            props.onShowModalInfo(item, state.isOwner);
+          } else {
+            zoomIntoItem(item);
+          }
+          lastDoubleClickedItem = item;
+          return;
+        }
+        const { x, y, width, height } = Record.getTransformedDimensions(item);
+        zoomToFit(x, y, width, height);
+        lastDoubleClickedItem = item;
+        return;
+      }
+    }
+    zoomOut();
+  }
+
+  function pinchStart(x1, y1, x2, y2) {
+    touchScaling = true;
+    lastInputX = x1;
+    lastInputY = y1;
+    lastInputX2 = x2;
+    lastInputY2 = y2;
+    lastCanvasScale = state.canvas.scale;
+  }
+
+  function pinchMove(inputX, inputY, inputX2, inputY2) {
+    if (state.isChangingRoute) {
+      return;
+    }
+    const originalDistance = Math.sqrt(
+      Math.pow(lastInputX - lastInputX2, 2) +
+        Math.pow(lastInputY - lastInputY2, 2)
+    );
+    const newDistance = Math.sqrt(
+      Math.pow(inputX - inputX2, 2) + Math.pow(inputY - inputY2, 2)
+    );
+    const factor = newDistance / originalDistance;
+    if (draggingItem) {
+      const angle = calculateAngle(
+        lastInputX - lastInputX2,
+        lastInputY - lastInputY2,
+        inputX - inputX2,
+        inputY - inputY2
+      );
+      transformItemWithGroup(
+        draggingItem,
+        draggingItemGroup,
+        draggingItem.scale * factor,
+        angle
+      );
+    } else if (draggingCanvas) {
+      const xCenter = inputX + 0.5 * (inputX2 - inputX);
+      const yCenter = inputY + 0.5 * (inputY2 - inputY);
+      const x =
+        xCenter -
+        ((xCenter - state.canvas.x) * lastCanvasScale * factor) /
+          state.canvas.scale;
+      const y =
+        yCenter -
+        ((yCenter - state.canvas.y) * lastCanvasScale * factor) /
+          state.canvas.scale;
+      const delta = factor > 1 ? 1 : -1;
+      const transitioned = checkTransition(delta);
+      if (!transitioned) {
+        smoothDispatch(scaleCanvas(lastCanvasScale * factor, x, y));
+      }
+    }
+  }
+
+  function withinMovementThreshold(inputX, inputY) {
+    return (
+      Math.abs(inputX - dragStartX) < 0.02 * canvas.width &&
+      Math.abs(inputY - dragStartY) < 0.02 * canvas.height
+    );
+  }
+
+  function isHumanScroll(evt) {
+    const now = Date.now();
+    const delta = evt.deltaY;
+    const rapidSuccession = now - lastScrollTime < 100;
+    const otherDirection = lastScrollDelta > 0 !== delta > 0;
+    const speedDecrease = Math.abs(delta) <= Math.abs(lastScrollDelta);
+    const isHuman = otherDirection || !rapidSuccession || !speedDecrease;
+    lastScrollTime = now;
+    lastScrollDelta = delta;
+    return isHuman;
+  }
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    adjustForRetinaDisplays();
+    render();
+  }
+
+  function adjustForRetinaDisplays() {
+    if (window.devicePixelRatio !== 1) {
+      canvas.width = canvas.width * window.devicePixelRatio;
+      canvas.height = canvas.height * window.devicePixelRatio;
+      if (!state) {
+        state = store.getState();
+      }
+      ctx.scale(
+        state.canvas.scale * window.devicePixelRatio,
+        state.canvas.scale * window.devicePixelRatio
+      );
+    }
+  }
+
+  canvas.addEventListener("mousedown", onInputDown, false);
+  canvas.addEventListener("touchstart", onInputDown, false);
+
+  window.addEventListener("mousemove", onInputMove, false);
+  window.addEventListener("touchmove", onInputMove, { passive: true });
+
+  window.addEventListener("mouseup", onInputUp, false);
+  window.addEventListener("touchend", onInputUp, false);
+
+  canvas.addEventListener("wheel", onScroll, false);
+
+  window.addEventListener("resize", resizeCanvas, false);
+
+  resizeCanvas();
 }
 
 export default {
