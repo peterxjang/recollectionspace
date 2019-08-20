@@ -1,5 +1,5 @@
 class Api::UserCollectionsController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_user, except: [:index, :show]
 
   def index
     @parent = Follow.find_by(follower_id: current_user.id, following_id: current_user.id)
