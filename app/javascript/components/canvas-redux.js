@@ -52,6 +52,8 @@ let lastScrollTime = 0;
 let lastScrollDelta = 0;
 let wasSelecting = false;
 let wasPinching = false;
+let wasOnModal = false;
+let wasLongPressing = false;
 let numFingers = 0;
 
 function initialize(inputCanvas, inputProps) {
@@ -148,6 +150,9 @@ function checkTransition(delta) {
         return props.onTransition(1, item, state.isOwner);
       }
     }
+  }
+  if (props.isModalInfoVisible()) {
+    wasOnModal = true;
   }
   props.onHideModalInfo();
   return false;
@@ -350,6 +355,12 @@ function allTransformEnd() {
   }
   isDragging = false;
   wasSelecting = false;
+  if (props.isModalInfoVisible()) {
+    wasOnModal = true;
+  } else {
+    wasOnModal = false;
+  }
+  wasLongPressing = false;
   canvas.style.cursor = "";
   loadVisibleImages();
   render();
@@ -856,6 +867,7 @@ function bindEvents(canvas) {
       );
       return;
     }
+    wasLongPressing = true;
     const selectedItem = state.items.find(
       item => item.id === state.selectedItem
     );
@@ -898,6 +910,9 @@ function bindEvents(canvas) {
   }
 
   function onInputMove(evt) {
+    if (props.isModalInfoVisible()) {
+      return;
+    }
     const { inputX, inputY, inputX2, inputY2 } = getInputPos(evt);
     const scaledInputX = inputX / state.canvas.scale;
     const scaledInputY = inputY / state.canvas.scale;
@@ -921,9 +936,9 @@ function bindEvents(canvas) {
 
   function onInputUp(evt) {
     numFingers -= 1;
-    allTransformEnd();
     clearTimeout(pressTimer);
     focusOnItem();
+    allTransformEnd();
   }
 
   function focusOnItem() {
@@ -939,11 +954,16 @@ function bindEvents(canvas) {
     if (wasSelecting) {
       return;
     }
-    // TODO: Exit if pinch zoom (second finger up)
     if (touchScaling) {
       return;
     }
     if (wasPinching) {
+      return;
+    }
+    if (wasOnModal) {
+      return;
+    }
+    if (wasLongPressing) {
       return;
     }
     for (let i = state.items.length - 1; i >= 0; i--) {
