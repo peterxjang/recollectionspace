@@ -171,9 +171,9 @@ textarea {
 	padding: 0;
 }
 #record-content-body {
-	max-width: 52rem;
+	max-width: 60rem;
 	margin: 0 auto;
-	padding: 0 2rem;
+	padding: 0 5rem;
 	background-color: white;
 	min-height: 100vh;
 }
