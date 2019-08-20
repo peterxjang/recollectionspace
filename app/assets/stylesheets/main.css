@@ -30,6 +30,12 @@ nav a {
 	padding-right: 1rem;
 	color: #ccc;
 }
+nav #nav-new, nav #nav-back {
+  display: none;
+}
+nav #nav-back {
+	float: right;
+}
 canvas {
   height: 100%;
   display: block;
@@ -188,6 +194,10 @@ textarea {
 	padding-bottom: 1rem;
 }
 @media (max-width: 640px) {
+	#record-content-body {
+		max-width: 52rem;
+		padding: 0 2rem;
+	}
 	#record-content h1 {
 		font-size: 2rem;
 	}

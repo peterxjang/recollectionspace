@@ -89,6 +89,7 @@ const Application = {
           ? json.items.filter(child => child.id === modalId)[0]
           : null;
         Canvas.transitionRouteSuccess(json, delta, item, modalItem);
+        Navbar.show(json.isOwner, json.canvas.type, modalId);
         if (modalId) {
           if (modalItem) {
             this.handleShowModalInfo(modalItem, json.isOwner);
@@ -512,6 +513,7 @@ const Application = {
     Router.matchUrl("/:username/:collection_name", params => {
       Router.setUrl(`/${params.username}/${params.collection_name}/${item.id}`);
     });
+    Navbar.show(isOwner, "record", item.id);
   },
   handleHideModal: function() {
     if (Modal.visible) {
