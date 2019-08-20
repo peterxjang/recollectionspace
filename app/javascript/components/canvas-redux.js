@@ -50,6 +50,9 @@ let isAnimating = false;
 let lockScrolling = false;
 let lastScrollTime = 0;
 let lastScrollDelta = 0;
+let wasSelecting = false;
+let wasPinching = false;
+let numFingers = 0;
 
 function initialize(inputCanvas, inputProps) {
   store = createStore(rootReducer);
@@ -296,7 +299,10 @@ function translateCanvasStart(x, y) {
   draggingItem = null;
   draggingItemGroup = null;
   draggingItemType = null;
-  smoothDispatch(selectItem(-1));
+  if (state.selectedItem !== -1) {
+    smoothDispatch(selectItem(-1));
+    wasSelecting = true;
+  }
 }
 
 function translateCanvasMove(deltaMouseX, deltaMouseY, inputX, inputY) {
@@ -335,8 +341,15 @@ function allTransformEnd() {
   draggingItemGroup = null;
   draggingItemType = null;
   draggingCanvas = null;
-  touchScaling = false;
+  if (touchScaling && numFingers <= 0) {
+    touchScaling = false;
+  } else if (touchScaling) {
+    wasPinching = true;
+  } else {
+    wasPinching = false;
+  }
   isDragging = false;
+  wasSelecting = false;
   canvas.style.cursor = "";
   loadVisibleImages();
   render();
@@ -764,6 +777,33 @@ function deleteItem(item) {
   smoothDispatch(removeItem(item));
 }
 
+function onClickCanvas(inputX, inputY) {
+  const item = state.items.find(item => item.id === state.selectedItem);
+  if (item && item.id !== null) {
+    draggingItemType = Record.isPointInRecord({
+      ...item,
+      inputX,
+      inputY,
+      selected: item.id === state.selectedItem
+    });
+    if (draggingItemType === "record") {
+      translateItemStart(inputX, inputY, item);
+    } else if (draggingItemType === "handle") {
+      transformItemStart(inputX, inputY, item);
+    } else if (draggingItemType === "edit-button") {
+      props.onShowModalEdit(item);
+    } else if (draggingItemType === "destroy-button") {
+      props.onShowModalDestroy(item);
+    } else {
+      props.onUpdateRecord(item);
+      translateCanvasStart(inputX, inputY);
+    }
+  } else {
+    translateCanvasStart(inputX, inputY);
+  }
+  checkTransition(1);
+}
+
 function bindEvents(canvas) {
   function onInputDown(evt) {
     evt.preventDefault();
@@ -792,34 +832,14 @@ function bindEvents(canvas) {
       clearTimeout(pressTimer);
     }
     if (inputX2 && inputY2) {
+      numFingers = 2;
       pinchStart(inputX, inputY, inputX2, inputY2);
-    }
-    const item = state.items.filter(item => item.id === state.selectedItem)[0];
-    if (item && item.id !== null) {
-      draggingItemType = Record.isPointInRecord({
-        ...item,
-        inputX,
-        inputY,
-        selected: item.id === state.selectedItem
-      });
-      if (draggingItemType === "record") {
-        translateItemStart(inputX, inputY, item);
-      } else if (draggingItemType === "handle") {
-        transformItemStart(inputX, inputY, item);
-      } else if (draggingItemType === "edit-button") {
-        props.onShowModalEdit(item);
-      } else if (draggingItemType === "destroy-button") {
-        props.onShowModalDestroy(item);
-      } else {
-        props.onUpdateRecord(item);
-        translateCanvasStart(inputX, inputY);
-      }
     } else {
-      translateCanvasStart(inputX, inputY);
+      numFingers = 1;
     }
+    onClickCanvas(inputX, inputY);
     dragStartX = lastInputX;
     dragStartY = lastInputY;
-    checkTransition(1);
   }
 
   function onLongPress() {
@@ -836,9 +856,9 @@ function bindEvents(canvas) {
       );
       return;
     }
-    const selectedItem = state.items.filter(
+    const selectedItem = state.items.find(
       item => item.id === state.selectedItem
-    )[0];
+    );
     for (let i = state.items.length - 1; i >= 0; i--) {
       const item = state.items[i];
       draggingItemType = Record.isPointInRecord({
@@ -899,9 +919,58 @@ function bindEvents(canvas) {
     }
   }
 
-  function onInputUp() {
+  function onInputUp(evt) {
+    numFingers -= 1;
     allTransformEnd();
     clearTimeout(pressTimer);
+    focusOnItem();
+  }
+
+  function focusOnItem() {
+    if (!withinMovementThreshold(lastInputX, lastInputY)) {
+      return;
+    }
+    if (state.selectedItem !== -1) {
+      return;
+    }
+    if (isAnimating) {
+      return;
+    }
+    if (wasSelecting) {
+      return;
+    }
+    // TODO: Exit if pinch zoom (second finger up)
+    if (touchScaling) {
+      return;
+    }
+    if (wasPinching) {
+      return;
+    }
+    for (let i = state.items.length - 1; i >= 0; i--) {
+      const item = state.items[i];
+      draggingItemType = Record.isPointInRecord({
+        ...item,
+        inputX: lastInputX,
+        inputY: lastInputY,
+        selected: true
+      });
+      if (draggingItemType === "record") {
+        if (item === lastDoubleClickedItem) {
+          if (item.type === "record") {
+            props.onShowModalInfo(item, state.isOwner);
+          } else {
+            zoomIntoItem(item);
+          }
+          lastDoubleClickedItem = item;
+          return;
+        }
+        const { x, y, width, height } = Record.getTransformedDimensions(item);
+        zoomToFit(x, y, width, height);
+        lastDoubleClickedItem = item;
+        return;
+      }
+    }
+    zoomOut();
   }
 
   function onScroll(evt) {
@@ -924,31 +993,7 @@ function bindEvents(canvas) {
   }
 
   function onDoubleClick() {
-    for (let i = state.items.length - 1; i >= 0; i--) {
-      const item = state.items[i];
-      const itemType = Record.isPointInRecord({
-        ...item,
-        inputX: lastInputX,
-        inputY: lastInputY,
-        selected: item.id === state.selectedItem
-      });
-      if (itemType === "record") {
-        if (item === lastDoubleClickedItem) {
-          if (item.type === "record") {
-            props.onShowModalInfo(item, state.isOwner);
-          } else {
-            zoomIntoItem(item);
-          }
-          lastDoubleClickedItem = item;
-          return;
-        }
-        const { x, y, width, height } = Record.getTransformedDimensions(item);
-        zoomToFit(x, y, width, height);
-        lastDoubleClickedItem = item;
-        return;
-      }
-    }
-    zoomOut();
+    return;
   }
 
   function pinchStart(x1, y1, x2, y2) {
@@ -1047,11 +1092,11 @@ function bindEvents(canvas) {
   canvas.addEventListener("mousedown", onInputDown, false);
   canvas.addEventListener("touchstart", onInputDown, false);
 
-  window.addEventListener("mousemove", onInputMove, false);
-  window.addEventListener("touchmove", onInputMove, { passive: true });
+  canvas.addEventListener("mousemove", onInputMove, false);
+  canvas.addEventListener("touchmove", onInputMove, { passive: true });
 
-  window.addEventListener("mouseup", onInputUp, false);
-  window.addEventListener("touchend", onInputUp, false);
+  canvas.addEventListener("mouseup", onInputUp, false);
+  canvas.addEventListener("touchend", onInputUp, false);
 
   canvas.addEventListener("wheel", onScroll, false);
 
