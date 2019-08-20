@@ -248,6 +248,13 @@ textarea {
   width: 100%;
   padding: 1rem 0rem;
 }
+#record-content img + em {
+	font-style: normal;
+	display: inherit;
+	text-align: center;
+	font-size: 85%;
+	color: #777;
+}
 [style*="--aspect-ratio"] {
   margin: 2rem 0;
 }
