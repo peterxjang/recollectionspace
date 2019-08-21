@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <%= csrf_meta_tags %>
+  <title>Recollection Space</title>
+</head>
+<body>
+  <h1>Recollection Space</h1>
+  <form id="login">
+    <h2>Login</h2>
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email">
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input id="password "type="password" name="password">
+    </div>
+    <button>Submit</button>
+  </form>
+  <script>
+var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+var $form = document.querySelector("#login");
+
+$form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  var params = new FormData($form);
+  fetch("/api/sessions", {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: params,
+    headers: { "X-CSRF-Token": csrfToken }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw response;
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("success", data)
+      window.location.href = "/"
+    })
+    .catch(error => {
+      console.log("error", error)
+    });
+})
+  </script>
+</body>
+</html>

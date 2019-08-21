@@ -111,7 +111,11 @@ const Application = {
         console.error(error);
         Canvas.transitionRouteFailure();
         if (error.status === 401) {
-          this.handleShowLogin(false);
+          if (url === "/api/follows") {
+            window.location.href = "/";
+          } else {
+            this.handleShowLogin(false);
+          }
         }
       });
   },
