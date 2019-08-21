@@ -7,8 +7,18 @@
 </head>
 <body>
   <h1>Recollection Space</h1>
-  <form id="login">
+  <form id="login" action="/sessions" method="POST">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
     <h2>Login</h2>
+    <% if @errors && @errors.any? %>
+      <div class="errors">
+        <ul>
+          <% @errors.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     <div>
       <label for="email">Email</label>
       <input id="email" type="email" name="email">
@@ -19,36 +29,5 @@
     </div>
     <button>Submit</button>
   </form>
-  <script>
-var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-var $form = document.querySelector("#login");
-
-$form.addEventListener("submit", function(event) {
-  event.preventDefault();
-  var params = new FormData($form);
-  fetch("/api/sessions", {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    redirect: "follow",
-    referrer: "no-referrer",
-    body: params,
-    headers: { "X-CSRF-Token": csrfToken }
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw response;
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("success", data)
-      window.location.href = "/"
-    })
-    .catch(error => {
-      console.log("error", error)
-    });
-})
-  </script>
 </body>
 </html>

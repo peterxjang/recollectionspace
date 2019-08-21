@@ -29,4 +29,5 @@ Rails.application.routes.draw do
   get "/:username/:collection_name/new" => "user_records#new"
   get "/:username/:collection_name/:user_record_id/edit" => "user_records#edit"
   get "/*path" => "pages#main"
+  post "/sessions" => "sessions#create"
 end
