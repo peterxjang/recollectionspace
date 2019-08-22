@@ -15,14 +15,6 @@ const Application = {
       onBack: this.handleNavbarBack.bind(this)
     });
     this.loadRouteData();
-    // TODO: Refactor to router and fix double zooming bug
-    window.addEventListener("popstate", evt => {
-      history.go(1);
-      Router.matchUrl("/:username/:collection_name/:id", params => {
-        this.handleNavbarBack();
-      });
-      Canvas.zoomOut();
-    });
   },
   handleNavbarNew: function() {
     if (RecordContent.visible) {

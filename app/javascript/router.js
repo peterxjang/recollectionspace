@@ -21,7 +21,7 @@ const Router = {
   },
   setUrl: function(url) {
     if (this.mode === "history") {
-      history.pushState(null, null, this.root + this.clearSlashes(url));
+      history.replaceState(null, null, this.root + this.clearSlashes(url));
     } else {
       window.location.href =
         window.location.href.replace(/#(.*)$/, "") + "#" + url;
