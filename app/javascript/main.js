@@ -196,7 +196,8 @@ const Application = {
     Modal.showNewSession({
       onLogin: this.handleLogin.bind(this),
       onShowSignup: this.handleShowSignup.bind(this),
-      onCancel: this.handleLoginCancel
+      onCancel: this.handleLoginCancel,
+      onLogout: this.handleLogout.bind(this)
     });
   },
   handleLogin: function(email, password) {
@@ -229,6 +230,28 @@ const Application = {
   handleLoginCancel: function() {
     Canvas.zoomToFitAll();
     Modal.hide();
+  },
+  handleLogout: function(email, password) {
+    fetch("/api/sessions", {
+      method: "DELETE",
+      mode: "cors",
+      cache: "no-cache",
+      redirect: "follow",
+      referrer: "no-referrer",
+      headers: { "X-CSRF-Token": csrfToken }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        window.location.href = "/";
+      })
+      .catch(error => {
+        Modal.setErrors(["Problem logging out."]);
+      });
   },
   handleNewRecord: function(state) {
     if (state.canvas.type === "collection") {

@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
       redirect_to "/"
     else
       @errors = ["Invalid email or password"]
-      render "pages/home.html.erb", layout: false
+      render "pages/home.html.erb", layout: "home"
     end
   end
 end

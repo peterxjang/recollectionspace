@@ -3,7 +3,7 @@ class PagesController < ApplicationController
     if current_user
       render "main.html.erb"
     else
-      render "home.html.erb", layout: false
+      render "home.html.erb", layout: "home"
     end
   end
 

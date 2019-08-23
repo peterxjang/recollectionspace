@@ -4,6 +4,7 @@ const ModalNewSession = {
   $errors: document.querySelector("#modal-new-session .errors"),
   $buttonSave: document.getElementById("modal-new-session-save"),
   $buttonCancel: document.getElementById("modal-new-session-cancel"),
+  $buttonLogout: document.getElementById("modal-new-session-logout"),
   $inputEmail: document.getElementById("modal-new-session-email"),
   $inputPassword: document.getElementById("modal-new-session-password"),
   // $buttonSignup: document.getElementById("modal-new-session-signup"),
@@ -33,6 +34,10 @@ const ModalNewSession = {
     this.$buttonSave.onclick = event => {
       event.preventDefault();
       this.props.onLogin(this.$inputEmail.value, this.$inputPassword.value);
+    };
+    this.$buttonLogout.onclick = event => {
+      event.preventDefault();
+      this.props.onLogout();
     };
     // this.$buttonSignup.onclick = event => {
     //   event.preventDefault();

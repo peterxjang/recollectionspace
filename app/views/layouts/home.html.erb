@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <%= csrf_meta_tags %>
+    <title>Recollection Space</title>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <style>
+      body {
+        background: black url("https://res.cloudinary.com/recollectionspace/image/upload/v1558976015/root.jpg") no-repeat center center fixed;
+        background-size: cover;
+        overflow: hidden;
+      }
+      .container {
+        background-color: white;
+        opacity: 1;
+        pointer-events: auto;
+        width: 50%;
+        margin-left: 25%;
+        margin-top: 5vh;
+        margin-bottom: 1rem;
+        padding: 1.5rem;
+        border-radius: .25rem;
+        max-height: 90vh;
+      }
+      main {
+        text-align: center;
+      }
+      main h1 {
+        font-size: 3em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+</html>

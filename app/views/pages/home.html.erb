@@ -1,33 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <%= csrf_meta_tags %>
-  <title>Recollection Space</title>
-</head>
-<body>
-  <h1>Recollection Space</h1>
-  <form id="login" action="/sessions" method="POST">
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-    <h2>Login</h2>
-    <% if @errors && @errors.any? %>
-      <div class="errors">
-        <ul>
-          <% @errors.each do |error| %>
-            <li><%= error %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-    <div>
-      <label for="email">Email</label>
-      <input id="email" type="email" name="email">
+<main>
+  <h1>recollectionspace</h1>
+  <p>A Zooming User Interface</p>
+  <hr>
+</main>
+<form id="login" action="/sessions" method="POST">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  <div class="form-group">
+  <h2>Login</h2>
+  <% if @errors && @errors.any? %>
+    <div class="errors">
+      <ul>
+        <% @errors.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
     </div>
-    <div>
-      <label for="password">Password</label>
-      <input id="password "type="password" name="password">
-    </div>
-    <button>Submit</button>
-  </form>
-</body>
-</html>
+  <% end %>
+  </div>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input class="form-control" id="email" type="email" name="email">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input class="form-control" id="password "type="password" name="password">
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary">Submit</button>
+  </div>
+</form>
