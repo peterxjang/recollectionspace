@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Recollection Space</title>
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <style>
@@ -22,6 +23,15 @@
         padding: 1.5rem;
         border-radius: .25rem;
         max-height: 90vh;
+      }
+      @media (max-width: 768px) {
+        .container {
+          width: 94%;
+          margin-left: 3%;
+        }
+        .container main h1 {
+          font-size: 2em;
+        }
       }
       main {
         text-align: center;
