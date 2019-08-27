@@ -857,6 +857,9 @@ function bindEvents(canvas) {
     if (!state.isOwner) {
       return;
     }
+    if (props.isModalInfoVisible()) {
+      return;
+    }
     if (state.loadingItems) {
       props.onShowModalInfo(
         {
