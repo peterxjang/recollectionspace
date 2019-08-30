@@ -720,8 +720,13 @@ function replaceItems(newItems) {
 }
 
 function replaceItemProperties(itemOld, itemNew) {
+  itemNew.scale = getNewItemScale(itemNew.width);
   smoothDispatch(replaceItem(itemOld, itemNew), allTransformEnd);
   translateItemStart(lastInputX, lastInputY, itemNew);
+}
+
+function getNewItemScale(itemWidth) {
+  return (0.25 * canvas.width) / state.canvas.scale / itemWidth;
 }
 
 function createItem(image, caption, body, options = {}) {
@@ -741,7 +746,7 @@ function createItem(image, caption, body, options = {}) {
       y: startingCenter.y,
       width: width,
       height: height,
-      scale: (0.25 * canvas.width) / state.canvas.scale / width,
+      scale: getNewItemScale(width),
       border: true,
       color: Record.getDominantColor(img)
     };
@@ -764,7 +769,7 @@ function createItem(image, caption, body, options = {}) {
       y: startingCenter.y,
       width: options.width,
       height: options.height,
-      scale: (0.25 * canvas.width) / state.canvas.scale / options.width,
+      scale: getNewItemScale(options.width),
       border: true,
       color: null
     };
