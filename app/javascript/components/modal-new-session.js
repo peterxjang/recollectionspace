@@ -2,12 +2,11 @@ const ModalNewSession = {
   props: null,
   $modal: document.getElementById("modal-new-session"),
   $errors: document.querySelector("#modal-new-session .errors"),
-  $buttonSave: document.getElementById("modal-new-session-save"),
+  $form: document.querySelector("#modal-new-session > form"),
   $buttonCancel: document.getElementById("modal-new-session-cancel"),
   $buttonLogout: document.getElementById("modal-new-session-logout"),
   $inputEmail: document.getElementById("modal-new-session-email"),
   $inputPassword: document.getElementById("modal-new-session-password"),
-  // $buttonSignup: document.getElementById("modal-new-session-signup"),
   visible: false,
   initialize: function() {
     this.bindEvents();
@@ -25,24 +24,21 @@ const ModalNewSession = {
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
     this.visible = true;
+    this.$inputEmail.focus();
   },
   bindEvents: function() {
+    this.$form.onsubmit = event => {
+      event.preventDefault();
+      this.props.onLogin(this.$inputEmail.value, this.$inputPassword.value);
+    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.props.onCancel();
-    };
-    this.$buttonSave.onsubmit = event => {
-      event.preventDefault();
-      this.props.onLogin(this.$inputEmail.value, this.$inputPassword.value);
     };
     this.$buttonLogout.onclick = event => {
       event.preventDefault();
       this.props.onLogout();
     };
-    // this.$buttonSignup.onclick = event => {
-    //   event.preventDefault();
-    //   this.props.onShowSignup();
-    // };
   }
 };
 
