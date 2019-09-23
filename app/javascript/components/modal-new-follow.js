@@ -4,7 +4,7 @@ const ModalNewFollow = {
   $errors: document.querySelector("#modal-new-follow .errors"),
   $inputSearch: document.getElementById("modal-new-follow-search"),
   $inputList: document.getElementById("modal-new-follow-list"),
-  $buttonSave: document.getElementById("modal-new-follow-save"),
+  $form: document.querySelector("#modal-new-follow > form"),
   $buttonCancel: document.getElementById("modal-new-follow-cancel"),
   visible: false,
   users: [],
@@ -25,6 +25,7 @@ const ModalNewFollow = {
     this.$modal.scrollTo(0, 0);
     this.visible = true;
     this.endTyping();
+    this.$inputSearch.focus();
   },
   startTyping: function() {
     this.$inputList.disabled = true;
@@ -57,16 +58,7 @@ const ModalNewFollow = {
             .join("");
   },
   bindEvents: function() {
-    this.$buttonCancel.onclick = event => {
-      event.preventDefault();
-      this.props.onCancel();
-    };
-    this.$inputSearch.oninput = event => {
-      clearTimeout(this.typingTimer);
-      this.typingTimer = setTimeout(this.endTyping.bind(this), 500);
-      this.startTyping();
-    };
-    this.$buttonSave.onclick = event => {
+    this.$form.onsubmit = event => {
       event.preventDefault();
       const $selected = this.$modal.querySelector(
         `input[name="userId"]:checked`
@@ -81,6 +73,15 @@ const ModalNewFollow = {
           height: user.height
         });
       }
+    };
+    this.$buttonCancel.onclick = event => {
+      event.preventDefault();
+      this.props.onCancel();
+    };
+    this.$inputSearch.oninput = event => {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = setTimeout(this.endTyping.bind(this), 500);
+      this.startTyping();
     };
   }
 };
