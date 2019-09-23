@@ -5,7 +5,6 @@ const ModalNewRecord = {
   $modal: document.getElementById("modal-new-record"),
   $form: document.querySelector("#modal-new-record form"),
   $errors: document.querySelector("#modal-new-record .errors"),
-  $buttonSave: document.getElementById("modal-new-record-save"),
   $buttonCancel: document.getElementById("modal-new-record-cancel"),
   $inputSearch: document.getElementById("modal-new-record-search"),
   $inputSearchResults: document.getElementById(
@@ -53,6 +52,7 @@ const ModalNewRecord = {
     this.$modal.scrollTo(0, 0);
     this.enableInputs();
     this.visible = true;
+    this.$inputSearch.focus();
   },
   startTyping: function() {
     // this.$inputUsers.disabled = true;
@@ -89,6 +89,17 @@ const ModalNewRecord = {
     [...this.$form.elements].forEach(element => (element.disabled = false));
   },
   bindEvents: function() {
+    this.$form.onsubmit = event => {
+      event.preventDefault();
+      this.disableInputs();
+      const image = this.imageUrl || this.$inputImage.files[0];
+      this.props.onSaveRecord(
+        image,
+        this.$inputCaption.value,
+        this.$inputBody.value,
+        { width: this.imageWidth, height: this.imageHeight, api_id: this.apiId }
+      );
+    };
     this.$buttonCancel.onclick = event => {
       event.preventDefault();
       this.props.onCancel();
@@ -112,17 +123,6 @@ const ModalNewRecord = {
     this.$inputImage.onchange = event => {
       URL.revokeObjectURL(this.$inputImagePreview.src);
       this.$inputImagePreview.src = URL.createObjectURL(event.target.files[0]);
-    };
-    this.$buttonSave.onclick = event => {
-      event.preventDefault();
-      this.disableInputs();
-      const image = this.imageUrl || this.$inputImage.files[0];
-      this.props.onSaveRecord(
-        image,
-        this.$inputCaption.value,
-        this.$inputBody.value,
-        { width: this.imageWidth, height: this.imageHeight, api_id: this.apiId }
-      );
     };
   }
 };
