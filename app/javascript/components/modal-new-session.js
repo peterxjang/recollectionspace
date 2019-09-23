@@ -31,7 +31,7 @@ const ModalNewSession = {
       event.preventDefault();
       this.props.onCancel();
     };
-    this.$buttonSave.onclick = event => {
+    this.$buttonSave.onsubmit = event => {
       event.preventDefault();
       this.props.onLogin(this.$inputEmail.value, this.$inputPassword.value);
     };
