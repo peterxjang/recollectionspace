@@ -8,7 +8,7 @@ const ModalNewUserCollection = {
   $inputName: document.getElementById("modal-new-user-collection-name"),
   $inputList: document.getElementById("modal-new-user-collection-list"),
   $inputImage: document.getElementById("modal-new-user-collection-image"),
-  $buttonSave: document.getElementById("modal-new-user-collection-save"),
+  $form: document.querySelector("#modal-new-user-collection > form"),
   $buttonCancel: document.getElementById("modal-new-user-collection-cancel"),
   visible: false,
   collections: [],
@@ -34,6 +34,7 @@ const ModalNewUserCollection = {
     this.$modal.scrollTo(0, 0);
     this.visible = true;
     this.endTyping();
+    this.$inputSearch.focus();
   },
   startTyping: function() {
     this.$inputList.disabled = true;
@@ -68,16 +69,7 @@ const ModalNewUserCollection = {
             .join("");
   },
   bindEvents: function() {
-    this.$buttonCancel.onclick = event => {
-      event.preventDefault();
-      this.props.onCancel();
-    };
-    this.$inputSearch.oninput = event => {
-      clearTimeout(this.typingTimer);
-      this.typingTimer = setTimeout(this.endTyping.bind(this), 500);
-      this.startTyping();
-    };
-    this.$buttonSave.onclick = event => {
+    this.$form.onsubmit = event => {
       event.preventDefault();
       let image, caption, body, id, width, height;
       const $selected = this.$modal.querySelector(
@@ -103,6 +95,15 @@ const ModalNewUserCollection = {
         width: width,
         height: height
       });
+    };
+    this.$buttonCancel.onclick = event => {
+      event.preventDefault();
+      this.props.onCancel();
+    };
+    this.$inputSearch.oninput = event => {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = setTimeout(this.endTyping.bind(this), 500);
+      this.startTyping();
     };
   }
 };
