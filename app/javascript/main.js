@@ -11,10 +11,14 @@ const Application = {
     this.initializeCanvas();
     Modal.onClose = this.handleHideModal.bind(this);
     Navbar.initialize({
+      onList: this.handleNavbarList.bind(this),
       onNew: this.handleNavbarNew.bind(this),
       onBack: this.handleNavbarBack.bind(this)
     });
     this.loadRouteData();
+  },
+  handleNavbarList: function() {
+    Modal.showList();
   },
   handleNavbarNew: function() {
     if (RecordContent.visible) {

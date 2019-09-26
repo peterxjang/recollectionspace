@@ -1,3 +1,4 @@
+import ModalList from "./modal-list";
 import ModalInfo from "./modal-info";
 import ModalNewRecord from "./modal-new-record";
 import ModalNewFollow from "./modal-new-follow";
@@ -22,6 +23,7 @@ const Modal = {
       this.currentModal.hide();
       this.currentModal = null;
     } else {
+      ModalList.hide();
       ModalInfo.hide();
       ModalNewRecord.hide();
       ModalNewFollow.hide();
@@ -44,6 +46,11 @@ const Modal = {
       this.visible = true;
       this.$buttonClose.style.display = "inherit";
     }, 0);
+  },
+  showList: function(props) {
+    this.makeVisible();
+    ModalList.show(props);
+    this.currentModal = ModalList;
   },
   showInfo: function(props) {
     this.makeVisible();
