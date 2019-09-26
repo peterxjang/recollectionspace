@@ -28,9 +28,6 @@ const Navbar = {
     }
     if (modalId) {
       this.$navbarNew.style.display = "none";
-      this.$navbarBack.style.display = "inline";
-    } else {
-      this.$navbarBack.style.display = "none";
     }
   },
   bindEvents: function() {

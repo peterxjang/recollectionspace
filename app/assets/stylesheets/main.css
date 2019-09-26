@@ -30,17 +30,15 @@ nav a, nav button.link {
 	padding-right: 1rem;
 	color: #ccc;
 }
-nav button.link {
+button.link {
   background: none!important;
   border: none;
-  padding: 0!important;
   text-decoration: underline;
   cursor: pointer;
 	font-family: inherit;
 	font-size: 1rem;
 }
 nav #nav-new, nav #nav-back {
-  display: none;
 }
 nav #nav-back {
 	float: right;
@@ -85,6 +83,7 @@ canvas {
   font-size: 2em;
   cursor: pointer;
   margin-right: 1rem;
+	display: none;
 }
 .modal-section {
   background-color: white;

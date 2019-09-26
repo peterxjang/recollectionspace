@@ -36,11 +36,13 @@ const Modal = {
   makeInvisible: function() {
     this.$modal.style.opacity = 0;
     this.visible = false;
+    this.$buttonClose.style.display = "none";
   },
   makeVisible: function() {
     setTimeout(() => {
       this.$modal.style.opacity = 1;
       this.visible = true;
+      this.$buttonClose.style.display = "inherit";
     }, 0);
   },
   showInfo: function(props) {
