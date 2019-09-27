@@ -820,6 +820,10 @@ function onClickCanvas(inputX, inputY) {
   checkTransition(1);
 }
 
+function getItems() {
+  return state.items.map(item => ({ id: item.id, caption: item.caption }));
+}
+
 function bindEvents(canvas) {
   function onInputDown(evt) {
     evt.preventDefault();
@@ -1145,5 +1149,6 @@ export default {
   updateItem,
   zoomToFitAll,
   zoomOut,
-  onNewRecord
+  onNewRecord,
+  getItems
 };

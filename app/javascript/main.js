@@ -18,7 +18,31 @@ const Application = {
     this.loadRouteData();
   },
   handleNavbarList: function() {
-    Modal.showList();
+    const items = Canvas.getItems();
+    Router.matchUrl("/", params => {
+      Modal.showList({
+        items: items.map(item => ({
+          href: `/${item.caption}`,
+          caption: `@${item.caption}`
+        }))
+      });
+    });
+    Router.matchUrl("/:username", params => {
+      Modal.showList({
+        items: items.map(item => ({
+          href: `/${params.username}/${item.caption}`,
+          caption: `[ ${item.caption} ]`
+        }))
+      });
+    });
+    Router.matchUrl("/:username/:collection_name", params => {
+      Modal.showList({
+        items: items.map(item => ({
+          href: `/${params.username}/${params.collection_name}/${item.id}`,
+          caption: item.caption
+        }))
+      });
+    });
   },
   handleNavbarNew: function() {
     if (RecordContent.visible) {
