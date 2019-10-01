@@ -13,23 +13,27 @@ const Navbar = {
   },
   show: function(isOwner, type, modalId) {
     this.isOwner = isOwner;
+    this.type = type;
     if (isOwner) {
       this.$navbarNew.style.display = "inline";
-      let text = "new";
-      if (type === "root") {
-        text = "new follow";
-      } else if (type === "follow") {
-        text = "new collection";
-      } else if (type === "collection") {
-        text = "new record";
-      }
-      this.$navbarNew.innerText = text;
     } else {
       this.$navbarNew.style.display = "none";
     }
     if (modalId) {
       this.$navbarNew.style.display = "none";
+      this.$navbarList.style.display = "none";
+    } else {
+      this.$navbarList.style.display = "inline";
     }
+    let text = "";
+    if (type === "root") {
+      text = "follows";
+    } else if (type === "follow") {
+      text = "collections";
+    } else if (type === "collection" || type === "record") {
+      text = "records";
+    }
+    this.$navbarList.innerText = text;
   },
   bindEvents: function() {
     this.$navbarList.onclick = event => {
@@ -42,7 +46,7 @@ const Navbar = {
     };
     this.$navbarBack.onclick = event => {
       event.preventDefault();
-      this.show(this.isOwner, "collection", null);
+      this.show(this.isOwner, this.type, null);
       this.props.onBack();
     };
   }

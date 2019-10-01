@@ -19,7 +19,6 @@ const ModalList = {
       .map(item => `<li><a href="${item.href}">${item.caption}</a></li>`)
       .join("")}</ul>`;
     this.visible = true;
-    console.log("modal list show", this.props);
   },
   bindEvents: function() {}
 };

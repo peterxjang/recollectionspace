@@ -67,20 +67,24 @@ const Application = {
     let modalId = null;
     Router.matchUrl("/", params => {
       apiUrl = "/api/follows";
+      Navbar.show(false, "root", null);
     });
     Router.matchUrl("/:username", params => {
       apiUrl = "/api/users/" + params.username;
+      Navbar.show(false, "follow", null);
     });
     Router.matchUrl("/:username/:collection_name", params => {
       apiUrl = `/api/user_collections/search?username=${
         params.username
       }&collection_name=${params.collection_name}`;
+      Navbar.show(false, "collection", null);
     });
     Router.matchUrl("/:username/:collection_name/:id", params => {
       apiUrl = `/api/user_collections/search?username=${
         params.username
       }&collection_name=${params.collection_name}`;
       modalId = params.id;
+      Navbar.show(false, "record", modalId);
     });
     if (apiUrl) {
       this.loadCanvasData(apiUrl, 1, null, modalId);
