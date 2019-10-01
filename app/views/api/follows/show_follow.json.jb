@@ -1,5 +1,6 @@
 {
   id: @follow.id,
+  created: @follow.created_at,
   name: @follow.following.username,
   description: "",
   x: @follow.x,

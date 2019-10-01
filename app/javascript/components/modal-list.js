@@ -3,6 +3,7 @@ const ModalList = {
   $modal: document.getElementById("modal-list"),
   $links: document.getElementById("modal-list-links"),
   visible: false,
+  sortAttribute: "size",
   initialize: function() {
     this.bindEvents();
     return this;
@@ -16,6 +17,7 @@ const ModalList = {
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
     this.$links.innerHTML = `<ul>${this.props.items
+      .sort((a, b) => b[this.sortAttribute] - a[this.sortAttribute])
       .map(item => `<li><a href="${item.href}">${item.caption}</a></li>`)
       .join("")}</ul>`;
     this.visible = true;

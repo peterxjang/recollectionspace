@@ -821,13 +821,12 @@ function onClickCanvas(inputX, inputY) {
 }
 
 function getItems() {
-  return state.items
-    .map(item => ({
-      id: item.id,
-      caption: item.caption,
-      size: item.width * item.height * item.scale * item.scale
-    }))
-    .sort((a, b) => b.size - a.size);
+  return state.items.map(item => ({
+    id: item.id,
+    caption: item.caption,
+    size: item.width * item.height * item.scale * item.scale,
+    date: new Date(item.created)
+  }));
 }
 
 function bindEvents(canvas) {

@@ -1,5 +1,6 @@
 {
   id: @user_collection.id,
+  created: @user_collection.created_at,
   name: @user_collection.name,
   description: @user_collection.description,
   collection_id: @user_collection.collection_id,

@@ -22,15 +22,16 @@ const Application = {
     Router.matchUrl("/", params => {
       Modal.showList({
         items: items.map(item => ({
+          ...item,
           href: `/${item.caption}`,
-          caption: `@${item.caption}`,
-          size: item.size
+          caption: `@${item.caption}`
         }))
       });
     });
     Router.matchUrl("/:username", params => {
       Modal.showList({
         items: items.map(item => ({
+          ...item,
           href: `/${params.username}/${item.caption}`,
           caption: `[ ${item.caption} ]`
         }))
@@ -39,6 +40,7 @@ const Application = {
     Router.matchUrl("/:username/:collection_name", params => {
       Modal.showList({
         items: items.map(item => ({
+          ...item,
           href: `/${params.username}/${params.collection_name}/${item.id}`,
           caption: item.caption
         }))
@@ -433,6 +435,7 @@ const Application = {
         const itemNew = {
           ...item,
           id: data.id,
+          created: data.created,
           src: data.src,
           width: data.width,
           height: data.height,
