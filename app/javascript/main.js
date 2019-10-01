@@ -23,7 +23,8 @@ const Application = {
       Modal.showList({
         items: items.map(item => ({
           href: `/${item.caption}`,
-          caption: `@${item.caption}`
+          caption: `@${item.caption}`,
+          size: item.size
         }))
       });
     });
