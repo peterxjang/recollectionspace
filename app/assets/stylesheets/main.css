@@ -200,15 +200,6 @@ textarea {
 	padding-top: 3rem;
 	padding-bottom: 1rem;
 }
-@media (max-width: 640px) {
-	#record-content-body {
-		max-width: 52rem;
-		padding: 0 2rem;
-	}
-	#record-content h1 {
-		font-size: 2rem;
-	}
-}
 #record-content h3 {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
@@ -370,6 +361,13 @@ ul.nav .active a:hover {
 	float: right;
 }
 @media (max-width: 768px) {
+	#record-content-body {
+		max-width: 52rem;
+		padding: 0 2rem;
+	}
+	#record-content h1 {
+		font-size: 2rem;
+	}
   .modal-section {
     width: 94%;
     margin-left: 3%;
