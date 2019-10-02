@@ -68,9 +68,8 @@ canvas {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
-  z-index: 3;
+  z-index: -1;
   opacity: 0;
-  pointer-events: none;
   transition: opacity 0.2s;
 }
 .modal a {

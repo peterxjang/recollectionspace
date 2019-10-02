@@ -37,12 +37,14 @@ const Modal = {
   },
   makeInvisible: function() {
     this.$modal.style.opacity = 0;
+    this.$modal.style.zIndex = -1;
     this.visible = false;
     this.$buttonClose.style.display = "none";
   },
   makeVisible: function() {
     setTimeout(() => {
       this.$modal.style.opacity = 1;
+      this.$modal.style.zIndex = 10;
       this.visible = true;
       this.$buttonClose.style.display = "inherit";
     }, 0);
