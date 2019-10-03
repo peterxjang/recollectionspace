@@ -2,8 +2,7 @@ const ModalList = {
   props: null,
   $modal: document.getElementById("modal-list"),
   $links: document.getElementById("modal-list-links"),
-  $buttonSortSize: document.getElementById("modal-list-sort-size"),
-  $buttonSortDate: document.getElementById("modal-list-sort-date"),
+  $selectSort: document.getElementById("modal-list-sort"),
   visible: false,
   sortAttribute: "size",
   initialize: function() {
@@ -12,13 +11,14 @@ const ModalList = {
   },
   hide: function() {
     this.$modal.style.display = "none";
-    this.sortAttribute = "size";
     this.visible = false;
   },
   show: function(props) {
     this.props = props;
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
+    this.sortAttribute = "size";
+    this.$selectSort.value = "size";
     this.setLinks();
     this.visible = true;
   },
@@ -29,14 +29,10 @@ const ModalList = {
       .join("")}</ul>`;
   },
   bindEvents: function() {
-    this.$buttonSortSize.onclick = event => {
+    this.$selectSort.onchange = event => {
       event.preventDefault();
-      this.sortAttribute = "size";
-      this.setLinks();
-    };
-    this.$buttonSortDate.onclick = event => {
-      event.preventDefault();
-      this.sortAttribute = "date";
+      console.log("select change", event.target.value);
+      this.sortAttribute = event.target.value;
       this.setLinks();
     };
   }
