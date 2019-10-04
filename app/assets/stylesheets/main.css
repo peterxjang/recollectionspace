@@ -133,6 +133,12 @@ textarea {
 .form-check .form-check-label {
   display: inline;
 }
+#modal-list-links {
+  margin-left: 1em;
+}
+#modal-list-links li {
+  padding-bottom: 0.5em;
+}
 #modal-new-record-search-results {
   height: 200px;
   overflow-x: scroll;
