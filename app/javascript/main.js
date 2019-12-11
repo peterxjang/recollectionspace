@@ -15,6 +15,9 @@ const Application = {
       onNew: this.handleNavbarNew.bind(this),
       onBack: this.handleNavbarBack.bind(this)
     });
+    RecordContent.initialize({
+      onHide: this.handleRecordContentHide.bind(this)
+    });
     this.loadRouteData();
   },
   handleNavbarList: function() {
@@ -55,9 +58,7 @@ const Application = {
     }
   },
   handleNavbarBack: function() {
-    RecordContent.hide({
-      onHide: this.handleRecordContentHide.bind(this)
-    });
+    RecordContent.hide();
   },
   handleRecordContentHide: function() {
     Canvas.zoomOut();

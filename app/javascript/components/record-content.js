@@ -3,7 +3,10 @@ const RecordContent = {
   $recordContentBody: document.querySelector("#record-content-body"),
   $canvas: document.querySelector("canvas"),
   visible: false,
-  initialize: function() {
+  props: null,
+  initialize: function(props) {
+    this.props = props;
+    this.bindEvents();
     return this;
   },
   show: function(item) {
@@ -16,12 +19,19 @@ const RecordContent = {
     this.$canvas.style.display = "none";
     this.visible = true;
   },
-  hide: function(props) {
+  hide: function() {
     this.$recordContent.style.display = "none";
     this.$canvas.style.display = "block";
     this.visible = false;
-    props.onHide();
+    this.props.onHide();
+  },
+  bindEvents: function() {
+    this.$recordContent.onclick = event => {
+      if (event.target === this.$recordContent) {
+        this.hide();
+      }
+    };
   }
 };
 
-export default RecordContent.initialize();
+export default RecordContent;
