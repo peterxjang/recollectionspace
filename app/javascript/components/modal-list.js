@@ -1,6 +1,7 @@
 const ModalList = {
   props: null,
   $modal: document.getElementById("modal-list"),
+  $header: document.getElementById("modal-list-header"),
   $links: document.getElementById("modal-list-links"),
   $selectSort: document.getElementById("modal-list-sort"),
   visible: false,
@@ -17,6 +18,7 @@ const ModalList = {
     this.props = props;
     this.$modal.style.display = "block";
     this.$modal.scrollTo(0, 0);
+    this.$header.innerText = props.headerText || "Items";
     this.sortAttribute = "size";
     this.$selectSort.value = "size";
     this.setLinks();

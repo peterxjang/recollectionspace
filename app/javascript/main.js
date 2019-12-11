@@ -24,6 +24,7 @@ const Application = {
     const items = Canvas.getItems();
     Router.matchUrl("/", params => {
       Modal.showList({
+        headerText: "Follows",
         items: items.map(item => ({
           ...item,
           href: `/${item.caption}`,
@@ -33,6 +34,7 @@ const Application = {
     });
     Router.matchUrl("/:username", params => {
       Modal.showList({
+        headerText: "Collections",
         items: items.map(item => ({
           ...item,
           href: `/${params.username}/${item.caption}`,
@@ -42,6 +44,7 @@ const Application = {
     });
     Router.matchUrl("/:username/:collection_name", params => {
       Modal.showList({
+        headerText: "Records",
         items: items.map(item => ({
           ...item,
           href: `/${params.username}/${params.collection_name}/${item.id}`,
