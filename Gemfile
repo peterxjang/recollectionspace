@@ -31,4 +31,6 @@ group :development do
 	gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano-yarn"
   gem 'capistrano-rails-console', require: false
+  gem 'ed25519'
+  gem 'bcrypt_pbkdf'
 end
