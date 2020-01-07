@@ -189,22 +189,32 @@ textarea {
 	margin: 0;
 	padding: 0;
 }
-#record-content-body {
+#record-content-container {
 	max-width: 60rem;
 	margin: 0 auto;
-	padding: 0 5rem;
 	background-color: white;
 	min-height: 100vh;
+}
+#record-content-header {
+  height: 30rem;
+  margin-bottom: 2rem;
+  background-color: black;
+  position: relative;
+}
+#record-content-header h1 {
+  position: absolute;
+  bottom: 0;
+  padding: 2rem 5rem;
+  font-size: 4rem;
+  color: white;
+}
+#record-content-body {
+	padding: 0 5rem;
 }
 #record-content p {
   font-size: 1rem;
   line-height: 1.6;
   padding-bottom: 1.5rem;
-}
-#record-content h1 {
-  font-size: 4rem;
-	padding-top: 3rem;
-	padding-bottom: 1rem;
 }
 #record-content h3 {
   margin-top: 1rem;

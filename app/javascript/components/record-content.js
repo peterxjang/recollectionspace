@@ -1,5 +1,7 @@
 const RecordContent = {
   $recordContent: document.querySelector("#record-content"),
+  $recordContentHeader: document.querySelector("#record-content-header"),
+  $recordContentTitle: document.querySelector("#record-content-header h1"),
   $recordContentBody: document.querySelector("#record-content-body"),
   $canvas: document.querySelector("canvas"),
   visible: false,
@@ -10,11 +12,12 @@ const RecordContent = {
     return this;
   },
   show: function(item) {
-    this.$recordContentBody.innerHTML = `
-      <h1>${item.caption}</h1>
-      <p><img src="${item.src}" alt="primary image"></p>
-      ${item.body}
-    `;
+    this.$recordContentHeader.style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${
+      item.src
+    }') no-repeat center center`;
+    this.$recordContentHeader.style.backgroundSize = "cover";
+    this.$recordContentTitle.innerHTML = item.caption;
+    this.$recordContentBody.innerHTML = item.body;
     this.$recordContent.style.display = "block";
     this.$canvas.style.display = "none";
     this.visible = true;
