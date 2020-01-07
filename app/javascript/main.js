@@ -8,6 +8,7 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
 const Application = {
   initialize: function() {
+    this.isOwner = null;
     this.initializeCanvas();
     Modal.onClose = this.handleHideModal.bind(this);
     Navbar.initialize({
@@ -66,6 +67,7 @@ const Application = {
   handleRecordContentHide: function() {
     Canvas.zoomOut();
     Router.matchUrl("/:username/:collection_name/:id", params => {
+      Navbar.show(this.isOwner, "collection", null);
       Router.setUrl(`/${params.username}/${params.collection_name}`);
     });
   },
@@ -123,6 +125,7 @@ const Application = {
         return response.json();
       })
       .then(json => {
+        this.isOwner = json.isOwner;
         document.getElementById("loading").style.opacity = 0;
         const modalItem = modalId
           ? json.items.filter(child => child.id === modalId)[0]
