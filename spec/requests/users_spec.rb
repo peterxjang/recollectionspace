@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
-  before :all do
+  before :each do
     Collection.create!(name: "music")
     Collection.create!(name: "movies")
     Collection.create!(name: "books")
@@ -9,11 +9,6 @@ RSpec.describe "Users", type: :request do
     names.each do |name|
       User.create!(username: name, email: "#{name}@email.com", password: "password")
     end
-  end
-
-  after :all do
-    Collection.destroy_all
-    User.destroy_all
   end
 
   describe "GET /api/users" do
