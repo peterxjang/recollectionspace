@@ -26,7 +26,7 @@ class Api::FollowsController < ApplicationController
       zindex: params[:zindex]
     )
     if @follow.save
-      render "show_follow.json.jb"
+      render "show_follow.json.jb", status: :created
     else
       render json: {errors: @follow.errors.full_messages}, status: 422
     end
