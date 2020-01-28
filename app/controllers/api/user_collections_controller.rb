@@ -55,7 +55,7 @@ class Api::UserCollectionsController < ApplicationController
       zindex: params[:zindex]
     )
     if @user_collection.save
-      render "show.json.jb"
+      render "show.json.jb", status: :created
     else
       render json: {errors: @user_collection.errors.full_messages}, status: 422
     end
@@ -111,7 +111,7 @@ class Api::UserCollectionsController < ApplicationController
   def destroy
     @user_collection = UserCollection.find_by(id: params[:id], user_id: current_user.id)
     if !@user_collection
-      render json: {errors: ["Invalid collection"]}, status: 422
+      render json: {errors: ["Invalid collection"]}, status: :bad_request
       return
     end
     @user_collection.destroy
