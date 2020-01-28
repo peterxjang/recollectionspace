@@ -12,6 +12,14 @@ class UserCollection < ApplicationRecord
     collection.description
   end
 
+  def slug_id
+    "#{id}-#{name.parameterize}"
+  end
+
+  def rendered_description
+    nil
+  end
+
   private
   # TODO: DRY with helper or concern
   def delete_cloudinary_image
