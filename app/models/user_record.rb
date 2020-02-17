@@ -1,6 +1,7 @@
 class UserRecord < ApplicationRecord
   belongs_to :record
   belongs_to :user_collection
+  validates :name, presence: true
   before_destroy :delete_cloudinary_image
   before_save :assign_rendered_description, if: -> { description_changed? }
 
