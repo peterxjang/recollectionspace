@@ -59,8 +59,12 @@ class Api::UserRecordsController < ApplicationController
 
   def update
     @user_record = UserRecord.find_by(id: params[:id])
+    if !@user_record
+      render json: {errors: ["Invalid user record"]}, status: 422
+      return
+    end
     if @user_record && @user_record.user_collection.user_id != current_user.id
-      render json: {errors: ["Invalid collection"]}, status: 422
+      render json: {errors: ["Unauthorized collection"]}, status: :unauthorized
       return
     end
     @user_record.name = params[:name] || @user_record.name
