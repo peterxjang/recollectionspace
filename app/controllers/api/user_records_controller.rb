@@ -100,7 +100,12 @@ class Api::UserRecordsController < ApplicationController
   private
 
   def get_valid_options(input_params, user_collection, width)
-    options = {}
+    options = {
+      angle: 0,
+      border: true,
+      color: "#000",
+      zindex: 1
+    }
     if input_params[:x]
       options[:x] = input_params[:x]
       options[:y] = input_params[:y]
@@ -109,7 +114,7 @@ class Api::UserRecordsController < ApplicationController
       options[:border] = input_params[:border]
       options[:color] = input_params[:color]
       options[:zindex] = input_params[:zindex]
-    else
+    elsif user_collection.user_records.length > 0
       xcoords = user_collection.user_records
         .map { |ur| ur.x }
       ycoords = user_collection.user_records
@@ -121,11 +126,6 @@ class Api::UserRecordsController < ApplicationController
       options[:y] = ycoords
         .reduce(0) { |sum, y| sum + y } / ycoords.length
       options[:scale] = 0.5 * xspan / width
-
-      options[:angle] = 0
-      options[:border] = true
-      options[:color] = "#000"
-      options[:zindex] = 1
     end
     options
   end
