@@ -15,15 +15,16 @@ RSpec.describe "UserCollections", type: :request do
 
   describe "GET /api/user_collections" do
     it "should return an array of user collections" do
+      user = User.first
       get "/api/user_collections"
       json = JSON.parse(response.body)
       expect(response).to have_http_status(200)
       expect(json).to match(hash_including(
-        "clientUrl",
-        "isOwner",
-        "selectedItem",
-        "canvas",
-        "items"
+        "clientUrl" => "/#{user.username}",
+        "isOwner" => anything,
+        "selectedItem" => anything,
+        "canvas" => anything,
+        "items" => anything
       ))
       expect(json["canvas"]).to match(hash_including(
         "id",
@@ -122,16 +123,17 @@ RSpec.describe "UserCollections", type: :request do
 
   describe "GET /api/user_collections/:id" do
     it "should show a user collection by id" do
-      user_collection = User.first.user_collections.first
+      user = User.first
+      user_collection = user.user_collections.first
       get "/api/user_collections/#{user_collection.id}"
       json = JSON.parse(response.body)
       expect(response).to have_http_status(200)
       expect(json).to match(hash_including(
-        "clientUrl",
-        "isOwner",
-        "selectedItem",
-        "canvas",
-        "items"
+        "clientUrl" => "/#{user.username}/#{user_collection.name}",
+        "isOwner" => anything,
+        "selectedItem" => anything,
+        "canvas" => anything,
+        "items" => anything
       ))
       expect(json["canvas"]).to match(hash_including(
         "id",
@@ -167,11 +169,11 @@ RSpec.describe "UserCollections", type: :request do
       json = JSON.parse(response.body)
       expect(response).to have_http_status(200)
       expect(json).to match(hash_including(
-        "clientUrl",
-        "isOwner",
-        "selectedItem",
-        "canvas",
-        "items"
+        "clientUrl" => "/#{user.username}/music",
+        "isOwner" => anything,
+        "selectedItem" => anything,
+        "canvas" => anything,
+        "items" => anything
       ))
       expect(json["canvas"]).to match(hash_including(
         "id",

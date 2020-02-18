@@ -43,17 +43,18 @@ RSpec.describe "Users", type: :request do
 
   describe "SHOW /api/users" do
     it "should get a user by username" do
-      get "/api/users/b"
-      user = JSON.parse(response.body)
+      user = User.second
+      get "/api/users/#{user.username}"
+      json = JSON.parse(response.body)
       expect(response).to have_http_status(200)
-      expect(user).to match(hash_including(
-        "clientUrl",
-        "isOwner",
-        "selectedItem",
-        "canvas",
-        "items"
+      expect(json).to match(hash_including(
+        "clientUrl" => "/#{user.username}",
+        "isOwner" => anything,
+        "selectedItem" => anything,
+        "canvas" => anything,
+        "items" => anything
       ))
-      expect(user["canvas"]).to match(hash_including(
+      expect(json["canvas"]).to match(hash_including(
         "id",
         "x",
         "y",
@@ -63,7 +64,7 @@ RSpec.describe "Users", type: :request do
         "src",
         "type" => "follow"
       ))
-      expect(user["items"][0]).to match(hash_including(
+      expect(json["items"][0]).to match(hash_including(
         "id",
         "created",
         "caption",

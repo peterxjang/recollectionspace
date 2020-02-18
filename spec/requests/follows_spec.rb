@@ -19,11 +19,11 @@ RSpec.describe "Follows", type: :request do
       follows = JSON.parse(response.body)
       expect(response).to have_http_status(200)
       expect(follows).to match(hash_including(
-        "clientUrl",
-        "isOwner",
-        "selectedItem",
-        "canvas",
-        "items"
+        "clientUrl" => "/",
+        "isOwner" => anything,
+        "selectedItem" => anything,
+        "canvas" => anything,
+        "items" => anything
       ))
       expect(follows["canvas"]).to match(hash_including(
         "id",
@@ -92,18 +92,18 @@ RSpec.describe "Follows", type: :request do
 
   describe "get /api/follows/:id" do
     it "gets data for one follow" do
-      follow_id = Follow.first.id
-      get "/api/follows/#{follow_id}"
-      follow = JSON.parse(response.body)
+      follow = Follow.first
+      get "/api/follows/#{follow.id}"
+      json = JSON.parse(response.body)
       expect(response).to have_http_status(200)
-      expect(follow).to match(hash_including(
-        "clientUrl",
-        "isOwner",
-        "selectedItem",
-        "canvas",
-        "items"
+      expect(json).to match(hash_including(
+        "clientUrl" => "/#{follow.following.username}",
+        "isOwner" => anything,
+        "selectedItem" => anything,
+        "canvas" => anything,
+        "items" => anything
       ))
-      expect(follow["canvas"]).to match(hash_including(
+      expect(json["canvas"]).to match(hash_including(
         "id",
         "x",
         "y",
@@ -113,7 +113,7 @@ RSpec.describe "Follows", type: :request do
         "src",
         "type" => "follow"
       ))
-      expect(follow["items"][0]).to match(hash_including(
+      expect(json["items"][0]).to match(hash_including(
         "id",
         "created",
         "caption",
