@@ -1,5 +1,5 @@
 {
-  clientUrl: @client_url,
+  clientUrl: @parent.client_url,
   isOwner: @is_owner,
   selectedItem: -1,
   canvas: {
@@ -10,14 +10,14 @@
     scale: 1,
     color: @parent.color,
     src: @parent.src,
-    type: @parent_type
+    type: @parent.type
   },
   items: @children.map do |child|
     {
       id: child.id,
       created: child.created_at,
       caption: child.name,
-      body: "",
+      body: child.body,
       x: child.x,
       y: child.y,
       src: child.src,
@@ -27,7 +27,7 @@
       angle: child.angle,
       scale: child.scale,
       border: child.border,
-      type: @children_type
+      type: child.type
     }
   end
 }

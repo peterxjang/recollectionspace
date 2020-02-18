@@ -11,6 +11,22 @@ class User < ApplicationRecord
 
   after_create :create_default_relationships
 
+  def color
+    "#000"
+  end
+
+  def src
+    "https://res.cloudinary.com/recollectionspace/image/upload/v1558976015/root.jpg"
+  end
+
+  def type
+    "root"
+  end
+
+  def client_url
+    "/"
+  end
+
   private
 
   def create_default_relationships

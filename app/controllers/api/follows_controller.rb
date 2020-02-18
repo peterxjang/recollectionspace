@@ -3,11 +3,9 @@ class Api::FollowsController < ApplicationController
 
   def index
     @parent = current_user
-    @parent_type = "root"
     @children = current_user.following_relationships
-    @children_type = "follow"
-    @client_url = "/"
-    render "index.json.jb"
+    @is_owner = true
+    render "api/canvas.json.jb"
   end
 
   def create
@@ -34,12 +32,9 @@ class Api::FollowsController < ApplicationController
 
   def show
     @parent = Follow.find_by(id: params[:id])
-    @parent_type = "follow"
     @children = @parent.following.user_collections
-    @children_type = "collection"
-    @client_url = "/#{@parent.following.username}"
     @is_owner = @parent.following == current_user
-    render "show.json.jb"
+    render "api/canvas.json.jb"
   end
 
   def update

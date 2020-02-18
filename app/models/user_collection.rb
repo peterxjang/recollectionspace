@@ -12,12 +12,20 @@ class UserCollection < ApplicationRecord
     collection.description
   end
 
-  def slug_id
-    "#{id}-#{name.parameterize}"
+  def body
+    description
   end
 
-  def rendered_description
-    nil
+  def type
+    "collection"
+  end
+
+  def client_url
+    "/#{user.username}/#{name.parameterize}"
+  end
+
+  def slug_id
+    "#{id}-#{name.parameterize}"
   end
 
   private

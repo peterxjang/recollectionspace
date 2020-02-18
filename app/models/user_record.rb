@@ -5,6 +5,14 @@ class UserRecord < ApplicationRecord
   before_destroy :delete_cloudinary_image
   before_save :assign_rendered_description, if: -> { description_changed? }
 
+  def type
+    "record"
+  end
+
+  def body
+    rendered_description || description
+  end
+
   def slug_id
     "#{id}-#{name.parameterize}"
   end

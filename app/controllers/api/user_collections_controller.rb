@@ -3,11 +3,9 @@ class Api::UserCollectionsController < ApplicationController
 
   def index
     @parent = Follow.find_by(follower_id: current_user.id, following_id: current_user.id)
-    @parent_type = "follow"
     @children = @parent.following.user_collections
-    @children_type = "collection"
     @is_owner = true
-    render "index.json.jb"
+    render "api/canvas.json.jb"
   end
 
   def create
@@ -74,12 +72,9 @@ class Api::UserCollectionsController < ApplicationController
       @parent = UserCollection.find_by(id: params[:id])
     end
     if @parent
-      @parent_type = "collection"
       @children = @parent.user_records
-      @children_type = "record"
-      @client_url = "/#{@parent.user.username}/#{@parent.name.parameterize}"
       @is_owner = @parent.user == current_user
-      render "index.json.jb"
+      render "api/canvas.json.jb"
     else
       render json: {errors: ["Invalid parameters"]}, status: :bad_request
     end

@@ -36,11 +36,9 @@ class Api::UsersController < ApplicationController
     user = User.find_by(username: params[:username])
     if user
       @parent = Follow.find_by(follower_id: user.id, following_id: user.id)
-      @parent_type = "follow"
       @children = user.user_collections
-      @children_type = "collection"
       @is_owner = user == current_user
-      render "show.json.jb"
+      render "api/canvas.json.jb"
     else
       render json: {errors: ["Invalid username"]}, status: :bad_request
     end
