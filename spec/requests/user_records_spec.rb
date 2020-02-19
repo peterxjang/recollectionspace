@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "UserRecords", type: :request do
   before :each do
-    Collection.create!(name: "music")
-    Collection.create!(name: "movies")
-    Collection.create!(name: "books")
+    Collection.create!(name: "music", src: "image.jpg", width: 1, height: 1)
+    Collection.create!(name: "movies", src: "image.jpg", width: 1, height: 1)
+    Collection.create!(name: "books", src: "image.jpg", width: 1, height: 1)
     user = User.create!(username: "a", email: "a@email.com", password: "password")
     stub_current_user(user)
   end
