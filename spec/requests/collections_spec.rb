@@ -12,7 +12,7 @@ RSpec.describe "Collections", type: :request do
     Collection.create!(name: "e", src: "image.jpg", width: 1, height: 1)
     Collection.create!(name: "f", src: "image.jpg", width: 1, height: 1)
     Collection.create!(name: "g", src: "image.jpg", width: 1, height: 1)
-    user = User.create!(username: "a", email: "a@email.com", password: "password")
+    user = User.create!(username: "a", email: "a@email.com", password: "password", admin: true)
     stub_current_user(user)
   end
 
@@ -30,6 +30,59 @@ RSpec.describe "Collections", type: :request do
         "width",
         "height"
       ))
+    end
+  end
+
+  describe "POST /api/collections" do
+    it "creates a new collection given an src url" do
+      post "/api/collections", params: {
+        caption: "Test",
+        src: "http://example.com/test.jpg",
+        width: 100,
+        height: 100,
+        color: "#323"
+      }
+      json = JSON.parse(response.body)
+      expect(response).to have_http_status(200)
+      expect(json).to match(hash_including(
+        "id",
+        "name",
+        "description",
+        "src",
+        "width",
+        "height"
+      ))
+    end
+
+    it "creates a new collection given an image file" do
+      stub_cloudinary
+      post "/api/collections", params: {
+        caption: "Test",
+        image: "test.jpg",
+        color: "#323"
+      }
+      json = JSON.parse(response.body)
+      expect(response).to have_http_status(200)
+      expect(json).to match(hash_including(
+        "id",
+        "name",
+        "description",
+        "src",
+        "width",
+        "height"
+      ))
+    end
+
+    it "fails if not an admin" do
+      user = User.create!(username: "b", email: "b@email.com", password: "password")
+      stub_current_user(user)
+      post "/api/collections"
+      expect(response).to have_http_status(401)
+    end
+
+    it "fails with invalid parameters" do
+      post "/api/collections"
+      expect(response).to have_http_status(422)
     end
   end
 end

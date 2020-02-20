@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     patch "/follows/:id" => "follows#update"
     delete "/follows/:id" => "follows#destroy"
     get "/collections" => "collections#index"
+    post "/collections" => "collections#create"
     get "/user_collections" => "user_collections#index"
     post "/user_collections" => "user_collections#create"
     get "/user_collections/:id" => "user_collections#show"

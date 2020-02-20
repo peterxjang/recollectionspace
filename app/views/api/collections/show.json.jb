@@ -1,0 +1,8 @@
+{
+  id: @collection.id,
+  name: @collection.name,
+  description: @collection.description,
+  src: @collection.src,
+  width: @collection.width,
+  height: @collection.height
+}
