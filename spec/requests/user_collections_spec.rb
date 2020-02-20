@@ -83,38 +83,6 @@ RSpec.describe "UserCollections", type: :request do
       ))
     end
 
-    it "should create a new user collection with collection given caption and image" do
-      user = User.create!(username: "admin", email: "admin@email.com", password: "password", admin: true)
-      num_collections = Collection.count
-      stub_current_user(user)
-      stub_cloudinary
-      post "/api/user_collections", params: {
-        caption: "test caption",
-        image: "test image"
-      }
-      json = JSON.parse(response.body)
-      expect(response).to have_http_status(:created)
-      expect(json).to match(hash_including(
-        "id",
-        "created",
-        "name",
-        "description",
-        "collection_id",
-        "x",
-        "y",
-        "width",
-        "height",
-        "angle",
-        "scale",
-        "border",
-        "src",
-        "color",
-        "zindex",
-        "type",
-      ))
-      expect(Collection.count).to eq(num_collections + 1)
-    end
-
     it "should fail if no collection id and no image/caption" do
       post "/api/user_collections"
       expect(response).to have_http_status(422)

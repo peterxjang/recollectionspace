@@ -314,7 +314,7 @@ const Application = {
       });
     } else if (state.canvas.type === "follow") {
       Modal.showNewUserCollection({
-        onSaveUserCollection: Canvas.createItem,
+        onSaveUserCollection: this.handleSaveUserCollection.bind(this),
         onSearch: this.handleGetCollections.bind(this),
         onCancel: Modal.hide.bind(Modal)
       });
@@ -325,6 +325,42 @@ const Application = {
         onCancel: Modal.hide.bind(Modal)
       });
     }
+  },
+  handleSaveUserCollection: function(image, caption, body, options = {}) {
+    console.log("handleSaveUserCollection");
+    if (options.collection_id) {
+      Canvas.createItem(image, caption, body, options);
+      return;
+    }
+    const url = "/api/collections";
+    const params = new FormData();
+    params.append("image", image);
+    params.append("caption", caption);
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: params,
+      headers: { "X-CSRF-Token": csrfToken }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      })
+      .then(data => {
+        options.collection_id = data.id;
+        options.src = data.src;
+        options.width = data.width;
+        options.height = data.height;
+        Canvas.createItem(image, caption, body, options);
+      })
+      .catch(error => {
+        error.json().then(data => Modal.setErrors(data.errors));
+      });
   },
   handleGetCollections: function(searchText, callback) {
     fetch("/api/collections?name=" + searchText, {
