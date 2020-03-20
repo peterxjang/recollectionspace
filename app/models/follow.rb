@@ -21,4 +21,8 @@ class Follow < ApplicationRecord
   def client_url
     "/#{following.username}"
   end
+
+  def slug_id
+    id
+  end
 end
