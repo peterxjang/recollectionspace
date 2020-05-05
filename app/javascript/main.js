@@ -7,91 +7,87 @@ import Router from "./router";
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
 const Application = {
-  initialize: function() {
+  initialize: function () {
     this.isOwner = null;
     this.initializeCanvas();
     Modal.onClose = this.handleHideModal.bind(this);
     Navbar.initialize({
       onList: this.handleNavbarList.bind(this),
       onNew: this.handleNavbarNew.bind(this),
-      onBack: this.handleNavbarBack.bind(this)
+      onBack: this.handleNavbarBack.bind(this),
     });
     RecordContent.initialize({
-      onHide: this.handleRecordContentHide.bind(this)
+      onHide: this.handleRecordContentHide.bind(this),
     });
     this.loadRouteData();
   },
-  handleNavbarList: function() {
+  handleNavbarList: function () {
     const items = Canvas.getItems();
-    Router.matchUrl("/", params => {
+    Router.matchUrl("/", (params) => {
       Modal.showList({
         headerText: "Follows",
-        items: items.map(item => ({
+        items: items.map((item) => ({
           ...item,
           href: `/${item.caption}`,
-          caption: `@${item.caption}`
-        }))
+          caption: `@${item.caption}`,
+        })),
       });
     });
-    Router.matchUrl("/:username", params => {
+    Router.matchUrl("/:username", (params) => {
       Modal.showList({
         headerText: "Collections",
-        items: items.map(item => ({
+        items: items.map((item) => ({
           ...item,
           href: `/${params.username}/${item.caption}`,
-          caption: `[ ${item.caption} ]`
-        }))
+          caption: `[ ${item.caption} ]`,
+        })),
       });
     });
-    Router.matchUrl("/:username/:collection_name", params => {
+    Router.matchUrl("/:username/:collection_name", (params) => {
       Modal.showList({
         headerText: "Records",
-        items: items.map(item => ({
+        items: items.map((item) => ({
           ...item,
           href: `/${params.username}/${params.collection_name}/${item.id}`,
-          caption: item.caption
-        }))
+          caption: item.caption,
+        })),
       });
     });
   },
-  handleNavbarNew: function() {
+  handleNavbarNew: function () {
     if (RecordContent.visible) {
       this.handleNavbarBack();
     } else {
       Canvas.onNewRecord();
     }
   },
-  handleNavbarBack: function() {
+  handleNavbarBack: function () {
     RecordContent.hide();
   },
-  handleRecordContentHide: function() {
+  handleRecordContentHide: function () {
     Canvas.zoomOut();
-    Router.matchUrl("/:username/:collection_name/:id", params => {
+    Router.matchUrl("/:username/:collection_name/:id", (params) => {
       Navbar.show(this.isOwner, "collection", null);
       Router.setUrl(`/${params.username}/${params.collection_name}`);
     });
   },
-  loadRouteData: function() {
+  loadRouteData: function () {
     let apiUrl = null;
     let modalId = null;
-    Router.matchUrl("/", params => {
+    Router.matchUrl("/", (params) => {
       apiUrl = "/api/follows";
       Navbar.show(false, "root", null);
     });
-    Router.matchUrl("/:username", params => {
+    Router.matchUrl("/:username", (params) => {
       apiUrl = "/api/users/" + params.username;
       Navbar.show(false, "follow", null);
     });
-    Router.matchUrl("/:username/:collection_name", params => {
-      apiUrl = `/api/user_collections/search?username=${
-        params.username
-      }&collection_name=${params.collection_name}`;
+    Router.matchUrl("/:username/:collection_name", (params) => {
+      apiUrl = `/api/user_collections/search?username=${params.username}&collection_name=${params.collection_name}`;
       Navbar.show(false, "collection", null);
     });
-    Router.matchUrl("/:username/:collection_name/:id", params => {
-      apiUrl = `/api/user_collections/search?username=${
-        params.username
-      }&collection_name=${params.collection_name}`;
+    Router.matchUrl("/:username/:collection_name/:id", (params) => {
+      apiUrl = `/api/user_collections/search?username=${params.username}&collection_name=${params.collection_name}`;
       modalId = params.id;
       Navbar.show(false, "record", modalId);
     });
@@ -99,7 +95,7 @@ const Application = {
       this.loadCanvasData(apiUrl, 1, null, modalId);
     }
   },
-  initializeCanvas: function() {
+  initializeCanvas: function () {
     Canvas.initialize(document.getElementById("canvas"), {
       onTransition: this.handleTransition.bind(this),
       onNewRecord: this.handleNewRecord.bind(this),
@@ -109,27 +105,25 @@ const Application = {
       onHideModalInfo: this.handleHideModal.bind(this),
       onShowModalEdit: this.handleEditRecord.bind(this),
       onShowModalDestroy: this.handleConfirmDeleteRecord.bind(this),
-      isModalInfoVisible: () => Modal.visible
+      isModalInfoVisible: () => Modal.visible,
     });
   },
-  loadCanvasData: function(url, delta, item, modalId) {
+  loadCanvasData: function (url, delta, item, modalId) {
     document.getElementById("loading").style.opacity = 1;
     Canvas.transitionRouteRequest();
     fetch(url, {
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(json => {
+      .then((json) => {
         this.isOwner = json.isOwner;
         document.getElementById("loading").style.opacity = 0;
-        const modalItem = modalId
-          ? json.items.filter(child => child.id === modalId)[0]
-          : null;
+        const modalItem = modalId ? json.items.filter((child) => child.id === modalId)[0] : null;
         Canvas.transitionRouteSuccess(json, delta, item, modalItem);
         Navbar.show(json.isOwner, json.canvas.type, modalId);
         if (modalId) {
@@ -140,7 +134,7 @@ const Application = {
           Router.setUrl(json.clientUrl);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         document.getElementById("loading").style.opacity = 0;
         console.error(error);
         Canvas.transitionRouteFailure();
@@ -153,7 +147,7 @@ const Application = {
         }
       });
   },
-  handleTransition: function(delta, item, isOwner) {
+  handleTransition: function (delta, item, isOwner) {
     if (delta < 0) {
       return this.transitionOut(delta, item);
     } else if (item && item.type !== "record") {
@@ -164,10 +158,10 @@ const Application = {
     }
     return false;
   },
-  transitionOut: function(delta, item) {
+  transitionOut: function (delta, item) {
     if (item && item.type === "collection") {
       let apiUrl;
-      Router.matchUrl("/:username/:collection_name", params => {
+      Router.matchUrl("/:username/:collection_name", (params) => {
         apiUrl = `/api/users/${params.username}`;
       });
       if (apiUrl) {
@@ -184,7 +178,7 @@ const Application = {
     }
     return false;
   },
-  transitionIn: function(delta, item) {
+  transitionIn: function (delta, item) {
     if (item.type === "collection") {
       this.loadCanvasData("/api/user_collections/" + item.id, delta, item);
       return true;
@@ -194,15 +188,15 @@ const Application = {
     }
     return false;
   },
-  handleShowSignup: function() {
+  handleShowSignup: function () {
     Modal.hide();
     Modal.showNewUser({
       onSignup: this.handleSignup.bind(this),
       onShowLogin: this.handleShowLogin.bind(this),
-      onCancel: this.handleLoginCancel
+      onCancel: this.handleLoginCancel,
     });
   },
-  handleSignup: function(email, username, password, passwordConfirmation) {
+  handleSignup: function (email, username, password, passwordConfirmation) {
     var params = new FormData();
     params.append("email", email);
     params.append("username", username);
@@ -215,23 +209,23 @@ const Application = {
       redirect: "follow",
       referrer: "no-referrer",
       body: params,
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         this.handleLogin(email, password);
         Modal.hide();
       })
-      .catch(error => {
-        error.json().then(data => Modal.setErrors(data.errors));
+      .catch((error) => {
+        error.json().then((data) => Modal.setErrors(data.errors));
       });
   },
-  handleShowLogin: function(userClick = true) {
+  handleShowLogin: function (userClick = true) {
     if (userClick) {
       Modal.hide();
     }
@@ -239,10 +233,10 @@ const Application = {
       onLogin: this.handleLogin.bind(this),
       onShowSignup: this.handleShowSignup.bind(this),
       onCancel: this.handleLoginCancel,
-      onLogout: this.handleLogout.bind(this)
+      onLogout: this.handleLogout.bind(this),
     });
   },
-  handleLogin: function(email, password) {
+  handleLogin: function (email, password) {
     var params = new FormData();
     params.append("email", email);
     params.append("password", password);
@@ -253,49 +247,49 @@ const Application = {
       redirect: "follow",
       referrer: "no-referrer",
       body: params,
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         this.loadRouteData();
         Modal.hide();
       })
-      .catch(error => {
+      .catch((error) => {
         Modal.setErrors(["Invalid email or password"]);
       });
   },
-  handleLoginCancel: function() {
+  handleLoginCancel: function () {
     Canvas.zoomToFitAll();
     Modal.hide();
   },
-  handleLogout: function(email, password) {
+  handleLogout: function (email, password) {
     fetch("/api/sessions", {
       method: "DELETE",
       mode: "cors",
       cache: "no-cache",
       redirect: "follow",
       referrer: "no-referrer",
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         window.location.href = "/";
       })
-      .catch(error => {
+      .catch((error) => {
         Modal.setErrors(["Problem logging out."]);
       });
   },
-  handleNewRecord: function(state) {
+  handleNewRecord: function (state) {
     if (state.canvas.type === "collection") {
       // TODO: set onSearch to depend on type of collection
       const url = Router.getUrl();
@@ -310,32 +304,35 @@ const Application = {
       Modal.showNewRecord({
         onSaveRecord: Canvas.createItem,
         onSearch: searchFunction,
-        onCancel: Modal.hide.bind(Modal)
+        onCancel: Modal.hide.bind(Modal),
       });
     } else if (state.canvas.type === "follow") {
       Modal.showNewUserCollection({
         onSaveUserCollection: this.handleSaveUserCollection.bind(this),
         onSearch: this.handleGetCollections.bind(this),
-        onCancel: Modal.hide.bind(Modal)
+        onCancel: Modal.hide.bind(Modal),
       });
     } else if (state.canvas.type === "root") {
       Modal.showNewFollow({
         onSearchUsers: this.handleSearchUsers,
         onSaveFollow: Canvas.createItem,
-        onCancel: Modal.hide.bind(Modal)
+        onCancel: Modal.hide.bind(Modal),
       });
     }
   },
-  handleSaveUserCollection: function(image, caption, body, options = {}) {
-    console.log("handleSaveUserCollection");
+  handleSaveUserCollection: function (image, caption, body, options = {}) {
     if (options.collection_id) {
       Canvas.createItem(image, caption, body, options);
       return;
     }
     const url = "/api/collections";
     const params = new FormData();
-    params.append("image", image);
-    params.append("caption", caption);
+    if (image) {
+      params.append("image", image);
+    }
+    if (caption) {
+      params.append("caption", caption);
+    }
     fetch(url, {
       method: "POST",
       mode: "cors",
@@ -343,93 +340,93 @@ const Application = {
       redirect: "follow",
       referrer: "no-referrer",
       body: params,
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         options.collection_id = data.id;
         options.src = data.src;
         options.width = data.width;
         options.height = data.height;
         Canvas.createItem(image, caption, body, options);
       })
-      .catch(error => {
-        error.json().then(data => Modal.setErrors(data.errors));
+      .catch((error) => {
+        error.json().then((data) => Modal.setErrors(data.errors));
       });
   },
-  handleGetCollections: function(searchText, callback) {
+  handleGetCollections: function (searchText, callback) {
     fetch("/api/collections?name=" + searchText, {
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         callback(data);
       });
   },
-  handleSearchUsers: function(searchText, callback) {
+  handleSearchUsers: function (searchText, callback) {
     fetch("/api/users?new=true&username=" + searchText, {
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         callback(data);
       });
   },
-  handleSearchBooks: function(searchText, callback) {
+  handleSearchBooks: function (searchText, callback) {
     fetch("/api/books?q=" + searchText)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         callback(data);
       });
   },
-  handleSearchMovies: function(searchText, callback) {
+  handleSearchMovies: function (searchText, callback) {
     fetch("/api/movies?q=" + searchText)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         callback(data);
       });
   },
-  handleSearchMusic: function(searchText, callback) {
+  handleSearchMusic: function (searchText, callback) {
     fetch("/api/music?q=" + searchText)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         callback(data);
       });
   },
-  handleSaveRecord: function(parent, item, image, options) {
+  handleSaveRecord: function (parent, item, image, options) {
     let url, params;
     params = new FormData();
-    Object.keys(item).forEach(key => {
+    Object.keys(item).forEach((key) => {
       if (item[key] || item[key] === 0) {
         params.append(key, item[key]);
       }
@@ -466,15 +463,15 @@ const Application = {
       redirect: "follow",
       referrer: "no-referrer",
       body: params,
-      headers: { "X-CSRF-Token": csrfToken }
+      headers: { "X-CSRF-Token": csrfToken },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         const itemNew = {
           ...item,
           id: data.id,
@@ -485,52 +482,48 @@ const Application = {
           scale: data.scale,
           caption: data.name,
           body: data.description,
-          type: data.type
+          type: data.type,
         };
         Canvas.replaceItemProperties(item, itemNew);
         URL.revokeObjectURL(item.src);
         Modal.hide();
       })
-      .catch(error => {
+      .catch((error) => {
         Canvas.deleteItem(item);
-        error.json().then(data => Modal.setErrors(data.errors));
+        error.json().then((data) => Modal.setErrors(data.errors));
       });
   },
-  handleEditRecord: function(item) {
+  handleEditRecord: function (item) {
     let fullEditLink;
-    Router.matchUrl("/:username/:collection_name/:id", params => {
-      fullEditLink = `/${params.username}/${params.collection_name}/${
-        params.id
-      }/edit`;
+    Router.matchUrl("/:username/:collection_name/:id", (params) => {
+      fullEditLink = `/${params.username}/${params.collection_name}/${params.id}/edit`;
     });
-    Router.matchUrl("/:username/:collection_name", params => {
-      fullEditLink = `/${params.username}/${params.collection_name}/${
-        item.id
-      }/edit`;
+    Router.matchUrl("/:username/:collection_name", (params) => {
+      fullEditLink = `/${params.username}/${params.collection_name}/${item.id}/edit`;
     });
     if (fullEditLink) {
       window.location.href = fullEditLink;
     }
   },
-  handleUpdateRecord: function(item) {
+  handleUpdateRecord: function (item) {
     let url, params;
     if (item.type === "record") {
       url = "/api/user_records/" + item.id;
       params = {
         ...item,
-        name: item.caption
+        name: item.caption,
       };
     } else if (item.type === "collection") {
       url = "/api/user_collections/" + item.id;
       params = {
-        ...item
+        ...item,
       };
     } else if (item.type === "follow") {
       url = "/api/follows/" + item.id;
       params = {
         ...item,
         name: item.caption,
-        description: item.body
+        description: item.body,
       };
     } else {
       return;
@@ -541,31 +534,31 @@ const Application = {
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken
+        "X-CSRF-Token": csrfToken,
       },
       redirect: "follow",
       referrer: "no-referrer",
-      body: JSON.stringify(params)
+      body: JSON.stringify(params),
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   },
-  handleConfirmDeleteRecord: function(item) {
+  handleConfirmDeleteRecord: function (item) {
     Modal.hide();
     Modal.showDelete({
       item: item,
       onDelete: this.handleDeleteRecord.bind(this),
-      onCancel: Modal.hide.bind(Modal)
+      onCancel: Modal.hide.bind(Modal),
     });
   },
-  handleDeleteRecord: function(item) {
+  handleDeleteRecord: function (item) {
     let url, params;
     if (item.type === "record") {
       url = "/api/user_records/" + item.id;
@@ -582,30 +575,30 @@ const Application = {
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken
+        "X-CSRF-Token": csrfToken,
       },
       redirect: "follow",
       referrer: "no-referrer",
-      body: JSON.stringify(params)
+      body: JSON.stringify(params),
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw response;
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         Canvas.deleteItem(item);
-        Router.matchUrl("/:username/:collection_name/:id", params => {
+        Router.matchUrl("/:username/:collection_name/:id", (params) => {
           Router.setUrl(`/${params.username}/${params.collection_name}`);
         });
         Modal.hide();
       })
-      .catch(error => {
-        error.json().then(data => Modal.setErrors(data.errors));
+      .catch((error) => {
+        error.json().then((data) => Modal.setErrors(data.errors));
       });
   },
-  handleShowModalInfo: function(item, isOwner) {
+  handleShowModalInfo: function (item, isOwner) {
     if (item.type === "record") {
       RecordContent.show(item);
     } else {
@@ -613,26 +606,26 @@ const Application = {
         item: item,
         onEdit: this.handleEditRecord.bind(this),
         onDelete: this.handleConfirmDeleteRecord.bind(this),
-        isOwner: isOwner
+        isOwner: isOwner,
       });
     }
-    Router.matchUrl("/:username/:collection_name", params => {
+    Router.matchUrl("/:username/:collection_name", (params) => {
       Router.setUrl(`/${params.username}/${params.collection_name}/${item.id}`);
     });
     Navbar.show(isOwner, "record", item.id);
   },
-  handleHideModal: function() {
+  handleHideModal: function () {
     if (Modal.visible) {
       Modal.hide();
-      Router.matchUrl("/:username/:collection_name/:id", params => {
+      Router.matchUrl("/:username/:collection_name/:id", (params) => {
         Router.setUrl(`/${params.username}/${params.collection_name}`);
         Canvas.zoomToFitAll();
       });
-      Router.matchUrl("/", params => {
+      Router.matchUrl("/", (params) => {
         Canvas.zoomToFitAll();
       });
     }
-  }
+  },
 };
 
 // Application.initialize();
