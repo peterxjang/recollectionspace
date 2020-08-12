@@ -51,7 +51,7 @@ canvas {
   height: 100%;
   display: block;
 }
-#loading {
+#loading, #bad-request {
   position: absolute;
   left: 0;
   top: 0;

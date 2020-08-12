@@ -110,12 +110,16 @@ const Application = {
   },
   loadCanvasData: function (url, delta, item, modalId) {
     document.getElementById("loading").style.opacity = 1;
+    document.getElementById("bad-request").style.opacity = 0;
     Canvas.transitionRouteRequest();
     fetch(url, {
       headers: { "X-CSRF-Token": csrfToken },
     })
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 400) {
+            document.getElementById("bad-request").style.opacity = 1;
+          }
           throw response;
         }
         return response.json();
