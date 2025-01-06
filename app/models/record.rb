@@ -4,6 +4,7 @@ class Record < ApplicationRecord
   before_destroy :delete_cloudinary_image
 
   private
+
   def delete_cloudinary_image
     matches = /^.+\.cloudinary\.com\/(?:[^\/]+\/)(?:(image|video)\/)?(?:(upload|fetch)\/)?(?:(?:[^_\/]+_[^,\/]+,?)*\/)?(?:v(\d+|\w{1,2})\/)?([^\.^\s]+)(?:\.(.+))?$/.match(self.src).to_a
     if matches.length == 6

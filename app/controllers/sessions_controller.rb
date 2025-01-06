@@ -5,8 +5,8 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       redirect_to "/"
     else
-      @errors = ["Invalid email or password"]
-      render "pages/home.html.erb", layout: "home"
+      @errors = [ "Invalid email or password" ]
+      render template: "pages/home", layout: "home"
     end
   end
 end

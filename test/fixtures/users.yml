@@ -1,0 +1,39 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  email: MyString
+  password_digest: MyString
+  admin: false
+  first_name: MyString
+  last_name: MyString
+  avatar: MyString
+  x: 1.5
+  'y': 1.5
+  width: 1
+  height: 1
+  angle: 1.5
+  scale: 1.5
+  border: false
+  src: MyString
+  color: MyString
+  zindex: 1
+
+two:
+  username: MyString
+  email: MyString
+  password_digest: MyString
+  admin: false
+  first_name: MyString
+  last_name: MyString
+  avatar: MyString
+  x: 1.5
+  'y': 1.5
+  width: 1
+  height: 1
+  angle: 1.5
+  scale: 1.5
+  border: false
+  src: MyString
+  color: MyString
+  zindex: 1

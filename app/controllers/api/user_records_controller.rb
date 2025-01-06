@@ -4,17 +4,17 @@ class Api::UserRecordsController < ApplicationController
   def create
     user_collection = UserCollection.find_by(id: params[:user_collection_id], user_id: current_user.id)
     if !user_collection
-      render json: {errors: ["Invalid collection"]}, status: 422
+      render json: { errors: [ "Invalid collection" ] }, status: 422
       return
     end
     record = params[:api_id] ? Record.find_by(api_id: params[:api_id], collection_id: user_collection.collection.id) : nil
     if record && UserRecord.find_by(record_id: record.id)
-      render json: {errors: ["Record already exists"]}, status: 422
+      render json: { errors: [ "Record already exists" ] }, status: 422
       return
     end
     unless record
       unless params[:image]
-        render json: {errors: ["Invalid image"]}, status: 422
+        render json: { errors: [ "Invalid image" ] }, status: 422
         return
       end
       response = Cloudinary::Uploader.upload(params[:image], folder: "records")
@@ -29,7 +29,7 @@ class Api::UserRecordsController < ApplicationController
         description: params[:description],
       )
       unless record.save
-        render json: {errors: record.errors.full_messages}, status: 422
+        render json: { errors: record.errors.full_messages }, status: 422
         return
       end
     end
@@ -48,23 +48,23 @@ class Api::UserRecordsController < ApplicationController
       border: options[:border],
       src: record.src,
       color: record.color || options[:color],
-      zindex: options[:zindex]
+      zindex: options[:zindex],
     )
     if @user_record.save
-      render "show.json.jb"
+      render :show
     else
-      render json: {errors: @user_record.errors.full_messages}, status: 422
+      render json: { errors: @user_record.errors.full_messages }, status: 422
     end
   end
 
   def update
     @user_record = UserRecord.find_by(id: params[:id])
     if !@user_record
-      render json: {errors: ["Invalid user record"]}, status: 422
+      render json: { errors: [ "Invalid user record" ] }, status: 422
       return
     end
     if @user_record && @user_record.user_collection.user_id != current_user.id
-      render json: {errors: ["Unauthorized collection"]}, status: :unauthorized
+      render json: { errors: [ "Unauthorized collection" ] }, status: :unauthorized
       return
     end
     @user_record.name = params[:name] || @user_record.name
@@ -81,20 +81,20 @@ class Api::UserRecordsController < ApplicationController
     @user_record.color = params[:color] || @user_record.color
     @user_record.zindex = params[:zindex] || @user_record.zindex
     if @user_record.save
-      render "show.json.jb"
+      render :show
     else
-      render json: {errors: @user_record.errors.full_messages}, status: 422
+      render json: { errors: @user_record.errors.full_messages }, status: 422
     end
   end
 
   def destroy
     @user_record = UserRecord.find_by(id: params[:id])
     if !@user_record
-      render json: {errors: ["Invalid user record"]}, status: 422
+      render json: { errors: [ "Invalid user record" ] }, status: 422
       return
     end
     if @user_record && @user_record.user_collection.user_id != current_user.id
-      render json: {errors: ["Unauthorized collection"]}, status: :unauthorized
+      render json: { errors: [ "Unauthorized collection" ] }, status: :unauthorized
       return
     end
     record = @user_record.record
@@ -102,7 +102,7 @@ class Api::UserRecordsController < ApplicationController
     if !record.api_id && record.user_records.length == 0
       record.destroy
     end
-    render json: {message: "Record successfully destroyed!"}
+    render json: { message: "Record successfully destroyed!" }
   end
 
   private

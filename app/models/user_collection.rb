@@ -1,7 +1,7 @@
 class UserCollection < ApplicationRecord
   belongs_to :collection
   belongs_to :user
-  has_many :user_records, :dependent => :destroy
+  has_many :user_records, dependent: :destroy
   before_destroy :delete_cloudinary_image
 
   def name
@@ -29,6 +29,7 @@ class UserCollection < ApplicationRecord
   end
 
   private
+
   # TODO: DRY with helper or concern
   def delete_cloudinary_image
     return unless self.src && self.src != collection.src

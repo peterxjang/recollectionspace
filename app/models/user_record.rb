@@ -22,6 +22,7 @@ class UserRecord < ApplicationRecord
   end
 
   private
+
   def delete_cloudinary_image
     return unless self.src && self.src != record.src
     matches = /^.+\.cloudinary\.com\/(?:[^\/]+\/)(?:(image|video)\/)?(?:(upload|fetch)\/)?(?:(?:[^_\/]+_[^,\/]+,?)*\/)?(?:v(\d+|\w{1,2})\/)?([^\.^\s]+)(?:\.(.+))?$/.match(self.src).to_a

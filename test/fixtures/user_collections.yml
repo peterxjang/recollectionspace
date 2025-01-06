@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  collection_id: 1
+  x: 1.5
+  'y': 1.5
+  width: 1
+  height: 1
+  angle: 1.5
+  scale: 1.5
+  border: false
+  src: MyString
+  color: MyString
+  zindex: 1
+
+two:
+  user_id: 1
+  collection_id: 1
+  x: 1.5
+  'y': 1.5
+  width: 1
+  height: 1
+  angle: 1.5
+  scale: 1.5
+  border: false
+  src: MyString
+  color: MyString
+  zindex: 1

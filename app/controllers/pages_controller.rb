@@ -1,13 +1,13 @@
 class PagesController < ApplicationController
   def home
     if current_user
-      render "main.html.erb"
+      render :main
     else
-      render "home.html.erb", layout: "home"
+      render :home, layout: "home"
     end
   end
 
   def main
-    render "main.html.erb"
+    render :main
   end
 end

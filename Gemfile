@@ -1,37 +1,37 @@
-source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+source "https://rubygems.org"
 
-ruby '2.5.1'
-
-gem 'rails', '~> 5.2.2'
-gem 'pg', '>= 0.18', '< 2.0'
-gem 'puma', '~> 3.11'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'webpacker'
-gem 'jb'
-gem 'bcrypt', '~> 3.1.7'
-gem 'bootsnap', '>= 1.1.0', require: false
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'cloudinary'
-gem 'http'
-gem 'redcarpet'
+gem "rails", "~> 8.0.0"
+gem "propshaft"
+gem "pg", "~> 1.1"
+gem "puma", ">= 5.0"
+gem "importmap-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
+gem "tailwindcss-rails"
+gem "jbuilder"
+gem "bcrypt", "~> 3.1.7"
+gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
+gem "bootsnap", require: false
+gem "kamal", require: false
+gem "thruster", require: false
+gem "redcarpet"
+gem "jb"
+gem "http"
 
 group :development, :test do
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails', '~> 3.8.3'
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "brakeman", require: false
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
-  gem 'seed_dump'
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '>= 3.0.5', '< 3.2'
-  gem "capistrano", "~> 3.11"
-  gem "capistrano-rails", "~> 1.4"
-  gem "capistrano-passenger", "~> 0.2.0"
-	gem "capistrano-rbenv", "~> 2.1"
-  gem "capistrano-yarn"
-  gem 'capistrano-rails-console', require: false
-  gem 'ed25519'
-  gem 'bcrypt_pbkdf'
+  gem "web-console"
+end
+
+group :test do
+  gem "capybara"
+  gem "selenium-webdriver"
 end

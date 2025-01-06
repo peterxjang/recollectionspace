@@ -8,7 +8,7 @@ class UserRecordsController < ApplicationController
       if user_collections.length > 0
         @collection_id = user_collections[0].id
         @user_record = UserRecord.new
-        render "new.html.erb", layout: "record_new"
+        render :new, layout: "record_new"
         return
       end
     end
@@ -27,7 +27,7 @@ class UserRecordsController < ApplicationController
         @collection_id = user_collection.id
         @user_record = user_collection.user_records.find_by(id: @user_record_id)
         if @user_record
-          render "edit.html.erb", layout: "record_new"
+          render :edit, layout: "record_new"
           return
         end
       end

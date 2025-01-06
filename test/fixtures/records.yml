@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  api_id: MyString
+  collection_id: 1
+  name: MyString
+  description: MyText
+  width: 1
+  height: 1
+  src: MyString
+  color: MyString
+
+two:
+  api_id: MyString
+  collection_id: 1
+  name: MyString
+  description: MyText
+  width: 1
+  height: 1
+  src: MyString
+  color: MyString

@@ -5,7 +5,7 @@ class Api::FollowsController < ApplicationController
     @parent = current_user
     @children = current_user.following_relationships
     @is_owner = true
-    render "api/canvas.json.jb"
+    render template: "api/canvas"
   end
 
   def create
@@ -21,12 +21,12 @@ class Api::FollowsController < ApplicationController
       border: params[:border],
       src: params[:src],
       color: params[:color],
-      zindex: params[:zindex]
+      zindex: params[:zindex],
     )
     if @follow.save
-      render "show_follow.json.jb", status: :created
+      render :show_follow, status: :created
     else
-      render json: {errors: @follow.errors.full_messages}, status: 422
+      render json: { errors: @follow.errors.full_messages }, status: 422
     end
   end
 
@@ -34,7 +34,7 @@ class Api::FollowsController < ApplicationController
     @parent = Follow.find_by(id: params[:id])
     @children = @parent.following.user_collections
     @is_owner = @parent.following == current_user
-    render "api/canvas.json.jb"
+    render template: "api/canvas"
   end
 
   def update
@@ -50,9 +50,9 @@ class Api::FollowsController < ApplicationController
     @follow.color = params[:color] || @follow.color
     @follow.zindex = params[:zindex] || @follow.zindex
     if @follow.save
-      render "show_follow.json.jb"
+      render :show_follow
     else
-      render json: {errors: @follow.errors.full_messages}, status: 422
+      render json: { errors: @follow.errors.full_messages }, status: 422
     end
   end
 
@@ -60,9 +60,9 @@ class Api::FollowsController < ApplicationController
     @follow = Follow.find_by(id: params[:id])
     unless @follow.follower_id == current_user.id && @follow.following_id == current_user.id
       @follow.destroy
-      render json: {message: "Follow successfully destroyed!"}
+      render json: { message: "Follow successfully destroyed!" }
     else
-      render json: {errors: ["Cannot unfollow yourself"]}, status: 422
+      render json: { errors: [ "Cannot unfollow yourself" ] }, status: 422
     end
   end
 end

@@ -8,7 +8,7 @@ class Api::UsersController < ApplicationController
       @users = @users.where.not(id: current_user.followings.pluck(:following_id))
     end
     @users = @users.limit(5)
-    render "index.json.jb"
+    render :index
   end
 
   def create
@@ -26,9 +26,9 @@ class Api::UsersController < ApplicationController
     )
     if user.save
       session[:user_id] = user.id
-      render json: {message: 'User created successfully'}, status: :created
+      render json: { message: "User created successfully" }, status: :created
     else
-      render json: {errors: user.errors.full_messages}, status: :bad_request
+      render json: { errors: user.errors.full_messages }, status: :bad_request
     end
   end
 
@@ -38,9 +38,9 @@ class Api::UsersController < ApplicationController
       @parent = Follow.find_by(follower_id: user.id, following_id: user.id)
       @children = user.user_collections
       @is_owner = user == current_user
-      render "api/canvas.json.jb"
+      render template: "api/canvas"
     else
-      render json: {errors: ["Invalid username"]}, status: :bad_request
+      render json: { errors: [ "Invalid username" ] }, status: :bad_request
     end
   end
 end

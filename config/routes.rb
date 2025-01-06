@@ -31,4 +31,6 @@ Rails.application.routes.draw do
   get "/:username/:collection_name/:user_record_id/edit" => "user_records#edit"
   get "/*path" => "pages#main"
   post "/sessions" => "sessions#create"
+
+  get "up" => "rails/health#show", as: :rails_health_check
 end
